@@ -57,7 +57,7 @@
       </tr>
       </tbody>
       <tbody v-else>
-      <tr v-for="(product, index) of products.data">
+      <tr v-for="(product, index) of products.data" class="animate-fade-in-down">
         <td class="border-b p-2 ">{{ product.id }}</td>
         <td class="border-b p-2 ">
           <img v-if="product.image_url" class="w-16 h-16 object-cover" :src="product.image_url" :alt="product.title" />
@@ -93,7 +93,7 @@
               leave-to-class="transform scale-95 opacity-0"
             >
               <MenuItems
-                class="absolute z-10 right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                class="absolute pointer-events-auto z-50 right-12 -top-2 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
               >
                 <div class="px-1 py-1">
                   <MenuItem v-slot="{ active }">
