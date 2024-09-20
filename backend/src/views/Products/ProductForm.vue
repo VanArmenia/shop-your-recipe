@@ -13,6 +13,7 @@
         <div class="col-span-1 sm:col-span-2 order-2 md:order-1 ">
           <CustomInput class="mb-2" v-model="product.title" label="Product Title"/>
           <CustomInput type="richtext" class="mb-2" v-model="product.description" label="Description"/>
+          <CustomInput type="select" class="mb-2" v-model.number="product.category_id" :selectOptions="categories" name="category_id"/>
           <CustomInput type="number" class="mb-2" v-model="product.price" label="Price" prepend="$"/>
           <CustomInput type="number" class="mb-2" v-model="product.quantity" label="Quantity"/>
           <CustomInput type="checkbox" class="mb-2" v-model="product.published" label="Published"/>
@@ -46,12 +47,13 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from 'vue'
+import {computed, onMounted, reactive, ref} from 'vue'
 import CustomInput from "../../components/core/CustomInput.vue";
 import store from "../../store/index.js";
 import Spinner from "../../components/core/Spinner.vue";
 import {useRoute, useRouter} from "vue-router";
 import ImagePreview from "../../components/core/ImagePreview.vue";
+import axiosClient from "../../axios";
 
 const product = ref({
   id: null,
@@ -60,6 +62,7 @@ const product = ref({
   deleted_images: [],
   description: '',
   price: null,
+  category_id: null,
   published: null
 })
 
@@ -67,8 +70,12 @@ const loading = ref(false)
 
 const router = useRouter();
 const route = useRoute();
+const categories = ref([]);
+const error = ref(null);
 
 onMounted(() => {
+  // console.log(product.value.category_id)
+  fetchCategories(); // Fetching categories
   if (route.params.id) {
     loading.value = true
     store.dispatch('getProduct', route.params.id)
@@ -78,6 +85,17 @@ onMounted(() => {
       })
   }
 })
+
+const fetchCategories = async () => {
+  error.value = null;
+  try {
+    const response = await axiosClient.get('/categories');
+    categories.value = response.data.data;
+  } catch (err) {
+    error.value = 'Failed to fetch categories';
+    console.error(err);
+  }
+};
 
 function onSubmit(event, close = false) {
   loading.value = true

@@ -28,6 +28,7 @@ class ProductResource extends JsonResource
             'images' => $this->images,
             'price' => $this->price,
             'quantity' => $this->quantity,
+            'category_id' => $this->category_id,
             'published' => (bool)$this->published,
             'created_at' => (new \DateTime($this->created_at))->format('Y-m-d H:i:s'),
             'updated_at' => (new \DateTime($this->updated_at))->format('Y-m-d H:i:s'),

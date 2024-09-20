@@ -6,7 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
-class ProductListResource extends JsonResource
+class CategoryListResource extends JsonResource
 {
     /**
      * Transform the resource collection into an array.
@@ -16,16 +16,12 @@ class ProductListResource extends JsonResource
      */
     public function toArray($request)
     {
-        /** @var \Illuminate\Support\Collection $images */
-        $images = $this->images;
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'image_url' => $this->image,
-            'price' => $this->price,
-            'quantity' => $this->quantity,
-            'category_id' => $this->category_id,
-            'updated_at' => ( new \DateTime($this->updated_at) )->format('Y-m-d H:i:s'),
+            'name' => $this->name,
+            'description' => $this->description,
+            'parent_id' => $this->parent_id,
+//            'updated_at' => ( new \DateTime($this->updated_at) )->format('Y-m-d H:i:s'),
         ];
     }
 }

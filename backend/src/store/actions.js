@@ -89,7 +89,9 @@ export function createProduct({commit}, product) {
     form.append('description', product.description || '');
     form.append('published', product.published ? 1 : 0);
     form.append('price', product.price);
+    form.append('category_id', product.category_id);
     product = form;
+    console.log(form.get('category_id'))
   }
   return axiosClient.post('/products', product)
 }
@@ -107,8 +109,10 @@ export function updateProduct({commit}, product) {
     form.append('description', product.description || '');
     form.append('published', product.published ? 1 : 0);
     form.append('price', product.price);
+    form.append('category_id', product.category_id);
     form.append('_method', 'PUT');
     product = form;
+    console.log(form.get('category_id'))
   } else {
     product._method = 'PUT'
   }

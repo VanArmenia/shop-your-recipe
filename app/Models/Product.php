@@ -14,7 +14,7 @@ class Product extends Model
     use HasSlug;
     use SoftDeletes;
 
-    protected $fillable = ['title', 'description', 'price', 'quantity', 'image', 'published', 'image_mime', 'image_size', 'created_by', 'updated_by'];
+    protected $fillable = ['title', 'description', 'price', 'quantity', 'image', 'published', 'image_mime', 'image_size', 'created_by', 'updated_by', 'category_id'];
 
     /**
      * Get the options for generating the slug.
@@ -39,5 +39,10 @@ class Product extends Model
     public function getImageAttribute()
     {
         return $this->images->count() > 0 ? $this->images->get(0)->url : null;
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }

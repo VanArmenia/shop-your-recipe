@@ -33,6 +33,9 @@
                         />
                     </a>
                     <div class="p-4">
+                        <h5 class="font-bold">{{$product->category->name}}</h5>
+                    </div>
+                    <div class="p-4">
                         <h3 class="text-lg">
                             <a href="{{ route('product.view', $product->slug) }}">
                                 {{$product->title}}
