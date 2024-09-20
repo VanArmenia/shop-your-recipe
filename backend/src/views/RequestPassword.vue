@@ -1,11 +1,11 @@
 <template>
   <GuestLayout title="Request new password">
-    <form class="mt-8 space-y-6" action="#" method="POST">
+    <form class="mt-8 space-y-6" method="POST" @submit.prevent="request">
       <input type="hidden" name="remember" value="true"/>
       <div class="rounded-md shadow-sm -space-y-px">
         <div>
           <label for="email-address" class="sr-only">Email address</label>
-          <input id="email-address" name="email" type="email" autocomplete="email" required=""
+          <input id="email-address" name="email" type="email" autocomplete="email" required="" v-model="email"
                  class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                  placeholder="Email address"/>
         </div>
@@ -35,4 +35,16 @@
 <script setup>
 import {LockClosedIcon} from '@heroicons/vue/solid'
 import GuestLayout from "../components/GuestLayout.vue";
+import router from "../router";
+import axiosClient from "../axios";
+import {ref} from "vue";
+
+const email = ref('');
+
+function request() {
+  return axiosClient.post('forgot-password', { email: email.value })
+    .then(() => {
+      router.push({name: 'resetPassword'})
+    })
+}
 </script>

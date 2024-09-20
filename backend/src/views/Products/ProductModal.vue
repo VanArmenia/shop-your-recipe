@@ -85,6 +85,7 @@ const product = ref({
   image: props.product.image,
   description: props.product.description,
   price: props.product.price,
+  category_id: props.product.category_id,
   published: props.product.published
 })
 
@@ -112,6 +113,7 @@ onUpdated(() => {
     image: props.product.image,
     description: props.product.description,
     price: props.product.price,
+    category_id: props.product.category_id,
     published: props.product.published,
   }
 })

@@ -37,6 +37,9 @@
                          @click="sortProducts('price')">
           Price
         </TableHeaderCell>
+        <TableHeaderCell field="category" :sort-field="sortField" :sort-direction="sortDirection">
+          Category
+        </TableHeaderCell>
         <TableHeaderCell field="updated_at" :sort-field="sortField" :sort-direction="sortDirection"
                          @click="sortProducts('updated_at')">
           Last Updated At
@@ -68,6 +71,9 @@
         </td>
         <td class="border-b p-2">
           {{ $filters.currencyUSD(product.price) }}
+        </td>
+        <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
+          {{ product.category_id }}
         </td>
         <td class="border-b p-2 ">
           {{ product.updated_at }}

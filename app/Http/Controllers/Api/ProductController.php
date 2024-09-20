@@ -88,7 +88,6 @@ class ProductController extends Controller
         $this->deleteImages($deletedImages, $product);
 
         $product->update($data);
-
         return new ProductResource($product);
     }
 
