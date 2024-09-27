@@ -93,6 +93,7 @@
                 </div>
             </div>
             <div class="lg:col-span-2">
+                <h5 class="font-bold pb-4 ">{{$product->category->name}}</h5>
                 <h1 class="text-lg font-semibold">
                     {{$product->title}}
                 </h1>
@@ -145,6 +146,7 @@
                     >
                         {!! $product->description !!}
                     </div>
+
                     <p class="text-right">
                         <a
                             @click="expanded = !expanded"
@@ -156,5 +158,81 @@
                 </div>
             </div>
         </div>
+        <div x-data="{ currentTab: 1 }" class="border-b border-gray-200 dark:border-gray-700 my-4">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400 mb-1" id="tabs-example" role="tablist">
+                @if ($product->manufacturer)
+                    <li @click="currentTab = 1">
+                        <button href="#" :class="currentTab === 1 ? 'text-white bg-purple-600' : ''"
+                                class="inline-block rounded-lg border-2 p-3 hover:border-purple-600">
+                            Manufacturer
+                        </button>
+                    </li>
+                @endif
+                @if ($product->allergens)
+                    <li @click="currentTab = 2">
+                        <button href="#"  :class="currentTab === 2 ? 'text-white bg-purple-600' : ''"
+                                class="inline-block rounded-lg border-2 p-3 hover:border-purple-600">
+                            Allergens
+                        </button>
+                    </li>
+                @endif
+                @if ($product->composition)
+                    <li @click="currentTab = 3">
+                        <button href="#"  :class="currentTab === 3 ? 'text-white bg-purple-600' : ''"
+                                class="inline-block rounded-lg border-2 p-3 hover:border-purple-600">
+                            Composition
+                        </button>
+                    </li>
+                @endif
+                @if ($product->storing)
+                    <li @click="currentTab = 4">
+                        <button href="#"  :class="currentTab === 4 ? 'text-white bg-purple-600' : ''"
+                                class="inline-block rounded-lg border-2 p-3 hover:border-purple-600">
+                            Storing
+                        </button>
+                    </li>
+                @endif
+                @if ($product->nutritional)
+                    <li @click="currentTab = 5">
+                        <button href="#"  :class="currentTab === 5 ? 'text-white bg-purple-600' : ''"
+                                class="inline-block rounded-lg border-2 p-3 hover:border-purple-600">
+                            Nutritional
+                        </button>
+                    </li>
+                @endif
+            </ul>
+            <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-800 min-h-24">
+                <div x-show="currentTab === 1">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        {!! $product->manufacturer !!}
+                    </p>
+                </div>
+                <div x-show="currentTab === 2">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        {!! $product->allergens !!}
+                    </p>
+                </div>
+                <div x-show="currentTab === 3">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        {!! $product->composition !!}
+                    </p>
+                </div>
+                <div x-show="currentTab === 4">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        {!! $product->storing !!}
+                    </p>
+                </div>
+                <div x-show="currentTab === 5">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        {!! $product->nutritional !!}
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
+    @push('scripts')
+        <script type="module">
+
+        </script>
+    @endpush
 </x-app-layout>

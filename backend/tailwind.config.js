@@ -9,7 +9,7 @@ module.exports = {
       keyframes: {
         'fade-in-down': {
           "from": {
-            transform: "translateY(-0.75rem)",
+            transform: "translateY(-1.5rem)",
             opacity: '0'
           },
           "to": {
@@ -19,7 +19,7 @@ module.exports = {
         },
       },
       animation: {
-        'fade-in-down': "fade-in-down 0.2s ease-in-out both",
+        'fade-in-down': "fade-in-down 0.4s ease-in-out both",
       },
     },
     plugins: [
