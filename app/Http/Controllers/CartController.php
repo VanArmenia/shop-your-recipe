@@ -13,6 +13,9 @@ class CartController extends Controller
 {
     public function index()
     {
+//        $request = \request();
+//        $dbCartItems = CartItem::where(['user_id' => $request->user()->id])->get()->keyBy('product_id');
+//        dd($dbCartItems);
         [$products, $cartItems] = Cart::getProductsAndCartItems();
         $total = 0;
         foreach ($products as $product) {

@@ -11,11 +11,16 @@
     <form v-if="!loading" @submit.prevent="onSubmit">
       <div class="bg-white px-4 pt-5 pb-4 z-50 grid grid-cols-3 gap-3">
         <div class="col-span-1 sm:col-span-2 order-2 md:order-1 ">
-          <CustomInput class="mb-2" v-model="product.title" label="Product Title"/>
+          <CustomInput class="mb-2" v-model="product.title" placeholder="Product Title"/>
           <CustomInput type="richtext" class="mb-2" v-model="product.description" label="Description"/>
-          <CustomInput type="select" class="mb-2" v-model.number="product.category_id" :selectOptions="categories" name="category_id"/>
-          <CustomInput type="number" class="mb-2" v-model="product.price" label="Price" prepend="$"/>
-          <CustomInput type="number" class="mb-2" v-model="product.quantity" label="Quantity"/>
+          <CustomInput type="richtext" class="mb-2" v-model="product.allergens" label="Allergens"/>
+          <CustomInput type="richtext" class="mb-2" v-model="product.composition" label="Composition"/>
+          <CustomInput type="richtext" class="mb-2" v-model="product.storing" label="Storing"/>
+          <CustomInput type="richtext" class="mb-2" v-model="product.nutritional" label="Nutritional"/>
+          <CustomInput type="richtext" class="mb-2" v-model="product.manufacturer" label="Manufacturer"/>
+          <CustomInput type="select" class="mb-2" v-model.number="product.category_id" :selectOptions="categories" name="category_id" label="Category"/>
+          <CustomInput type="number" class="mb-2" v-model="product.price" placeholder="Price" prepend="$"/>
+          <CustomInput type="number" class="mb-2" v-model="product.quantity" placeholder="Quantity"/>
           <CustomInput type="checkbox" class="mb-2" v-model="product.published" label="Published"/>
         </div>
         <div class="col-span-1 order-1 md:order-2">
@@ -47,7 +52,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, reactive, ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import CustomInput from "../../components/core/CustomInput.vue";
 import store from "../../store/index.js";
 import Spinner from "../../components/core/Spinner.vue";
@@ -61,6 +66,11 @@ const product = ref({
   images: [],
   deleted_images: [],
   description: '',
+  manufacturer: '',
+  allergens: '',
+  composition: '',
+  storing: '',
+  nutritional: '',
   price: null,
   category_id: null,
   published: null
@@ -134,5 +144,10 @@ function onSubmit(event, close = false) {
   }
 }
 </script>
-<style>
+<style scoped>
+
+.ck-editor__editable_inline:not(.ck-comment__input *) {
+  height: 50px !important;
+  overflow-y: auto;
+}
 </style>

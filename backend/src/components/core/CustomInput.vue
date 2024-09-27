@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label class="sr-only">{{ label }}</label>
+    <label class="text-gray-500 text-sm">{{ label }}</label>
     <div class="mt-1 flex rounded-md">
       <span v-if="prepend"
             class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
@@ -31,7 +31,8 @@
                   :model-value="props.modelValue"
                   @input="onChange"
                   :class="inputClasses"
-                  :config="props.editorConfig"></ckeditor>
+                  :config="props.editorConfig"
+                  rows="2"></ckeditor>
       </template>
       <template v-else-if="type === 'file'">
         <input :type="type"
@@ -59,7 +60,7 @@
                :value="props.modelValue"
                @input="emit('update:modelValue', $event.target.value)"
                :class="inputClasses"
-               :placeholder="label"
+               :placeholder="placeholder"
                step="0.01"/>
       </template>
       <span v-if="append"
@@ -81,6 +82,7 @@ const editor = ClassicEditor
 const props = defineProps({
   modelValue: [String, Number, File],
   label: String,
+  placeholder: String,
   type: {
     type: String,
     default: 'text'
@@ -137,7 +139,6 @@ function onChange(value) {
   emit('update:modelValue', value)
   emit('change', value)
 }
-
 </script>
 
 <style scoped>

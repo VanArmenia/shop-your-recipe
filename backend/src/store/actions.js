@@ -87,6 +87,11 @@ export function createProduct({commit}, product) {
     form.append('title', product.title);
     product.images.forEach(im => form.append('images[]', im))
     form.append('description', product.description || '');
+    form.append('manufacturer', product.manufacturer || '');
+    form.append('allergens', product.allergens || '');
+    form.append('composition', product.composition || '');
+    form.append('storing', product.storing || '');
+    form.append('nutritional', product.nutritional || '');
     form.append('published', product.published ? 1 : 0);
     form.append('price', product.price);
     form.append('category_id', product.category_id);
@@ -107,12 +112,16 @@ export function updateProduct({commit}, product) {
       product.deletedImages.forEach(im => form.append('deleted_images[]', im))
     }
     form.append('description', product.description || '');
+    form.append('manufacturer', product.manufacturer || '');
+    form.append('allergens', product.allergens || '');
+    form.append('composition', product.composition || '');
+    form.append('storing', product.storing || '');
+    form.append('nutritional', product.nutritional || '');
     form.append('published', product.published ? 1 : 0);
     form.append('price', product.price);
     form.append('category_id', product.category_id);
     form.append('_method', 'PUT');
     product = form;
-    console.log(form.get('category_id'))
   } else {
     product._method = 'PUT'
   }

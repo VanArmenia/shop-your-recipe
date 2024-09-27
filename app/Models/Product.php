@@ -14,7 +14,7 @@ class Product extends Model
     use HasSlug;
     use SoftDeletes;
 
-    protected $fillable = ['title', 'description', 'price', 'quantity', 'image', 'published', 'image_mime', 'image_size', 'created_by', 'updated_by', 'category_id'];
+    protected $fillable = ['title', 'description', 'price', 'quantity', 'image', 'published', 'image_mime', 'image_size', 'created_by', 'updated_by', 'category_id', 'manufacturer', 'allergens', 'composition', 'storing', 'nutritional'];
 
     /**
      * Get the options for generating the slug.
@@ -44,5 +44,10 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class)->orderBy('created_at');
     }
 }
