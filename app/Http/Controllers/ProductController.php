@@ -21,7 +21,11 @@ class ProductController extends Controller
 
     public function view(Product $product)
     {
-        return view('product.view', ['product' => $product]);
+        $simProducts = $product->category->products()
+            ->orderBy('updated_at', 'desc')
+            ->paginate(5);
+        $breadcrumbs = $this->getCategoryBreadcrumbs($product->category);
+        return view('product.view', ['product' => $product, 'simProduct' => $simProducts, 'breadcrumbs' =>$breadcrumbs]);
     }
 
     public function category(Category $category)
@@ -33,4 +37,18 @@ class ProductController extends Controller
             'products' => $products
         ]);
     }
+
+    public function getCategoryBreadcrumbs($category)
+    {
+        $breadcrumbs = [];
+        while ($category) {
+            $breadcrumbs[] = [
+                'name' => $category->name,
+                'url' => route('category', $category)
+            ];
+            $category = $category->parent; // Assuming parent relationship exists
+        }
+        return array_reverse($breadcrumbs); // Reverse to get root-to-child order
+    }
+
 }

@@ -1,5 +1,19 @@
 <x-app-layout>
-    <div  x-data="productItem({{ json_encode([
+    <nav aria-label="breadcrumb" class="flex">
+        <ol class="breadcrumb flex">
+            @foreach ($breadcrumbs as $breadcrumb)
+                <li class="breadcrumb-item">
+                    <a href="{{ $breadcrumb['url'] }}">
+                        {{ $breadcrumb['name'] }}
+                        @if (!$loop->last) <!-- Only show '>' if it's not the last item -->
+                        <i class="fas fa-chevron-right text-sm px-1 text-gray-600"></i>
+                        @endif
+                    </a>
+                </li>
+            @endforeach
+        </ol>
+    </nav>
+    <div x-data="productItem({{ json_encode([
                     'id' => $product->id,
                     'slug' => $product->slug,
                     'image' => $product->image,
@@ -230,9 +244,68 @@
             </div>
         </div>
     </div>
+    <?php if ($simProduct->count() > 0): ?>
+    <div>
+        <div
+            class="grid gap-8 grig-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 p-5"
+        >
+            @foreach($simProduct as $product)
+                <!-- Product Item -->
+                <div
+                    x-data="productItem({{ json_encode([
+                        'id' => $product->id,
+                        'slug' => $product->slug,
+                        'image' => $product->image,
+                        'title' => $product->title,
+                        'price' => $product->price,
+                        'addToCartUrl' => route('cart.add', $product)
+                    ]) }})"
+                    class="border border-1 border-gray-200 rounded-md hover:border-purple-600 transition-colors bg-white"
+                >
+                    <a href="{{ route('product.view', $product->slug) }}"
+                       class="aspect-w-3 aspect-h-2 block overflow-hidden">
+                        <img
+                            src="{{ $product->image }}"
+                            alt=""
+                            class="object-cover rounded-lg hover:scale-105 hover:rotate-1 transition-transform pt-2"
+                        />
+                    </a>
+                    <div class="p-4">
+                        <h5 class="font-bold text-sm">{{$product->category->name}}</h5>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-sm">
+                            <a href="{{ route('product.view', $product->slug) }}">
+                                {{$product->title}}
+                            </a>
+                        </h3>
+                        <h5 class="font-bold text-sm">${{$product->price}}</h5>
+                    </div>
+                    <div class="flex justify-between py-3 px-4">
+                        <button class="btn-primary" @click="addToCart()">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+                <!--/ Product Item -->
+            @endforeach
+        </div>
+        {{$simProduct->links()}}
+    </div>
+    <?php endif; ?>
     @push('scripts')
         <script type="module">
 
         </script>
     @endpush
+    <style>
+        .breadcrumb-separator::before {
+            content: "\e90e"; /* Use your Unicode character here */
+            font-family: 'YourIconFont'; /* Optional: If using a custom icon font */
+            margin-left: 5px;
+            margin-right: 5px;
+            display: inline-block;
+            vertical-align: middle; /* Align it properly */
+        }
+    </style>
 </x-app-layout>
