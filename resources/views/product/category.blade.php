@@ -3,15 +3,6 @@
 ?>
 
 <x-app-layout>
-    <header class="px-5">
-        <div class="bg-purple-100 p-4 text-center">
-            <h1 class="text-2xl">
-                Welcome to our shop.
-            </h1>
-            <p> Ready to compose your recipe?</p>
-        </div>
-    </header>
-
     <?php if ($products->count() === 0): ?>
         <div class="text-center text-gray-600 py-16 text-xl">
             There are no products published

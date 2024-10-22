@@ -25,7 +25,8 @@ class ProductController extends Controller
             ->orderBy('updated_at', 'desc')
             ->paginate(5);
         $breadcrumbs = $this->getCategoryBreadcrumbs($product->category);
-        return view('product.view', ['product' => $product, 'simProduct' => $simProducts, 'breadcrumbs' =>$breadcrumbs]);
+        $categories = Category::with('children')->whereNull('parent_id')->get();
+        return view('product.view', compact('product', 'simProducts', 'breadcrumbs', 'categories'));
     }
 
     public function category(Category $category)
@@ -33,7 +34,7 @@ class ProductController extends Controller
         $products = $category->products()
             ->orderBy('updated_at', 'desc')
             ->paginate(5);
-        return view('product.index', [
+        return view('product.category', [
             'products' => $products
         ]);
     }
