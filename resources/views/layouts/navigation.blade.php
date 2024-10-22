@@ -7,7 +7,14 @@
     class="flex justify-between bg-slate-800 shadow-md text-white"
 >
     <div>
-        <a href="{{ route('home') }}" class="block py-navbar-item pl-5"> Logo </a>
+        <a href="{{ route('home') }}" class="block pt-1">
+            <img
+                src="{{ asset('storage/logo.png') }}"
+                alt="Logo"
+                width="80"
+                class=""
+            />
+        </a>
     </div>
     <!-- Responsive Menu -->
     <div

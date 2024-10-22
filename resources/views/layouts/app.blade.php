@@ -9,7 +9,7 @@
     <title>{{ config('app.name', 'Laravel E-commerce Website') }}</title>
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/splide.min.css', 'resources/js/app.js', 'resources/js/slide.js'])
     <style>
         [x-cloak] {
             display: none !important;
@@ -19,7 +19,7 @@
 <body>
 @include('layouts.navigation')
 
-<main class="p-5">
+<main class="p-5 relative">
     {{ $slot }}
 </main>
 
