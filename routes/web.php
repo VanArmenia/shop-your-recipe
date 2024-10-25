@@ -5,6 +5,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RecipeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,8 @@ Route::middleware(['guestOrVerified'])->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('home');
     Route::get('/category/{category:name}', [ProductController::class, 'category'])->name('category');
     Route::get('/product/{product:slug}', [ProductController::class, 'view'])->name('product.view');
+    Route::resource('recipes', RecipeController::class);
+    Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
 
     Route::prefix('/cart')->name('cart.')->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('index');

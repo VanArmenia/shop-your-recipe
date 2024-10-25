@@ -1,5 +1,5 @@
 <x-app-layout>
-    <nav aria-label="breadcrumb" class="flex pb-4">
+    <nav aria-label="breadcrumb" class="flex p-4">
         <ol class="breadcrumb flex">
             @foreach ($breadcrumbs as $breadcrumb)
                 <li class="breadcrumb-item">
@@ -14,10 +14,13 @@
         </ol>
     </nav>
     <div class="grid grid-cols-1 md:grid-cols-[minmax(250px,_25%)_1fr] min-h-screen">
-        <aside class="relative bg-purple-600 p-2 border rounded-md text-white mr-2">
+
+        <aside class="hidden md:block relative p-2 border rounded-md text-white mr-2"
+        style="background-color: #7fc7af">
             {{-- Call the recursive component with top-level categories --}}
-            <x-category-list :categories="$categories" />
+            <x-category-list :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)"/>
         </aside>
+
         <div x-data="productItem({{ json_encode([
                     'id' => $product->id,
                     'slug' => $product->slug,
@@ -98,14 +101,15 @@
                                 </svg>
                             </a>
                         </div>
-                        <div class="flex">
+                        <div class="flex pt-2">
                             <template x-for="image in images">
                                 <a
                                     @click.prevent="activeImage = image"
-                                    class="cursor-pointer w-[80px] h-[80px] border border-gray-300 hover:border-purple-500 flex items-center justify-center"
-                                    :class="{'border-purple-600': activeImage === image}"
+                                    class="cursor-pointer w-[80px] h-[80px] border border-gray-300  flex items-center justify-center"
                                 >
-                                    <img :src="image" alt="" class="w-auto max-auto max-h-full"/>
+                                    <img :src="image" alt="" class="w-auto max-auto max-h-full hover:border-pink-300 border-2"
+                                         :class="{'border-pink-300': activeImage === image}"
+                                    />
                                 </a>
                             </template>
                         </div>
@@ -181,40 +185,40 @@
                 <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400 mb-1" id="tabs-example" role="tablist">
                     @if ($product->manufacturer)
                         <li @click="currentTab = 1">
-                            <button href="#" :class="currentTab === 1 ? 'text-white bg-purple-600' : ''"
-                                    class="inline-block rounded-lg border-2 p-3 hover:border-purple-600">
+                            <button href="#" :class="currentTab === 1 ? 'text-white activeTab' : ''"
+                                    class="inline-block rounded-lg border-2 p-3 hover:border-green-100">
                                 Manufacturer
                             </button>
                         </li>
                     @endif
                     @if ($product->allergens)
                         <li @click="currentTab = 2">
-                            <button href="#"  :class="currentTab === 2 ? 'text-white bg-purple-600' : ''"
-                                    class="inline-block rounded-lg border-2 p-3 hover:border-purple-600">
+                            <button href="#"  :class="currentTab === 2 ? 'text-white activeTab' : ''"
+                                    class="inline-block rounded-lg border-2 p-3 hover:border-green-100">
                                 Allergens
                             </button>
                         </li>
                     @endif
                     @if ($product->composition)
                         <li @click="currentTab = 3">
-                            <button href="#"  :class="currentTab === 3 ? 'text-white bg-purple-600' : ''"
-                                    class="inline-block rounded-lg border-2 p-3 hover:border-purple-600">
+                            <button href="#"  :class="currentTab === 3 ? 'text-white activeTab' : ''"
+                                    class="inline-block rounded-lg border-2 p-3 hover:border-green-100">
                                 Composition
                             </button>
                         </li>
                     @endif
                     @if ($product->storing)
                         <li @click="currentTab = 4">
-                            <button href="#"  :class="currentTab === 4 ? 'text-white bg-purple-600' : ''"
-                                    class="inline-block rounded-lg border-2 p-3 hover:border-purple-600">
+                            <button href="#"  :class="currentTab === 4 ? 'text-white activeTab' : ''"
+                                    class="inline-block rounded-lg border-2 p-3 hover:border-green-100">
                                 Storing
                             </button>
                         </li>
                     @endif
                     @if ($product->nutritional)
                         <li @click="currentTab = 5">
-                            <button href="#"  :class="currentTab === 5 ? 'text-white bg-purple-600' : ''"
-                                    class="inline-block rounded-lg border-2 p-3 hover:border-purple-600">
+                            <button href="#"  :class="currentTab === 5 ? 'text-white activeTab' : ''"
+                                    class="inline-block rounded-lg border-2 p-3 hover:border-green-100">
                                 Nutritional
                             </button>
                         </li>
@@ -315,7 +319,7 @@
         }
         /* Custom styles for Splide arrows */
         .splide__arrow {
-            background-color: rgb(129, 36, 213);  /* Remove default background */
+            background-color: rgb(255,61,127);
         }
 
         .splide__arrow--prev {
@@ -338,6 +342,9 @@
 
         .category-list ul {
             padding-left: 20px; /* Indent child categories */
+        }
+        .activeTab {
+            background-color: #3fb8af;
         }
     </style>
 </x-app-layout>

@@ -3,24 +3,26 @@
 ?>
 
 <x-app-layout>
-    <header class="md:px-5" style="background:
-    linear-gradient(90deg, #ff9e9d85 0%, transparent 20%, #ff9e9d85 40%, transparent 60%, #ff9e9d85 80%),
-    linear-gradient(to top, rgba(218,216,167, 1), rgba(255,158,157, 0.3));
-    background-blend-mode: overlay;
-            ">
-        <div class="p-4 text-center">
-            <h1 class="text-xl md:text-2xl">
-                Welcome to our Web Kitchen.
+    <header class="">
+        <div class="p-4 text-center w-full" style="background:linear-gradient(90deg, rgba(218,216,167) 0%, rgba(127,199,175) 50%, rgba(218,216,167) 100%);">
+            <h1 class="text-2xl">
+                Welcome to our shop.
             </h1>
             <p> Ready to compose your recipe?</p>
         </div>
     </header>
-
-    <?php if ($products->count() === 0): ?>
+    <main class="grid grid-cols-1 md:grid-cols-[minmax(250px,_25%)_1fr] min-h-screen">
+        <aside class="hidden md:block relative bg-purple-600 p-2 border rounded-md text-white mr-2"
+               style="background-color: #ff9e9d"
+        >
+            {{-- Call the recursive component with top-level categories --}}
+            <x-category-list :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)"/>
+        </aside>
+        <?php if ($products->count() === 0): ?>
         <div class="text-center text-gray-600 py-16 text-xl">
             There are no products published
         </div>
-    <?php else: ?>
+        <?php else: ?>
         <div
             class="grid gap-8 grig-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-5"
         >
@@ -35,14 +37,15 @@
                         'price' => $product->price,
                         'addToCartUrl' => route('cart.add', $product)
                     ]) }})"
-                    class="border border-1 border-gray-200 rounded-md transition-colors bg-white"
+                    class="border border-1 rounded-md transition-colors bg-white p-2"
+                    style="border-color: #ff9e9d"
                 >
                     <a href="{{ route('product.view', $product->slug) }}"
                        class="aspect-w-3 aspect-h-2 block overflow-hidden">
                         <img
                             src="{{ $product->image }}"
                             alt=""
-                            class="object-cover rounded-lg hover:scale-105 hover:rotate-1 transition-transform pt-2"
+                            class="object-cover rounded-lg hover:scale-105 hover:scale-110 transition-transform pt-2"
                         />
                     </a>
                     <div class="p-4">
@@ -57,7 +60,7 @@
                         <h5 class="font-bold">${{$product->price}}</h5>
                     </div>
                     <div class="flex justify-between py-3 px-4">
-                        <button class="btn-primary" @click="addToCart()">
+                        <button class="btn-primary" @click="addToCart()" style="background-color: #ff3d7f">
                             Add to Cart
                         </button>
                     </div>
@@ -66,5 +69,8 @@
             @endforeach
         </div>
         {{$products->links()}}
-    <?php endif; ?>
+        <?php endif; ?>
+    </main>
+
+
 </x-app-layout>
