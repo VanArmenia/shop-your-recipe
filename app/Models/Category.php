@@ -9,6 +9,10 @@ class Category extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'id' => 'integer',  // Ensure that 'id' is always an integer
+    ];
+
     public function products()
     {
         return $this->hasMany(Product::class);

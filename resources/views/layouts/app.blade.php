@@ -19,7 +19,7 @@
 <body>
 @include('layouts.navigation')
 
-<main class="p-5 relative">
+<main class="relative">
     {{ $slot }}
 </main>
 
@@ -62,5 +62,6 @@
     </div>
 </div>
 <!--/ Toast -->
+@include('layouts.footer')
 </body>
 </html>

@@ -4,15 +4,15 @@
         cartItemsCount: {{ \App\Helpers\Cart::getCartItemsCount() }},
     }"
     @cart-change.window="cartItemsCount = $event.detail.count"
-    class="flex justify-between bg-slate-800 shadow-md text-white"
+    class="flex justify-between shadow-md text-white"
+    style="background-color: #1e1212"
 >
     <div>
         <a href="{{ route('home') }}" class="block pt-1">
             <img
                 src="{{ asset('storage/logo.png') }}"
                 alt="Logo"
-                width="80"
-                class=""
+                class="w-16 md:w-20"
             />
         </a>
     </div>
@@ -50,7 +50,8 @@
                         x-transition
                         x-text="cartItemsCount"
                         x-cloak
-                        class="py-[2px] px-[8px] rounded-full bg-red-500"
+                        class="py-[2px] px-[8px] rounded-full"
+                        style="background-color: #FF3D7F;"
                     ></small>
                     <!--/ Cart Items Counter -->
                 </a>
@@ -192,7 +193,7 @@
                 <li class="px-3 py-3">
                     <a
                         href="{{ route('register') }}"
-                        class="block text-center text-white bg-emerald-600 py-2 px-3 rounded shadow-md hover:bg-emerald-700 active:bg-emerald-800 transition-colors w-full"
+                        class="block text-center text-white py-2 px-3 rounded shadow-md btn-primary transition-colors w-full"
                     >
                         Register now
                     </a>
@@ -228,7 +229,8 @@
                         x-transition
                         x-cloak
                         x-text="cartItemsCount"
-                        class="absolute z-[100] top-4 -right-3 py-[2px] px-[8px] rounded-full bg-red-500"
+                        class="absolute z-[100] top-4 -right-3 py-[2px] px-[8px] rounded-full"
+                        style="background-color: #FF3D7F;"
                     ></small>
                 </a>
             </li>
@@ -373,7 +375,7 @@
                 <li>
                     <a
                         href="{{ route('register') }}"
-                        class="inline-flex items-center text-white bg-emerald-600 py-2 px-3 rounded shadow-md hover:bg-emerald-700 active:bg-emerald-800 transition-colors mx-5"
+                        class="btn-primary inline-flex items-center text-white py-2 px-3 rounded shadow-md transition-colors mx-5"
                     >
                         Register now
                     </a>
