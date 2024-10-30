@@ -86,6 +86,7 @@ const product = ref({
   description: props.product.description,
   price: props.product.price,
   category_id: props.product.category_id,
+  manufacturer_id: props.product.manufacturer_id,
   published: props.product.published
 })
 
@@ -114,6 +115,7 @@ onUpdated(() => {
     description: props.product.description,
     price: props.product.price,
     category_id: props.product.category_id,
+    manufacturer_id: props.product.manufacturer_id,
     published: props.product.published,
   }
 })

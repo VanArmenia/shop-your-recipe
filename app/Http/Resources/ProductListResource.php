@@ -25,6 +25,7 @@ class ProductListResource extends JsonResource
             'price' => $this->price,
             'quantity' => $this->quantity,
             'category_id' => $this->category_id,
+            'manufacturer_id' => $this->manufacturer_id,
             'updated_at' => ( new \DateTime($this->updated_at) )->format('Y-m-d H:i:s'),
         ];
     }

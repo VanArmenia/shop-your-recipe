@@ -12,7 +12,7 @@
                 :value="props.modelValue"
                 :class="inputClasses"
                 @change="onChange($event.target.value)">
-          <option disabled value="">Select a Category:</option>
+          <option disabled value="">Select a {{ label }}:</option>
           <option v-for="option of selectOptions" :value="option.id">{{ option.name }}</option>
         </select>
       </template>

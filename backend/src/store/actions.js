@@ -87,7 +87,7 @@ export function createProduct({commit}, product) {
     form.append('title', product.title);
     product.images.forEach(im => form.append('images[]', im))
     form.append('description', product.description || '');
-    form.append('manufacturer', product.manufacturer || '');
+    form.append('manufacturer_id', product.manufacturer_id);
     form.append('allergens', product.allergens || '');
     form.append('composition', product.composition || '');
     form.append('storing', product.storing || '');
@@ -112,7 +112,7 @@ export function updateProduct({commit}, product) {
       product.deletedImages.forEach(im => form.append('deleted_images[]', im))
     }
     form.append('description', product.description || '');
-    form.append('manufacturer', product.manufacturer || '');
+    form.append('manufacturer_id', product.manufacturer_id);
     form.append('allergens', product.allergens || '');
     form.append('composition', product.composition || '');
     form.append('storing', product.storing || '');

@@ -57,7 +57,7 @@ class ProductController extends Controller
         $products = Product::query()
             ->where('published', '=', 1)
             ->orderBy('updated_at', 'desc')
-            ->paginate(5);
+            ->paginate(10);
         $categories = Category::with('children')->whereNull('parent_id')->get();
         return view('shop.index', compact('products','categories'));
     }

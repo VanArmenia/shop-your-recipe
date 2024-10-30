@@ -24,6 +24,7 @@ const DEFAULT_PRODUCT = {
   image: '',
   price: '',
   category_id: '',
+  manufacturer_id: '',
 }
 
 const products = computed(() => store.state.products);
