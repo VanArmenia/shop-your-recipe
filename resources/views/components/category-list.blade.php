@@ -1,11 +1,11 @@
 @props(['categories', 'depth' => 0, 'prodCategory'])
 
-<div x-data="{ catShow: {{ $prodCategory }} }" class="category-list">
+<div x-data="{ catShow: {{ $prodCategory }} }" class="category-list" style="margin-left: {{ $depth }}rem;">
     @foreach ($categories as $category)
         <div class="breadcrumb-item">
             <div class="flex justify-between items-center p-1">
                 <!-- Category name link -->
-                <a href="{{ route('category', $category) }}" class="text-xl" style="padding-left: {{ $depth }}rem;">
+                <a href="{{ route('category', $category) }}" class="text-lg font-bold">
                     {{ $category->name }}
                 </a>
 
@@ -24,7 +24,7 @@
 
             @if($category->children->count() > 0)
                 <!-- Separate container for child categories, not affected by flex -->
-                <div x-show="catShow === {{ $category->id }} || {{ $depth }} === 0" x-collapse :class="catShow === {{ $category->id }} ? 'activeCategory font-bold' : ''">
+                <div x-show="catShow === {{ $category->id }} || {{ $depth }} === 0" x-collapse :class="catShow === {{ $category->id }} ? 'activeCategory font-bold' : ''" style="margin-left: {{ $depth }}rem;">
                     <x-category-list :categories="$category->children" :depth="$depth + 1" :prodCategory="$prodCategory"/>
                 </div>
             @endif

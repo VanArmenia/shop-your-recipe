@@ -227,7 +227,7 @@
                 <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-800 min-h-24">
                     <div x-show="currentTab === 1">
                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                            {!! $product->manufacturer !!}
+                            {!! $product->manufacturer->name !!}
                         </p>
                     </div>
                     <div x-show="currentTab === 2">

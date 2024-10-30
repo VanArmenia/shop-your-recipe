@@ -17,7 +17,7 @@
           <CustomInput type="richtext" class="mb-2" v-model="product.composition" label="Composition"/>
           <CustomInput type="richtext" class="mb-2" v-model="product.storing" label="Storing"/>
           <CustomInput type="richtext" class="mb-2" v-model="product.nutritional" label="Nutritional"/>
-          <CustomInput type="richtext" class="mb-2" v-model="product.manufacturer" label="Manufacturer"/>
+          <CustomInput type="select" class="mb-2" v-model.number="product.manufacturer_id" :selectOptions="manufacturers" name="manufacturer_id" label="Manufacturer"/>
           <CustomInput type="select" class="mb-2" v-model.number="product.category_id" :selectOptions="categories" name="category_id" label="Category"/>
           <CustomInput type="number" class="mb-2" v-model="product.price" placeholder="Price" prepend="$"/>
           <CustomInput type="number" class="mb-2" v-model="product.quantity" placeholder="Quantity"/>
@@ -66,7 +66,7 @@ const product = ref({
   images: [],
   deleted_images: [],
   description: '',
-  manufacturer: '',
+  manufacturer_id: null,
   allergens: '',
   composition: '',
   storing: '',
@@ -81,11 +81,13 @@ const loading = ref(false)
 const router = useRouter();
 const route = useRoute();
 const categories = ref([]);
+const manufacturers = ref([]);
 const error = ref(null);
 
 onMounted(() => {
   // console.log(product.value.category_id)
   fetchCategories(); // Fetching categories
+  fetchManufacturers(); // Fetching manufacturers
   if (route.params.id) {
     loading.value = true
     store.dispatch('getProduct', route.params.id)
@@ -103,6 +105,17 @@ const fetchCategories = async () => {
     categories.value = response.data.data;
   } catch (err) {
     error.value = 'Failed to fetch categories';
+    console.error(err);
+  }
+};
+
+const fetchManufacturers = async () => {
+  error.value = null;
+  try {
+    const response = await axiosClient.get('/manufacturers');
+    manufacturers.value = response.data.data;
+  } catch (err) {
+    error.value = 'Failed to fetch manufacturers';
     console.error(err);
   }
 };

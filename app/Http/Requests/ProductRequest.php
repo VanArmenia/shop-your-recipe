@@ -30,7 +30,7 @@ class ProductRequest extends FormRequest
             'price' => ['required', 'numeric'],
             'quantity' => ['nullable', 'numeric'],
             'description' => ['nullable', 'string'],
-            'manufacturer' => ['nullable', 'string'],
+            'manufacturer_id' => ['nullable', 'numeric'],
             'allergens' => ['nullable', 'string'],
             'composition' => ['nullable', 'string'],
             'storing' => ['nullable', 'string'],
