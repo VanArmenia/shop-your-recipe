@@ -1,6 +1,9 @@
-@props(['categories', 'depth' => 0, 'prodCategory'])
+@props(['categories', 'depth' => 0, 'prodCategory' => 0, 'catID' => 0])
 
-<div x-data="{ catShow: {{ $prodCategory }} }" class="category-list" style="margin-left: {{ $depth }}rem;">
+<div x-data="{ catShow: {{ $prodCategory !== 0 ? $prodCategory : $catID }} }"
+     class="category-list"
+     style="margin-left: {{ $depth }}rem;"
+>
     @foreach ($categories as $category)
         <div class="breadcrumb-item">
             <div class="flex justify-between items-center p-1">
@@ -24,8 +27,12 @@
 
             @if($category->children->count() > 0)
                 <!-- Separate container for child categories, not affected by flex -->
-                <div x-show="catShow === {{ $category->id }} || {{ $depth }} === 0" x-collapse :class="catShow === {{ $category->id }} ? 'activeCategory font-bold' : ''" style="margin-left: {{ $depth }}rem;">
-                    <x-category-list :categories="$category->children" :depth="$depth + 1" :prodCategory="$prodCategory"/>
+                <div x-show="catShow === {{ $category->id }} || {{ $depth }} === 0"
+                     x-collapse
+                     :class="catShow === {{ $category->id }} ? 'activeCategory font-bold' : ''"
+                     style="margin-left: {{ $depth + 1 }}rem;"
+                >
+                    <x-category-list :categories="$category->children" :depth="$depth + 1" :prodCategory="$prodCategory" :catID="$catID"/>
                 </div>
             @endif
         </div>
