@@ -15,11 +15,8 @@
     </nav>
     <div class="grid grid-cols-1 md:grid-cols-[minmax(250px,_25%)_1fr] min-h-screen">
 
-        <aside class="hidden md:block relative p-2 border rounded-md text-white mr-2"
-        style="background-color: #7fc7af">
-            {{-- Call the recursive component with top-level categories --}}
-            <x-category-list :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)"/>
-        </aside>
+        <!-- Include the aside Blade component here -->
+        <x-aside :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)"/>
 
         <div x-data="productItem({{ json_encode([
                     'id' => $product->id,

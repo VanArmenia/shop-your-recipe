@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Manufacturer;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -34,9 +35,9 @@ class ProductController extends Controller
         $products = $category->products()
             ->orderBy('updated_at', 'desc')
             ->paginate(5);
-        return view('product.category', [
-            'products' => $products
-        ]);
+        $manufacturers = Manufacturer::All();
+        $categories = Category::with('children')->whereNull('parent_id')->get();
+        return view('product.category', compact('products','categories', 'manufacturers','category'));
     }
 
     public function getCategoryBreadcrumbs($category)
@@ -59,7 +60,8 @@ class ProductController extends Controller
             ->orderBy('updated_at', 'desc')
             ->paginate(10);
         $categories = Category::with('children')->whereNull('parent_id')->get();
-        return view('shop.index', compact('products','categories'));
+        $manufacturers = Manufacturer::All();
+        return view('shop.index', compact('products','categories', 'manufacturers'));
     }
 
 }
