@@ -8,10 +8,15 @@
         <div class="breadcrumb-item">
             <div class="flex justify-between items-center p-1">
                 <!-- Category name link -->
-                <a href="{{ route('category', $category) }}" class="text-lg font-bold">
+                @if($category->children->count() == 0)
+                <a href="{{ route('category', $category) }}" class="text-lg font-bold"
+                   :class="catShow === {{ $category->parent->id }} ? 'activeCategory font-bold' : ''"
+                >
                     {{ $category->name }}
                 </a>
-
+                @else
+                <p class="text-lg font-bold"> {{ $category->name }}</p>
+                @endif
                 @if($category->children->count() > 0)
                     <!-- Toggle button for expanding/collapsing children -->
                     <button
@@ -29,7 +34,6 @@
                 <!-- Separate container for child categories, not affected by flex -->
                 <div x-show="catShow === {{ $category->id }} || {{ $depth }} === 0"
                      x-collapse
-                     :class="catShow === {{ $category->id }} ? 'activeCategory font-bold' : ''"
                      style="margin-left: {{ $depth + 1 }}rem;"
                 >
                     <x-category-list :categories="$category->children" :depth="$depth + 1" :prodCategory="$prodCategory" :catID="$catID"/>
@@ -40,7 +44,8 @@
 </div>
 <style>
     .activeCategory {
-        background-color: #3fb8af;
+        border-left: 3px solid #3fb8af; /* Adjust thickness and color */
+        padding-left: 10px; /* Adds spacing between border and content */
     }
 </style>
 

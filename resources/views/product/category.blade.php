@@ -12,11 +12,20 @@
         </div>
     </header>
     <main class="grid grid-cols-1 md:grid-cols-[minmax(250px,_25%)_1fr] min-h-screen"
-          x-data="productFilter()"
+          x-data="{...  productFilter(), filterShow: 1 }"
           x-init="initSlider()"
     >
+
+        <h3 class="bg-emerald-500 text-white text-lg font-bold p-2 headerBg mb-2 md:hidden cursor-pointer"
+            @click="filterShow = !filterShow"
+        >
+            Filters
+        </h3>
         <!-- Include the aside Blade component here -->
-        <x-aside :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)" :manufacturers="$manufacturers" :catID="($category->parent->id ?? 0)"/>
+        <x-aside :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)" :manufacturers="$manufacturers" :catID="($category->parent->id ?? 0)"
+        />
+
+
     <?php if ($products->count() === 0): ?>
         <div class="text-center text-gray-600 py-16 text-xl">
             There are no products published
@@ -49,6 +58,10 @@
                     } else {
                         this.selectedManufacturers.push(manufacturerId);
                     }
+                },
+
+                toggleShow() {
+                    this.filtersShow = !this.filtersShow
                 },
 
                 initSlider() {

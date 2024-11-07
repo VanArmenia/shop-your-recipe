@@ -1,6 +1,8 @@
 @props(['categories', 'prodCategory', 'manufacturers', 'catID' => 0])
 
-<aside class="hidden md:block relative bg-purple-600 p-2 border rounded-md text-white mr-2" style="background-color: #ff9e9d">
+<aside style="background-color: #ff9e9d" :class="filterShow? '' : 'hidden '"
+       class="relative right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg origin-top md:block bg-purple-600 p-2 border rounded-md text-white mr-2"
+>
     @if ($prodCategory == 0)
     <div class="price-filter mb-8">
         <label class="p-2 bg-greenSp w-full block text-white font-bold text-lg">Price</label>
@@ -37,4 +39,10 @@
         {{-- Call the recursive component with top-level categories --}}
         <x-category-list :categories="$categories" :prodCategory="$prodCategory" :catID="$catID"/>
     </div>
+
+    <style>
+        .headerBg {
+            background-color: #3fb8af;
+        }
+    </style>
 </aside>
