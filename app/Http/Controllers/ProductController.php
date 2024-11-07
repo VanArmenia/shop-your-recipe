@@ -63,5 +63,4 @@ class ProductController extends Controller
         $manufacturers = Manufacturer::All();
         return view('shop.index', compact('products','categories', 'manufacturers'));
     }
-
 }
