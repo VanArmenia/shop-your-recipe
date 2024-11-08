@@ -176,6 +176,19 @@
                             ></a>
                         </p>
                     </div>
+            {{--Reviews--}}
+                    <div>
+                        <h3 class="p-4 text-lg">Reviews</h3>
+                        @foreach($product->reviews as $review)
+                            <p>
+                                {!! $review->rating !!}
+                            </p>
+                            <p>
+                                {!! $review->review_text !!}
+                            </p>
+
+                        @endforeach
+                    </div>
                 </div>
             </div>
             <div x-data="{ currentTab: 1 }" class="border-b border-gray-200 dark:border-gray-700 my-4">
@@ -306,10 +319,6 @@
     </div>
     <?php endif; ?>
 
-    @push('scripts')
-        <script type="module">
-        </script>
-    @endpush
     <style>
         .sliderDiv {
             width: 100% !important;
