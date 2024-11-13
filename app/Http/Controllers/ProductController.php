@@ -64,4 +64,38 @@ class ProductController extends Controller
         $manufacturers = Manufacturer::All();
         return view('shop.index', compact('products','categories', 'manufacturers'));
     }
+
+    public function storeReview(Request $request, $productId)
+    {
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'review_text' => 'nullable|string|max:1000',
+        ]);
+
+        // Ensure the product exists
+        $product = Product::findOrFail($productId);
+
+        // Create the review
+        $product->reviews()->create([
+            'user_id' => auth()->id(),  // Assuming the user is authenticated
+            'rating' => $request->input('rating'),
+            'review_text' => $request->input('review_text'),
+        ]);
+
+        // Return a JSON response for Alpine.js handling
+        return response()->json([
+            'message' => 'Review submitted successfully!',
+        ]);
+    }
+
+    // Method to fetch reviews
+    public function fetchReviews($productId)
+    {
+        $product = Product::findOrFail($productId);
+        $reviews = $product->reviews()->with('user.customer')->orderBy('created_at', 'desc')->get();
+
+        return response()->json([
+            'reviews' => $reviews,
+        ]);
+    }
 }

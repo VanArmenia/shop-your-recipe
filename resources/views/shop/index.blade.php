@@ -12,9 +12,14 @@
         </div>
     </header>
     <main class="grid grid-cols-1 md:grid-cols-[minmax(250px,_25%)_1fr] min-h-screen"
-          x-data="productFilter()"
+          x-data="{...  productFilter(), filterShow: 1 }"
           x-init="initSlider()"
     >
+        <h3 class="bg-emerald-500 text-white text-lg font-bold p-2 headerBg mb-2 md:hidden cursor-pointer"
+            @click="filterShow = !filterShow"
+        >
+            Filters
+        </h3>
         <!-- Include the aside Blade component here -->
         <x-aside :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)" :manufacturers="$manufacturers"/>
         <?php if ($products->count() === 0): ?>
