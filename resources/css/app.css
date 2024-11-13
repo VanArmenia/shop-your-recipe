@@ -33,6 +33,10 @@
     background-color: #ff3d7f;
     @apply text-white py-2 px-4 rounded shadow-md active:bg-purple-800 transition-colors;
   }
+  .start-icon {
+    background-color: #ff3d7f;
+    @apply text-white p-0.5 px-2 rounded shadow-md active:bg-purple-800 transition-colors;
+  }
   .btn-primary:hover {
     background-color: #fe2770;
   }

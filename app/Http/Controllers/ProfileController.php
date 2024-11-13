@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -40,10 +41,33 @@ class ProfileController extends Controller
         /** @var \App\Models\Customer $customer */
         $customer = $user->customer;
 
+        // Handle avatar upload if exists
+        if ($request->hasFile('avatar')) {
+            // Delete the old avatar if it exists
+            if ($customer->avatar) {
+                Storage::delete('public/' . $customer->avatar);
+            }
+            $avatar = $request->file('avatar');
+            $filename = time() . '_' . $avatar->getClientOriginalName();
+
+            // Store the file in 'public/avatars' directory and keep it in the 'public' disk
+            $path = $avatar->storeAs('avatars', $filename, 'public');
+
+            // Update the customer avatar
+            $customer->avatar = $path;
+            $customer->update(); // Save immediately to avoid issues if the transaction fails
+        }
+
+        // Unset the 'avatar' field so it is not overwritten during customer update
+        unset($customerData['avatar']);
+
+        // Start the database transaction for customer data, shipping, and billing
         DB::beginTransaction();
         try {
+            // Update customer information
             $customer->update($customerData);
 
+            // Update shipping address
             if ($customer->shippingAddress) {
                 $customer->shippingAddress->update($shippingData);
             } else {
@@ -51,6 +75,8 @@ class ProfileController extends Controller
                 $shippingData['type'] = AddressType::Shipping->value;
                 CustomerAddress::create($shippingData);
             }
+
+            // Update billing address
             if ($customer->billingAddress) {
                 $customer->billingAddress->update($billingData);
             } else {
@@ -58,20 +84,22 @@ class ProfileController extends Controller
                 $billingData['type'] = AddressType::Billing->value;
                 CustomerAddress::create($billingData);
             }
+
+            // Commit the transaction
+            DB::commit();
+
+            // Flash success message
+            $request->session()->flash('flash_message', 'Profile was successfully updated.');
+            return redirect()->route('profile');
         } catch (\Exception $e) {
+            // Rollback the transaction in case of failure
             DB::rollBack();
 
-            Log::critical(__METHOD__ . ' method does not work. '. $e->getMessage());
+            Log::critical(__METHOD__ . ' method does not work. ' . $e->getMessage());
             throw $e;
         }
-
-        DB::commit();
-
-        $request->session()->flash('flash_message', 'Profile was successfully updated.');
-
-        return redirect()->route('profile');
-
     }
+
 
     public function passwordUpdate(PasswordUpdateRequest $request)
     {

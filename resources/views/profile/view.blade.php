@@ -14,6 +14,12 @@
         @endif
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
             <div class="bg-white p-3 shadow rounded-lg md:col-span-2">
+                @if($customer->avatar)
+                    <img src="{{ asset('storage/' . $customer->avatar) }}" alt="User Avatar" class="w-20 h-20 rounded-full">
+                @else
+                    <img src="{{ asset('images/default-avatar.png') }}" alt="Default Avatar" class="w-20 h-20 rounded-full">
+                @endif
+
                 <form x-data="{
                     countries: {{ json_encode($countries) }},
                     billingAddress: {{ json_encode([
@@ -46,10 +52,18 @@
                         }
                         return null;
                     }
-                }" action="{{ route('profile.update') }}" method="post">
+                }" action="{{ route('profile.update') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <h2 class="text-xl font-semibold mb-2">Profile Details</h2>
                     <div class="grid grid-cols-2 gap-3 mb-3">
+                        <!-- Avatar input -->
+                        <x-input
+                            type="file"
+                            name="avatar"
+                            label="Upload Avatar"
+                            class="w-full mt-2"
+                        />
+
                         <x-input
                             type="text"
                             name="first_name"
