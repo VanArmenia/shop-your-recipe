@@ -24,6 +24,38 @@
         <ul>
             <li>
                 <a
+                    href="{{ route('home') }}"
+                    class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
+                >
+                    Home
+                </a>
+            </li>
+            <li>
+                <a
+                    href="{{ route('about') }}"
+                    class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
+                >
+                    About
+                </a>
+            </li>
+            <li>
+                <a
+                    href="{{ route('recipes.index') }}"
+                    class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
+                >
+                    Recipes
+                </a>
+            </li>
+            <li>
+                <a
+                    href="{{ route('shop') }}"
+                    class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
+                >
+                    Shop
+                </a>
+            </li>
+            <li>
+                <a
                     href="{{ route('cart.index') }}"
                     class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
                 >
@@ -204,6 +236,30 @@
     <!--/ Responsive Menu -->
     <nav class="hidden md:block">
         <ul class="grid grid-flow-col items-center">
+            <li>
+                <a
+                    href="{{ route('about') }}"
+                    class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
+                >
+                    About
+                </a>
+            </li>
+            <li>
+                <a
+                    href="{{ route('recipes.index') }}"
+                    class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
+                >
+                    Recipes
+                </a>
+            </li>
+            <li>
+                <a
+                    href="{{ route('shop') }}"
+                    class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
+                >
+                    Shop
+                </a>
+            </li>
             <li>
                 <a
                     href="{{ route('cart.index') }}"

@@ -15,11 +15,27 @@
           x-data="{...  productFilter(), filterShow: 1 }"
           x-init="initSlider()"
     >
-        <h3 class="bg-emerald-500 text-white text-lg font-bold p-2 headerBg mb-2 md:hidden cursor-pointer"
+        <div class="flex justify-between bg-emerald-500 text-white text-lg font-bold p-2 headerBg mb-2 md:hidden cursor-pointer"
             @click="filterShow = !filterShow"
         >
-            Filters
-        </h3>
+           <h3> Filters </h3>
+            <button class="block md:hidden">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M4 6h16M4 12h16M4 18h16"
+                    />
+                </svg>
+            </button>
+        </div>
         <!-- Include the aside Blade component here -->
         <x-aside :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)" :manufacturers="$manufacturers"/>
         <?php if ($products->count() === 0): ?>
