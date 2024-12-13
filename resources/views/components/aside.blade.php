@@ -1,7 +1,7 @@
 @props(['categories', 'prodCategory', 'manufacturers', 'catID' => 0])
 
-<aside style="background-color: #ff9e9d" :class="filterShow? '' : 'hidden '"
-       class="relative right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg origin-top md:block bg-purple-600 p-2 border rounded-md text-white mr-2"
+<aside :class="filterShow? '' : 'hidden '"
+       class="relative right-0 m-2 bg-white border border-gray-200 rounded-md shadow-lg origin-top md:block bg-purple-600 p-2 border rounded-md text-black mr-2"
 >
     @if ($prodCategory == 0)
     <div class="price-filter mb-8">

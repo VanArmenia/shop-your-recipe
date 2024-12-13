@@ -16,6 +16,9 @@ module.exports = {
             colors: {
               greenSp: '#3fb8af', // Add your custom color here
             },
+            scale: {
+              '103': '1.03', // Add custom scale
+            },
         },
     },
 

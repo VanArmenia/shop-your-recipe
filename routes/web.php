@@ -32,6 +32,8 @@ Route::middleware(['guestOrVerified'])->group(function () {
 
     Route::resource('recipes', RecipeController::class);
 
+    Route::view('/about', 'about')->name('about');
+
     Route::prefix('/cart')->name('cart.')->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('index');
         Route::post('/add/{product:slug}', [CartController::class, 'add'])->name('add');

@@ -3,12 +3,8 @@
 ?>
 
 <x-app-layout>
-    <header class="md:px-5" style="background:
-    linear-gradient(90deg, #ff9e9d85 0%, transparent 20%, #ff9e9d85 40%, transparent 60%, #ff9e9d85 80%),
-    linear-gradient(to top, rgba(218,216,167, 1), rgba(255,158,157, 0.3));
-    background-blend-mode: overlay;
-            ">
-        <div class="p-4 text-center">
+    <header class="md:px-5 bg-yellow-700">
+        <div class="p-4 text-center text-yellow-100">
             <h1 class="text-xl md:text-2xl">
                 Welcome to our Web Kitchen.
             </h1>

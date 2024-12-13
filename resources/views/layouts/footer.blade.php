@@ -24,6 +24,12 @@
         <ul>
             <li>
                 <a
+                    href="{{ route('about') }}"
+                    class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
+                >
+                    About
+                </a>
+                <a
                     href="{{ route('recipes.index') }}"
                     class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
                 >
@@ -43,6 +49,12 @@
     <nav class="hidden md:block px-16">
         <ul class="grid grid-flow-col items-center">
             <li>
+                <a
+                    href="{{ route('about') }}"
+                    class="relative inline-flex items-center py-navbar-item px-navbar-item hover:bg-slate-900"
+                >
+                    About
+                </a>
                 <a
                     href="{{ route('recipes.index') }}"
                     class="relative inline-flex items-center py-navbar-item px-navbar-item hover:bg-slate-900"
