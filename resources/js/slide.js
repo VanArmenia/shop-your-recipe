@@ -7,10 +7,13 @@ document.addEventListener('DOMContentLoaded', function () {
       type: 'loop',
       perPage: 5,
       breakpoints: {
-        640: {
-          perPage: 2,
+        440: {
+          perPage: 1,
         },
         940: {
+          perPage: 2,
+        },
+        1240: {
           perPage: 3,
         },
       },
