@@ -3,6 +3,7 @@ import AppLayout from '../components/AppLayout.vue'
 import Login from "../views/Login.vue";
 import Dashboard from "../views/Dashboard.vue";
 import Products from "../views/Products/Products.vue";
+import Recipes from "../views/Recipes/Recipes.vue";
 import Users from "../views/Users/Users.vue";
 import Customers from "../views/Customers/Customers.vue";
 import CustomerView from "../views/Customers/CustomerView.vue";
@@ -16,6 +17,7 @@ import Report from "../views/Reports/Report.vue";
 import OrdersReport from "../views/Reports/OrdersReport.vue";
 import CustomersReport from "../views/Reports/CustomersReport.vue";
 import ProductForm from "../views/Products/ProductForm.vue";
+import RecipeForm from "../views/Recipes/RecipesForm.vue";
 
 const routes = [
   {
@@ -42,9 +44,27 @@ const routes = [
         component: Products
       },
       {
+        path: 'recipes',
+        name: 'app.recipes',
+        component: Recipes
+      },
+      {
         path: 'products/create',
         name: 'app.products.create',
         component: ProductForm
+      },
+      {
+        path: 'recipes/create',
+        name: 'app.recipes.create',
+        component: RecipeForm
+      },
+      {
+        path: 'recipes/:id',
+        name: 'app.recipes.edit',
+        component: RecipeForm,
+        props: {
+          id: (value) => /^\d+$/.test(value)
+        }
       },
       {
         path: 'products/:id',

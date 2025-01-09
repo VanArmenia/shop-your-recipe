@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Recipe extends Model
 {
     use HasFactory;
+
+    public function images()
+    {
+        return $this->hasMany(RecipeImage::class)->orderBy('position');
+    }
+
 }

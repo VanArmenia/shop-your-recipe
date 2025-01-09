@@ -18,7 +18,7 @@
         }
     </style>
 </head>
-<body>
+<body class="flex flex-col justify-between h-screen">
 @include('layouts.navigation')
 
 <main class="relative">
