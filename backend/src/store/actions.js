@@ -76,9 +76,32 @@ export function getProducts({commit, state}, {url = null, search = '', per_page,
       commit('setProducts', [false])
     })
 }
+export function getRecipes({commit, state}, {url = null, search = '', per_page, sort_field, sort_direction} = {}) {
+  commit('setRecipes', [true])
+  url = url || '/recipes'
+  const params = {
+    per_page: state.recipes.limit,
+  }
+  return axiosClient.get(url, {
+    params: {
+      ...params,
+      search, per_page, sort_field, sort_direction
+    }
+  })
+    .then((response) => {
+      commit('setRecipes', [false, response.data])
+    })
+    .catch(() => {
+      commit('setRecipes', [false])
+    })
+}
 
 export function getProduct({commit}, id) {
   return axiosClient.get(`/products/${id}`)
+}
+
+export function getRecipe({commit}, id) {
+  return axiosClient.get(`/recipes/${id}`)
 }
 
 export function createProduct({commit}, product) {

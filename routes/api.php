@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Api\ManufacturerController;
@@ -27,6 +28,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
 
     Route::apiResource('products', ProductController::class);
+    Route::apiResource('recipes', RecipeController::class);
     Route::apiResource('users', UserController::class);
     Route::apiResource('customers', CustomerController::class);
     Route::get('/countries', [CustomerController::class, 'countries']);
