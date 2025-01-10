@@ -9,6 +9,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Api\Product;
 use App\Models\Category;
 use App\Models\ProductImage;
+use App\Models\RecipeCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -25,6 +26,13 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
+
+        return CategoryListResource::collection($categories);
+    }
+
+    public function recipeCategories()
+    {
+        $categories = RecipeCategory::all();
 
         return CategoryListResource::collection($categories);
     }

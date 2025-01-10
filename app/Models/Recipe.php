@@ -14,4 +14,9 @@ class Recipe extends Model
         return $this->hasMany(RecipeImage::class)->orderBy('position');
     }
 
+    public function category()
+    {
+        return $this->belongsTo(RecipeCategory::class);
+    }
+
 }

@@ -13,7 +13,7 @@
         <div class="col-span-1 sm:col-span-2 order-2 md:order-1 ">
           <CustomInput class="mb-2" v-model="recipe.name" placeholder="Recipe Title"/>
           <CustomInput type="richtext" class="mb-2" v-model="recipe.description" label="Description"/>
-         :selectOptions="manufacturers" name="manufacturer_id" label="Manufacturer"/>
+          <CustomInput type="text" class="mb-2" v-model="recipe.prep_time" label="Prep time"/>
           <CustomInput type="select" class="mb-2" v-model.number="recipe.category" :selectOptions="categories" name="category_id" label="Category"/>
           <CustomInput type="checkbox" class="mb-2" v-model="recipe.published" label="Published"/>
         </div>
@@ -60,6 +60,7 @@ const recipe = ref({
   images: [],
   deleted_images: [],
   description: '',
+  prep_time: '',
   category: null,
   published: null
 })
@@ -73,6 +74,7 @@ const error = ref(null);
 
 onMounted(() => {
   // console.log(recipe.value.category_id)
+  fetchCategories(); // Fetching categories
   if (route.params.id) {
     loading.value = true
     store.dispatch('getRecipe', route.params.id)
@@ -85,7 +87,7 @@ onMounted(() => {
 
 function onSubmit(event, close = false) {
   loading.value = true
-  if (product.value.id) {
+  if (recipe.value.id) {
     store.dispatch('updateRecipe', recipe.value)
       .then(response => {
         recipe.value = response.data
@@ -105,11 +107,11 @@ function onSubmit(event, close = false) {
         loading.value = false;
         if (response.status === 201) {
           store.commit('showToast', 'Recipe was successfully created')
-          store.dispatch('getProducts')
+          store.dispatch('getRecipes')
           if (close) {
             router.push({name: 'app.recipes'})
           } else {
-            product.value = response.data
+            recipe.value = response.data
             router.push({name: 'app.recipes.edit', params: {id: response.data.id}})
           }
         }
@@ -119,6 +121,16 @@ function onSubmit(event, close = false) {
       })
   }
 }
+  const fetchCategories = async () => {
+    error.value = null;
+    try {
+      const response = await axiosClient.get('/recipe-categories');
+      categories.value = response.data.data;
+    } catch (err) {
+      error.value = 'Failed to fetch categories';
+      console.error(err);
+    }
+  };
 </script>
 <style scoped>
 
