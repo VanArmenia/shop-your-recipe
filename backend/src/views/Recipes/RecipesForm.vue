@@ -14,8 +14,19 @@
           <CustomInput class="mb-2" v-model="recipe.name" placeholder="Recipe Title"/>
           <CustomInput type="richtext" class="mb-2" v-model="recipe.description" label="Description"/>
           <CustomInput type="text" class="mb-2" v-model="recipe.prep_time" label="Prep time"/>
-          <CustomInput type="select" class="mb-2" v-model.number="recipe.category" :selectOptions="categories" name="category_id" label="Category"/>
-          <CustomInput type="checkbox" class="mb-2" v-model="recipe.published" label="Published"/>
+          <div>
+            <label class="text-gray-500 text-sm">Categories</label>
+            <div class="mt-1 flex rounded-md">
+              <select name="category"
+                      class="inline-flex items-center px-3 rounded-md border border-gray-300 text-gray-500 text-sm mb2 h-10 w-full "
+                      v-model="recipe.category">
+                <option disabled value="">Select a Category:</option>
+                <option v-for="option in categories" :key="option.id" :value="option.name">
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+          </div>
         </div>
         <div class="col-span-1 order-1 md:order-2">
           <image-preview v-model="recipe.images"
@@ -62,7 +73,6 @@ const recipe = ref({
   description: '',
   prep_time: '',
   category: null,
-  published: null
 })
 
 const loading = ref(false)
@@ -73,7 +83,6 @@ const categories = ref([]);
 const error = ref(null);
 
 onMounted(() => {
-  // console.log(recipe.value.category_id)
   fetchCategories(); // Fetching categories
   if (route.params.id) {
     loading.value = true

@@ -8,6 +8,7 @@ use App\Http\Resources\RecipeListResource;
 use App\Http\Resources\RecipeResource;
 use App\Models\Api\Recipe;
 use App\Models\ProductImage;
+use App\Models\RecipeImage;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -118,7 +119,7 @@ class RecipeController extends Controller
 
             $relativePath = $path . '/' . $image->getClientOriginalName();
 
-            ProductImage::create([
+            RecipeImage::create([
                 'product_id' => $recipe->id,
                 'path' => $relativePath,
                 'url' => URL::to(Storage::url($relativePath)),
@@ -131,7 +132,7 @@ class RecipeController extends Controller
 
     public function deleteImages($imageIds, Recipe $recipe)
     {
-        $images = ProductImage::query()
+        $images = RecipeImage::query()
             ->where('product_id', $recipe->id)
             ->whereIn('id', $imageIds)
             ->get();

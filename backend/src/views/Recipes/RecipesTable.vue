@@ -20,65 +20,57 @@
       </div>
     </div>
 
-    <table class="table-auto w-full">
-      <thead>
-      <tr>
-        <TableHeaderCell field="id" :sort-field="sortField" :sort-direction="sortDirection" @click="sortRecipes('id')">
-          ID
-        </TableHeaderCell>
-        <TableHeaderCell field="image" :sort-field="sortField" :sort-direction="sortDirection">
-          Image
-        </TableHeaderCell>
-        <TableHeaderCell field="title" :sort-field="sortField" :sort-direction="sortDirection"
-                         @click="sortRecipes('name')">
-          Name
-        </TableHeaderCell>
-        <TableHeaderCell field="price" :sort-field="sortField" :sort-direction="sortDirection"
-                         @click="sortRecipes('category')">
-          Category
-        </TableHeaderCell>
-        <TableHeaderCell field="category" :sort-field="sortField" :sort-direction="sortDirection">
-          Description
-        </TableHeaderCell>
-        <TableHeaderCell field="updated_at" :sort-field="sortField" :sort-direction="sortDirection"
-                         @click="sortRecipes('updated_at')">
-          Last Updated At
-        </TableHeaderCell>
-        <TableHeaderCell field="actions">
-          Actions
-        </TableHeaderCell>
-      </tr>
-      </thead>
-      <tbody v-if="recipes.loading || !recipes.data.length">
-      <tr>
-        <td colspan="6">
-          <Spinner v-if="recipes.loading"/>
-          <p v-else class="text-center py-8 text-gray-700">
-            There are no recipes
-          </p>
-        </td>
-      </tr>
-      </tbody>
-      <tbody v-else>
-      <tr v-for="(recipe, index) of recipes.data" class="animate-fade-in-down">
-        <td class="border-b p-2 ">{{ recipes.id }}</td>
-        <td class="border-b p-2 ">
+    <div v-if="recipes.loading || !recipes.data.length">
+      <Spinner v-if="recipes.loading"/>
+      <p v-else class="text-center py-8 text-gray-700">
+        There are no recipes
+      </p>
+    </div>
+    <div v-else class="grid grid-cols-[70px,80px,1.5fr,1fr,3.5fr,80px,70px] gap-1 w-full border border-gray-200">
+      <!-- Header Row -->
+      <div class="font-bold p-2 border-b cursor-pointer" field="id" :sort-field="sortField" :sort-direction="sortDirection" @click="sortRecipes('id')">ID</div>
+      <div class="font-bold p-2 border-b cursor-pointer">Image</div>
+      <div class="font-bold p-2 border-b cursor-pointer" field="name" :sort-field="sortField" :sort-direction="sortDirection"
+           @click="sortRecipes('name')">Name</div>
+      <div class="font-bold p-2 border-b cursor-pointer" field="category" :sort-field="sortField" :sort-direction="sortDirection"
+           @click="sortRecipes('category')">Category</div>
+      <div class="font-bold p-2 border-b cursor-pointer">Description</div>
+      <div class="font-bold p-2 border-b cursor-pointer" field="updated_at" :sort-field="sortField" :sort-direction="sortDirection"
+           @click="sortRecipes('updated_at')">Updated</div>
+      <div class="font-bold p-2 border-b cursor-pointer">Actions</div>
+
+      <!-- Data Rows -->
+      <div v-for="(recipe, index) in recipes.data" :key="index" class="contents">
+        <!-- ID -->
+        <div class="p-2 border-b max-w-[50px]">{{ recipe.id }}</div>
+
+        <!-- Image -->
+        <div class="p-2 border-b">
           <img v-if="recipe.image_url" class="w-16 h-16 object-cover" :src="recipe.image_url" :alt="recipe.name" />
           <img v-else class="w-16 h-16 object-cover" src="../../assets/noimage.jpg" />
-        </td>
-        <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
+        </div>
+
+        <!-- Name -->
+        <div class="p-2 border-b max-w-[200px] overflow-hidden text-ellipsis">
           {{ recipe.name }}
-        </td>
-        <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
+        </div>
+
+        <!-- Category -->
+        <div class="p-2 border-b max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
           {{ recipe.category }}
-        </td>
-        <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
+        </div>
+
+        <!-- Description -->
+        <div class="p-2 border-b max-w-[400px] h-[100px] overflow-y-auto whitespace-normal break-words">
           {{ recipe.description }}
-        </td>
-        <td class="border-b p-2 ">
-          {{ recipe.updated_at }}
-        </td>
-        <td class="border-b p-2 ">
+        </div>
+
+        <!-- Last Updated At -->
+        <div class="p-2 border-b text-sm font-bold">{{ formatDate(recipe.updated_at) }}</div>
+
+        <!-- Actions -->
+        <div class="p-2 border-b flex flex-col justify-between">
+          <!-- Actions Menu -->
           <Menu as="div" class="relative inline-block text-left">
             <div>
               <MenuButton
@@ -138,10 +130,10 @@
               </MenuItems>
             </transition>
           </Menu>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+        </div>
+      </div>
+    </div>
+
 
     <div v-if="!recipes.loading" class="flex justify-between items-center mt-5">
       <div v-if="recipes.data.length">
@@ -249,6 +241,16 @@ function deleteRecipe(recipe) {
       store.commit('showToast', 'Recipe was successfully deleted');
       store.dispatch('getRecipes')
     })
+}
+
+function formatDate(date) {
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const year = String(d.getFullYear()).slice(-2);
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  return `${day}-${month}-${year} ${hours}:${minutes}`;
 }
 
 </script>

@@ -9,6 +9,8 @@ class Recipe extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'description', 'category', 'prep_time', 'images'];
+
     public function images()
     {
         return $this->hasMany(RecipeImage::class)->orderBy('position');

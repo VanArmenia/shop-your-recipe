@@ -119,9 +119,22 @@ export function createProduct({commit}, product) {
     form.append('price', product.price);
     form.append('category_id', product.category_id);
     product = form;
-    console.log(form.get('category_id'))
   }
   return axiosClient.post('/products', product)
+}
+
+export function createRecipe({commit}, recipe) {
+  if (recipe.images && recipe.images.length) {
+    const form = new FormData();
+    form.append('name', recipe.name);
+    recipe.images.forEach(im => form.append('images[]', im))
+    form.append('description', recipe.description || '');
+    form.append('prep_time', recipe.prep_time);
+    form.append('category', recipe.category);
+    recipe = form;
+    console.log(form.get('category'))
+  }
+  return axiosClient.post('/recipes', recipe)
 }
 
 export function updateProduct({commit}, product) {
