@@ -25,17 +25,8 @@ class RecipeRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:2000'],
-            'images.*' => ['nullable', 'image'],
-            'deleted_images.*' => ['nullable', 'int'],
-            'quantity' => ['nullable', 'numeric'],
             'description' => ['nullable', 'string'],
-            'manufacturer_id' => ['nullable', 'numeric'],
-            'allergens' => ['nullable', 'string'],
-            'composition' => ['nullable', 'string'],
-            'storing' => ['nullable', 'string'],
-            'nutritional' => ['nullable', 'string'],
-            'category_id' => ['required', 'numeric'],
-            'published' => ['required', 'boolean']
+            'category' => ['required', 'string'],
         ];
     }
 }
