@@ -120,7 +120,7 @@ class RecipeController extends Controller
             $relativePath = $path . '/' . $image->getClientOriginalName();
 
             RecipeImage::create([
-                'product_id' => $recipe->id,
+                'recipe_id' => $recipe->id,
                 'path' => $relativePath,
                 'url' => URL::to(Storage::url($relativePath)),
                 'mime' => $image->getClientMimeType(),
@@ -133,7 +133,7 @@ class RecipeController extends Controller
     public function deleteImages($imageIds, Recipe $recipe)
     {
         $images = RecipeImage::query()
-            ->where('product_id', $recipe->id)
+            ->where('recipe_id', $recipe->id)
             ->whereIn('id', $imageIds)
             ->get();
 
