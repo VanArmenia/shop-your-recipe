@@ -164,9 +164,32 @@ export function updateProduct({commit}, product) {
   return axiosClient.post(`/products/${id}`, product)
 }
 
+export function updateRecipe({commit}, recipe) {
+  const id = recipe.id
+  if (recipe.images && recipe.images.length) {
+    const form = new FormData();
+    form.append('name', recipe.name);
+    recipe.images.forEach(im => form.append('images[]', im))
+    if (recipe.deletedImages) {
+      recipe.deletedImages.forEach(im => form.append('deleted_images[]', im))
+    }
+    form.append('description', recipe.description || '');
+    form.append('prep_time', recipe.prep_time);
+    form.append('category', recipe.category);
+    form.append('_method', 'PUT');
+    recipe = form;
+  } else {
+    recipe._method = 'PUT'
+  }
+  return axiosClient.post(`/recipes/${id}`, recipe)
+}
 
 export function deleteProduct({commit}, id) {
   return axiosClient.delete(`/products/${id}`)
+}
+
+export function deleteRecipe({commit}, id) {
+  return axiosClient.delete(`/recipes/${id}`)
 }
 
 export function getUsers({commit, state}, {url = null, search = '', per_page, sort_field, sort_direction} = {}) {
