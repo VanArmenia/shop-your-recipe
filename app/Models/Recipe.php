@@ -9,7 +9,7 @@ class Recipe extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'category', 'prep_time', 'images'];
+    protected $fillable = ['name', 'description', 'category', 'prep_time', 'image'];
 
     public function images()
     {
@@ -20,5 +20,11 @@ class Recipe extends Model
     {
         return $this->belongsTo(RecipeCategory::class);
     }
+
+    public function getImageAttribute()
+    {
+        return $this->images->count() > 0 ? $this->images->get(0)->url : null;
+    }
+
 
 }
