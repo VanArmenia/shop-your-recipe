@@ -25,7 +25,7 @@ class RecipeListResource extends JsonResource
             'prep_time' => $this->prep_time,
             'category' => $this->category,
             'tags' => $this->tags,
-            'image_url' => $this->image_url,
+            'image_url' => $this->image,
             'updated_at' => ( new \DateTime($this->updated_at) )->format('Y-m-d H:i:s'),
         ];
     }
