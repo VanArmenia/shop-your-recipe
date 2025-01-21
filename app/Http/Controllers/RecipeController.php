@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Recipe;
 use Illuminate\Http\Request;
 
 class RecipeController extends Controller
@@ -11,7 +12,12 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        //
+        $recipes = Recipe::query()
+            ->orderBy('updated_at', 'desc')
+            ->paginate(5);
+        return view('recipes.index', [
+            'recipes' => $recipes
+        ]);
     }
 
     /**
@@ -33,9 +39,9 @@ class RecipeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Recipe $recipe)
     {
-        //
+        return view('recipes.view', compact('recipe'));
     }
 
     /**

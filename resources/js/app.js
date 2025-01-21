@@ -160,6 +160,72 @@ document.addEventListener("alpine:init", async () => {
 
   };
   });
+  Alpine.data("recipeItem", (recipe) => {
+    return {
+      recipe,
+      reviewHandler() {
+        return {
+          rating: 1,           // Default rating value
+          reviewText: '',      // Default review text
+          message: '',         // To display success or error messages
+          reviews: [],             // Array to hold reviews dynamically
+
+          init() {
+            // Initialize reviews from the backend
+            this.fetchReviews();
+          },
+
+          fetchReviews() {
+            // Fetch the reviews initially (use a GET request)
+            fetch(this.recipe.fetchReviews)
+              .then(response => response.json())
+              .then(data => {
+                this.reviews = data.reviews; // Load initial reviews into Alpine
+                this.reviews = this.reviews.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Descending
+              })
+              .catch(error => {
+                console.error("Error fetching reviews:", error);
+              });
+          },
+
+          // Method to handle the review submission
+          submitReview() {
+            // Post data to the server
+            post(this.recipe.addReview, {
+              rating: this.rating,
+              review_text: this.reviewText
+            })
+              .then(result => {
+                // Dispatch an event for any global updates if needed
+                this.$dispatch("review-submitted", {
+                  message: "Review submitted successfully!",
+                });
+
+                // Add the new review to the reviews array to update the UI
+                this.reviews.unshift({
+                  rating: this.rating,
+                  review_text: this.reviewText,
+                  created_at: new Date().toISOString(),  // Assuming you'll show the time
+                  user: { name: 'You' }  // Placeholder for the authenticated user
+                });
+
+                this.fetchReviews();
+
+                // Optionally clear the form fields
+                this.rating = 1;
+                this.reviewText = '';
+              })
+              .catch(error => {
+                // Handle error and show message
+                console.log(error);
+                this.message = error.message || 'Server Error. Please try again.';
+              });
+          }
+        };
+      }
+
+    };
+  });
 });
 
 

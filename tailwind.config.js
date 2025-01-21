@@ -17,7 +17,9 @@ module.exports = {
               greenSp: '#3fb8af', // Add your custom color here
             },
             scale: {
-              '103': '1.03', // Add custom scale
+              98: '.98',  // Add custom scale
+              95: '.95',  // Add custom scale
+              90: '.90',  // Add custom scale
             },
         },
     },
