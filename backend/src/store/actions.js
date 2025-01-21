@@ -133,6 +133,7 @@ export function createRecipe({commit}, recipe) {
     form.append('category', recipe.category);
     recipe = form;
     console.log(form.get('category'))
+    console.log(form.get('prep_time'))
   }
   return axiosClient.post('/recipes', recipe)
 }
@@ -178,6 +179,8 @@ export function updateRecipe({commit}, recipe) {
     form.append('category', recipe.category);
     form.append('_method', 'PUT');
     recipe = form;
+    console.log(form.get('prep_time'))
+    console.log(form.get('category'))
   } else {
     recipe._method = 'PUT'
   }

@@ -26,6 +26,7 @@ class RecipeResource extends JsonResource
 //            'slug' => $this->slug,
             'description' => $this->description,
             'prep_time' => $this->prep_time,
+            'category' => $this->category,
             'images' => $this->images,
             'created_at' => (new \DateTime($this->created_at))->format('Y-m-d H:i:s'),
             'updated_at' => (new \DateTime($this->updated_at))->format('Y-m-d H:i:s'),

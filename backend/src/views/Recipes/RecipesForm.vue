@@ -71,7 +71,7 @@ const recipe = ref({
   images: [],
   deleted_images: [],
   description: '',
-  prep_time: '',
+  prep_time: null,
   category: null,
 })
 
