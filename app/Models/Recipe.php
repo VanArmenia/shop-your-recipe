@@ -26,5 +26,19 @@ class Recipe extends Model
         return $this->images->count() > 0 ? $this->images->get(0)->url : null;
     }
 
+    public function reviews()
+    {
+        return $this->morphMany(Review::class, 'reviewable');
+    }
+
+    public function getReviewCountAttribute()
+    {
+        return $this->reviews()->count(); // Returns the total number of reviews
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return $this->reviews()->avg('rating') ?? 0; // Returns average rating, or 0 if no reviews
+    }
 
 }
