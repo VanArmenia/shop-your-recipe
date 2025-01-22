@@ -11,15 +11,13 @@ class Review extends Model
 
     protected $fillable = [
         'user_id',
-        'product_id',
         'rating',
         'review_text',
     ];
 
-    // Relationship to Product
-    public function product()
+    public function reviewable()
     {
-        return $this->belongsTo(Product::class);
+        return $this->morphTo();
     }
 
     // Relationship to User

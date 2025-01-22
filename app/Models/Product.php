@@ -53,6 +53,6 @@ class Product extends Model
 
     public function reviews()
     {
-        return $this->hasMany(Review::class)->orderBy('created_at');
+        return $this->morphMany(Review::class, 'reviewable');
     }
 }
