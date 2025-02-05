@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 class RecipeController extends Controller
@@ -32,9 +33,21 @@ class RecipeController extends Controller
             ->limit(10) // Limit the results to 10 recipes
             ->get();
 
+        // Get count of all recipes
+        $countRecipes = Recipe::count();
+
+        // Get count of all reviews
+        $countReviews = Review::count();
+
+        $latestRecipes = Recipe::latest()->take(5)->get();
+
+
         return view('recipes.index', [
             'breakfasts' => $breakfast,
-            'vegetarians' => $vegetarian
+            'vegetarians' => $vegetarian,
+            'countRecipes' => $countRecipes,
+            'countReviews' => $countReviews,
+            'latestRecipes' => $latestRecipes,
         ]);
     }
 
@@ -120,4 +133,25 @@ class RecipeController extends Controller
             'reviews' => $reviews,
         ]);
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+
+        $recipes = Recipe::query()
+            ->where('name', 'like', '%' . $query . '%')
+            ->with('images') // Load images relationship
+            ->get()
+            ->map(function ($recipe) {
+                return [
+                    'id' => $recipe->id,
+                    'name' => $recipe->name,
+                    'category' => $recipe->category,
+                    'image' => $recipe->images->first()?->url // Get the first image URL
+                ];
+            });
+
+        return response()->json($recipes);
+    }
+
 }
