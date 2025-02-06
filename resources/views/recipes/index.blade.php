@@ -4,13 +4,13 @@
 ?>
 
 <x-app-layout>
-    <header class="md:px-5 bg-yellow-900">
-        <div class="p-4 text-center text-yellow-100">
+    <header class="md:px-5 bg-indigo-100">
+        <div class="p-4 text-center text-yellow-700">
             <h1 class="text-xl md:text-2xl">
                 Welcome to our Web Kitchen.
             </h1>
-            <p> <span class="text-yellow-200 font-bold">{{ $countRecipes }}</span> Original Recipes</p>
-            <p> <span class="text-yellow-200 font-bold">{{ $countReviews }}</span> Reviews</p>
+            <p> <span class="text-yellow-800 font-bold">{{ $countRecipes }}</span> Original Recipes</p>
+            <p> <span class="text-yellow-800 font-bold">{{ $countReviews }}</span> Reviews</p>
         </div>
     </header>
 
@@ -187,21 +187,36 @@
         x-data="{
         query: '',
         recipes: [],
+        currentPage: 1,
+        totalPages: 0,
+        pageLinks: [],
+        nextUrl: null,
+        prevUrl: null,
         searchPerformed: false,
-        search() {
+        search(page = 1) {
             this.searchPerformed = true;
-            fetch('{{ route('recipes.search') }}?q=' + this.query)
+            fetch('{{ route('recipes.search') }}?q=' + this.query + '&page=' + page)
                 .then(response => response.json())
                 .then(data => {
-                    this.recipes = data;
+                    this.recipes = data.data;
+                    this.currentPage = data.current_page;
+                    this.totalPages = data.last_page;
+                    this.pageLinks = data.links.filter(link => {
+                      return !link.label.includes('Previous') && !link.label.includes('Next');
+                    });
+                    this.nextUrl = data.next_page_url;
+                    this.prevUrl = data.prev_page_url;
                 });
         },
+         goToPage(page) {
+            this.search(page);  // Fetch data for the selected page
+         },
          predefinedSearch(term) {
             this.query = term;
             this.search();
         }
     }"
-        class="border border-gray-400 m-2"
+        class="border border-gray-400 m-2 p-4 w-3/4 mx-auto"
     >
         <div class="relative p-4">
             <div class="flex items-center space-x-2">
@@ -231,32 +246,32 @@
             <div class="text-xl font-bold mb-4">Popular Searches</div>
             <div
                 @click="predefinedSearch('Chicken')"
-                class="text-indigo-700 hover:underline px-4 py-2 bg-indigo-200 inline-block my-1">Chicken
+                class="text-indigo-700 hover:bg-indigo-400 hover:text-indigo-100 px-4 py-2 bg-indigo-200 inline-block my-1 cursor-pointer">Chicken
             </div>
             <div
                 @click="predefinedSearch('Smoothies')"
-                class="text-indigo-700 hover:underline px-4 py-2 bg-indigo-200 inline-block my-1">Smoothies
+                class="text-indigo-700 hover:bg-indigo-400 hover:text-indigo-100 px-4 py-2 bg-indigo-200 inline-block my-1 cursor-pointer">Smoothies
             </div>
             <div
                 @click="predefinedSearch('Banana Bread')"
-                class="text-indigo-700 hover:underline px-4 py-2 bg-indigo-200 inline-block my-1">Banana Bread
+                class="text-indigo-700 hover:bg-indigo-400 hover:text-indigo-100 px-4 py-2 bg-indigo-200 inline-block my-1 cursor-pointer">Banana Bread
             </div>
             <div
                 @click="predefinedSearch('Lasagna')"
-                class="text-indigo-700 hover:underline px-4 py-2 bg-indigo-200 inline-block my-1">Lasagna
+                class="text-indigo-700 hover:bg-indigo-400 hover:text-indigo-100 px-4 py-2 bg-indigo-200 inline-block my-1 cursor-pointer">Lasagna
             </div>
             <div
                 @click="predefinedSearch('Pancakes')"
-                class="text-indigo-700 hover:underline px-4 py-2 bg-indigo-200 inline-block my-1">Pancakes
+                class="text-indigo-700 hover:bg-indigo-400 hover:text-indigo-100 px-4 py-2 bg-indigo-200 inline-block my-1 cursor-pointer">Pancakes
             </div>
             <div
                 @click="predefinedSearch('Meatloaf')"
-                class="text-indigo-700 hover:underline px-4 py-2 bg-indigo-200 inline-block my-1">Meatloaf
+                class="text-indigo-700 hover:bg-indigo-400 hover:text-indigo-100 px-4 py-2 bg-indigo-200 inline-block my-1 cursor-pointer">Meatloaf
             </div>
         </div>
 
         <!-- Recipe Results -->
-        <div x-show="recipes.length > 0" class="mt-4 p-4">
+        <div x-show="recipes.length > 0" class="mt-4 p-4 grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             <template x-for="recipe in recipes" :key="recipe.id">
                 <div class="flex space-x-4 border-b py-2">
                     <!-- Image -->
@@ -271,7 +286,9 @@
                     </div>
                     <!-- Recipe Details -->
                     <div class="flex-1">
-                        <h3 class="text-lg font-bold text-gray-800" x-text="recipe.name"></h3>
+                        <a :href="'/recipes/' + recipe.id" class="text-blue-500 hover:underline">
+                          <h3 class="text-lg font-bold text-gray-800" x-text="recipe.name"></h3>
+                        </a>
                         <p class="text-gray-600" x-text="recipe.category"></p>
                     </div>
                 </div>
@@ -282,6 +299,20 @@
         <!-- No Results Message -->
         <div x-show="searchPerformed && recipes.length === 0" class="mt-4 text-gray-500 p-4">
             No recipes found.
+        </div>
+
+        <!-- Pagination Controls (All Page Links) -->
+        <div class="flex justify-center space-x-4 mt-4">
+            <!-- Display Page Links -->
+            <template x-for="page in pageLinks" :key="page.label">
+                <button
+                    @click="goToPage(page.url.split('?page=')[1])"
+                    :class="{'bg-indigo-500 text-white': currentPage == page.label, 'px-4 py-2 rounded-full': true, 'bg-indigo-200': currentPage != page.label}"
+                    :disabled="currentPage === page.label"
+                >
+                    <span x-text="page.label"></span>
+                </button>
+            </template>
         </div>
     </div>
 </x-app-layout>

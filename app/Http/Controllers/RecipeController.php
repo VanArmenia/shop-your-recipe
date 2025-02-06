@@ -141,8 +141,8 @@ class RecipeController extends Controller
         $recipes = Recipe::query()
             ->where('name', 'like', '%' . $query . '%')
             ->with('images') // Load images relationship
-            ->get()
-            ->map(function ($recipe) {
+            ->paginate(10) // Paginate before using map()
+            ->through(function ($recipe) {
                 return [
                     'id' => $recipe->id,
                     'name' => $recipe->name,
@@ -153,5 +153,4 @@ class RecipeController extends Controller
 
         return response()->json($recipes);
     }
-
 }
