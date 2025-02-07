@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
+use App\Models\RecipeCategory;
 use App\Models\Review;
 use Illuminate\Http\Request;
 
@@ -13,9 +14,10 @@ class RecipeController extends Controller
      */
     public function index()
     {
+        $categoryBr = RecipeCategory::where('name', 'Breakfast')->first();
         // Get recipes for Breakfast category
         $breakfast = Recipe::query()
-            ->where('category', 'Breakfast')
+            ->where('category_id', $categoryBr->id)
             ->with('reviews') // Include the 'reviews' relationship
             ->withCount('reviews as review_count') // Add review count
             ->withAvg('reviews as average_rating', 'rating') // Add average rating
@@ -23,9 +25,10 @@ class RecipeController extends Controller
             ->limit(10) // Limit the results to 10 recipes
             ->get();
 
+        $categoryVg = RecipeCategory::where('name', 'Vegetarian')->first();
         // Get recipes for Vegetarian category
         $vegetarian = Recipe::query()
-            ->where('category', 'Vegetarian')
+            ->where('category_id', $categoryVg->id)
             ->with('reviews') // Include the 'reviews' relationship
             ->withCount('reviews as review_count') // Add review count
             ->withAvg('reviews as average_rating', 'rating') // Add average rating
@@ -73,7 +76,8 @@ class RecipeController extends Controller
      */
     public function show(Recipe $recipe)
     {
-        return view('recipes.view', compact('recipe'));
+        $breadcrumbs = $recipe->category->getBreadcrumbs();
+        return view('recipes.view', compact('recipe', 'breadcrumbs'));
     }
 
     /**
@@ -152,5 +156,13 @@ class RecipeController extends Controller
             });
 
         return response()->json($recipes);
+    }
+
+    public function category(RecipeCategory $category)
+    {
+        $recipes = $category->recipes()
+            ->orderBy('updated_at', 'desc')
+            ->paginate(5);
+        return view('recipes.category', compact('recipes','category'));
     }
 }

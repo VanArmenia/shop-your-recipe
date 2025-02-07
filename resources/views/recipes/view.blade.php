@@ -1,18 +1,24 @@
 <x-app-layout>
-{{--    <nav aria-label="breadcrumb" class="flex p-4">--}}
-{{--        <ol class="breadcrumb flex">--}}
-{{--            @foreach ($breadcrumbs as $breadcrumb)--}}
-{{--                <li class="breadcrumb-item">--}}
-{{--                    <a href="{{ $breadcrumb['url'] }}">--}}
-{{--                        {{ $breadcrumb['name'] }}--}}
-{{--                        @if (!$loop->last) <!-- Only show '>' if it's not the last item -->--}}
-{{--                        <i class="fas fa-chevron-right text-sm px-1 text-gray-600"></i>--}}
-{{--                        @endif--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-{{--            @endforeach--}}
-{{--        </ol>--}}
-{{--    </nav>--}}
+    <nav aria-label="breadcrumb" class="flex p-4">
+        <ol class="breadcrumb flex">
+            <li class="breadcrumb-item">
+                <a href="/recipes/">
+                    Recipes
+                    <i class="fas fa-chevron-right text-sm px-1 text-gray-600"></i>
+                </a>
+            </li>
+            @foreach ($breadcrumbs as $breadcrumb)
+                <li class="breadcrumb-item">
+                    <a href="{{ $breadcrumb['url'] }}">
+                        {{ $breadcrumb['name'] }}
+                        @if (!$loop->last) <!-- Only show '>' if it's not the last item -->
+                        <i class="fas fa-chevron-right text-sm px-1 text-gray-600"></i>
+                        @endif
+                    </a>
+                </li>
+            @endforeach
+        </ol>
+    </nav>
     <div class="grid grid-cols-1 md:grid-cols-[minmax(250px,_25%)_1fr] min-h-screen">
 
         <!-- Include the aside Blade component here -->
@@ -111,7 +117,7 @@
                     </div>
                 </div>
                 <div class="md:col-span-3">
-                    <h5 class="font-bold pb-4 ">{{$recipe->category}}</h5>
+                    <h5 class="font-bold pb-4 ">{{$recipe->category->name}}</h5>
                     <h1 class="text-lg font-semibold">
                         {{$recipe->name}}
                     </h1>

@@ -18,7 +18,7 @@ class Recipe extends Model
 
     public function category()
     {
-        return $this->belongsTo(RecipeCategory::class);
+        return $this->belongsTo(RecipeCategory::class, 'category_id');
     }
 
     public function getImageAttribute()
