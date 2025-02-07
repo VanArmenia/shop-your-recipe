@@ -9,7 +9,7 @@
             <div class="flex justify-between items-center p-1">
                 <!-- Category name link -->
                 @if($category->children->count() == 0)
-                <a href="{{ route('category', $category) }}" class="text-lg font-bold"
+                <a href="{{ route('product.category', $category) }}" class="text-lg font-bold"
                    :class="catShow === {{ $category->parent->id }} ? 'activeCategory font-bold' : ''"
                 >
                     {{ $category->name }}

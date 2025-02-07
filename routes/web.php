@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guestOrVerified'])->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('home');
-    Route::get('/category/{category:name}', [ProductController::class, 'category'])->name('category');
+    Route::get('/product/category/{category:name}', [ProductController::class, 'category'])->name('product.category');
 
     Route::get('/product/{product:slug}', [ProductController::class, 'view'])->name('product.view');
     Route::post('/product/{product:id}/reviews', [ProductController::class, 'storeReview'])
@@ -32,6 +32,7 @@ Route::middleware(['guestOrVerified'])->group(function () {
         ->middleware('auth')->name('add-recipe-review');  // Ensure only authenticated users can post reviews
     Route::get('/recipes/{recipe:id}/reviews', [RecipeController::class, 'fetchReviews'])->name('fetch-recipe-reviews');
     Route::get('/recipes/search', [RecipeController::class, 'search'])->name('recipes.search');
+    Route::get('/recipes/category/{category:name}', [RecipeController::class, 'category'])->name('recipe.category');
 
     Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
 

@@ -26,7 +26,7 @@ class ProductController extends Controller
         $simProducts = $product->category->products()
             ->orderBy('updated_at', 'desc')
             ->paginate(5);
-        $breadcrumbs = $this->getCategoryBreadcrumbs($product->category);
+        $breadcrumbs = $product->category->getBreadcrumbs();
         $categories = Category::with('children')->whereNull('parent_id')->get();
         return view('product.view', compact('product', 'simProducts', 'breadcrumbs', 'categories'));
     }
@@ -39,19 +39,6 @@ class ProductController extends Controller
         $manufacturers = Manufacturer::All();
         $categories = Category::with('children')->whereNull('parent_id')->get();
         return view('product.category', compact('products','categories', 'manufacturers','category'));
-    }
-
-    public function getCategoryBreadcrumbs($category)
-    {
-        $breadcrumbs = [];
-        while ($category) {
-            $breadcrumbs[] = [
-                'name' => $category->name,
-                'url' => route('category', $category)
-            ];
-            $category = $category->parent; // Assuming parent relationship exists
-        }
-        return array_reverse($breadcrumbs); // Reverse to get root-to-child order
     }
 
     public function shop()

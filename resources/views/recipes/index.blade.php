@@ -47,7 +47,9 @@
                             />
                         </a>
                         <div class="p-2">
-                            <h5 class="text-gray-600">{{$breakfast->category}}</h5>
+                            <a href="{{ route('recipe.category', $breakfast->category) }}" class="text-lg font-bold">
+                               <h5 class="text-gray-600">{{$breakfast->category->name}}</h5>
+                            </a>
                         </div>
                         <div class="py-0 px-2">
                             <h3 class="text-lg font-bold">
@@ -104,7 +106,9 @@
                             />
                         </a>
                         <div class="p-2">
-                            <h5 class="text-gray-600">{{$vegetarian->category}}</h5>
+                            <a href="{{ route('recipe.category', $vegetarian->category) }}" class="text-lg font-bold">
+                               <h5 class="text-gray-600">{{$vegetarian->category->name}}</h5>
+                            </a>
                         </div>
                         <div class="py-0 px-2">
                             <h3 class="text-lg font-bold">
@@ -165,7 +169,10 @@
                         </div>
                         <div class="flex-1">
                             <div class="p-2">
-                                <h5 class="text-gray-600">{{$latestRecipe->category}}</h5>
+                                <a href="{{ route('recipe.category', $latestRecipe->category) }}" class="text-lg font-bold">
+                                    <h5 class="text-gray-600">{{$latestRecipe->category->name}}</h5>
+                                </a>
+
                             </div>
                             <div class="py-0 px-2">
                                 <h3 class="text-lg font-bold">
