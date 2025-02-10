@@ -26,7 +26,7 @@ class RecipeRequest extends FormRequest
         return [
             'name' => ['required', 'max:2000'],
             'description' => ['nullable', 'string'],
-            'category' => ['required', 'string'],
+            'category_id' => ['required', 'int'],
             'prep_time' => ['required', 'string'],
             'images.*' => ['nullable', 'image'],
             'deleted_images.*' => ['nullable', 'int'],

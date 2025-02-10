@@ -32,8 +32,13 @@
       <div class="font-bold p-2 border-b cursor-pointer">Image</div>
       <div class="font-bold p-2 border-b cursor-pointer" field="name" :sort-field="sortField" :sort-direction="sortDirection"
            @click="sortRecipes('name')">Name</div>
-      <div class="font-bold p-2 border-b cursor-pointer" field="category" :sort-field="sortField" :sort-direction="sortDirection"
-           @click="sortRecipes('category')">Category</div>
+      <div class="font-bold p-2 border-b cursor-pointer"
+           field="category_name"
+           :sort-field="sortField"
+           :sort-direction="sortDirection"
+           @click="sortRecipes('category_name')">
+        Category
+      </div>
       <div class="font-bold p-2 border-b cursor-pointer">Description</div>
       <div class="font-bold p-2 border-b cursor-pointer" field="updated_at" :sort-field="sortField" :sort-direction="sortDirection"
            @click="sortRecipes('updated_at')">Updated</div>
@@ -57,7 +62,7 @@
 
         <!-- Category -->
         <div class="p-2 border-b max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
-          {{ recipe.category }}
+          {{ recipe.category.name }}
         </div>
 
         <!-- Description -->

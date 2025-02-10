@@ -17,11 +17,11 @@
           <div>
             <label class="text-gray-500 text-sm">Categories</label>
             <div class="mt-1 flex rounded-md">
-              <select name="category"
+              <select name="category_id"
                       class="inline-flex items-center px-3 rounded-md border border-gray-300 text-gray-500 text-sm mb2 h-10 w-full "
-                      v-model="recipe.category">
+                      v-model="recipe.category_id">
                 <option disabled value="">Select a Category:</option>
-                <option v-for="option in categories" :key="option.id" :value="option.name">
+                <option v-for="option in categories" :key="option.id" :value="option.id">
                   {{ option.name }}
                 </option>
               </select>
@@ -72,7 +72,7 @@ const recipe = ref({
   deleted_images: [],
   description: '',
   prep_time: null,
-  category: null,
+  category_id: null,
 })
 
 const loading = ref(false)

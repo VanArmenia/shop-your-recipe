@@ -23,7 +23,6 @@ const DEFAULT_RECIPE = {
   description: '',
   image: '',
   category_id: '',
-  manufacturer_id: '',
 }
 
 const recipes = computed(() => store.state.recipes);

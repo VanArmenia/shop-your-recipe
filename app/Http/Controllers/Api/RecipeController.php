@@ -22,18 +22,29 @@ class RecipeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $perPage = request('per_page', 10);
-        $search = request('search', '');
-        $sortField = request('sort_field', 'created_at');
-        $sortDirection = request('sort_direction', 'desc');
+        $search = $request->query('search', '');
+        $perPage = $request->query('per_page', 10);
+        $sortField = $request->query('sort_field', 'name'); // Default sorting by recipe name
+        $sortDirection = $request->query('sort_direction', 'asc');
 
-        $query = Recipe::query()
-            ->where('name', 'like', "%{$search}%")
-            ->orderBy($sortField, $sortDirection)
+        // Check if sorting by category
+        if ($sortField === 'category_name') {
+            $sortField = 'recipe_categories.name'; // Change to correct column
+        } else {
+            $sortField = 'recipes.' . $sortField; // Use the recipes table for other fields
+        }
+
+        $recipes = Recipe::select('recipes.*')
+            ->leftJoin('recipe_categories', 'recipes.category_id', '=', 'recipe_categories.id') // Join categories
+            ->when($search, function ($query) use ($search) {
+                return $query->where('recipes.name', 'like', "%$search%");
+            })
+            ->orderBy($sortField, $sortDirection) // Apply sorting
             ->paginate($perPage);
-        return RecipeListResource::collection($query);
+
+        return RecipeListResource::collection($recipes);
     }
 
     /**
