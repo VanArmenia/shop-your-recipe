@@ -130,7 +130,7 @@ export function createRecipe({commit}, recipe) {
     recipe.images.forEach(im => form.append('images[]', im))
     form.append('description', recipe.description || '');
     form.append('prep_time', recipe.prep_time);
-    form.append('category', recipe.category);
+    form.append('category_id', recipe.category_id);
     recipe = form;
     console.log(form.get('category'))
     console.log(form.get('prep_time'))
@@ -176,11 +176,11 @@ export function updateRecipe({commit}, recipe) {
     }
     form.append('description', recipe.description || '');
     form.append('prep_time', recipe.prep_time);
-    form.append('category', recipe.category);
+    form.append('category_id', recipe.category_id); // Use category_id, not category name
     form.append('_method', 'PUT');
     recipe = form;
     console.log(form.get('prep_time'))
-    console.log(form.get('category'))
+    console.log(form.get('category_id'))
   } else {
     recipe._method = 'PUT'
   }
