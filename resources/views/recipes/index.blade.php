@@ -5,6 +5,66 @@
 
 <x-app-layout>
     <header class="md:px-5 bg-indigo-100">
+        <nav class="md:block">
+            <ul class="grid grid-flow-col items-center w-1/4">
+                <!-- Ingredients Dropdown -->
+                <li class="relative group">
+                    <a
+                        href="{{ route('recipes.index') }}"
+                        class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
+                    >
+                        Cuisines
+                    </a>
+
+                    <!-- Dropdown Content -->
+                    <ul class="absolute hidden bg-white shadow-md rounded-md w-40 z-[9999] group-hover:block">
+                        @foreach ($rootRegions as $region)
+                            <li class="relative group/item">
+                                <!-- Parent Region Menu Item -->
+                                <a href="{{ route('recipe.region', $region->name) }}" class="block px-4 py-2 hover:bg-gray-200">
+                                    {{ $region->name }}
+                                    @if($region->children->count() > 0)
+                                        <span class="float-right">→</span>
+                                    @endif
+                                </a>
+
+                                <!-- Second-Level Dropdown -->
+                                @if($region->children->count() > 0)
+                                    <ul class="absolute left-full top-0 hidden bg-white shadow-md rounded-md w-40 group-hover/item:block">
+                                        @foreach ($region->children as $child)
+                                            <li class="relative">
+                                                <a href="{{ route('recipe.region', $child->name) }}" class="block px-4 py-2 hover:bg-gray-200">
+                                                    {{ $child->name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
+
+                <li>
+                    <a
+                        href="{{ route('recipes.index') }}"
+                        class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
+                    >
+                        Ingredients
+                    </a>
+                </li>
+                <!-- Shop Link (No Dropdown) -->
+                <li>
+                    <a
+                        href="{{ route('shop') }}"
+                        class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
+                    >
+                        Shop
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
         <div class="p-4 text-center text-yellow-700">
             <h1 class="text-xl md:text-2xl">
                 Welcome to our Web Kitchen.
@@ -19,7 +79,7 @@
             There are no recipes published
         </div>
     <?php else: ?>
-    <div class="grid md:grid-cols-[3fr_1fr] gap-8 grid-cols-[1fr]">
+    <div class="grid md:grid-cols-[3fr_1fr] gap-8 grid-cols-[1fr] z-1">
         <div>
             <h2 class="font-bold text-2xl p-4 relative inline-block">Breakfast
                 <span class="absolute bottom-0 left-1/2 w-1/2 border-b-2 border-yellow-300 -translate-x-1/2"></span>
@@ -296,7 +356,7 @@
                         <a :href="'/recipes/' + recipe.id" class="text-blue-500 hover:underline">
                           <h3 class="text-lg font-bold text-gray-800" x-text="recipe.name"></h3>
                         </a>
-                        <p class="text-gray-600" x-text="recipe.category"></p>
+                        <p class="text-gray-600" x-text="recipe.category.name"></p>
                     </div>
                 </div>
             </template>

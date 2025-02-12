@@ -16,7 +16,7 @@ class RecipeCategory extends Model
         return $this->hasMany(Recipe::class, 'category_id');
     }
 
-    public function getCategoryRoute()
+    public function getUnitRoute()
     {
         return route('recipe.category', $this);
     }
