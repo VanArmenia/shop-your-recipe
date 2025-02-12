@@ -7,14 +7,14 @@ trait HasBreadcrumbs
     public function getBreadcrumbs()
     {
         $breadcrumbs = [];
-        $category = $this; // Start with the current category
+        $unit = $this; // Start with the current category
 
-        while ($category) {
+        while ($unit) {
             $breadcrumbs[] = [
-                'name' => $category->name,
-                'url' => $category->getCategoryRoute() // Use dynamic method
+                'name' => $unit->name,
+                'url' => $unit->getUnitRoute() // Use dynamic method
             ];
-            $category = $category->parent; // Ensure parent relationship exists
+            $unit = $unit->parent; // Ensure parent relationship exists
         }
 
         return array_reverse($breadcrumbs);

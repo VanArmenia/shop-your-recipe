@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Recipe;
 use App\Models\RecipeCategory;
+use App\Models\Region;
 use App\Models\Review;
 use Illuminate\Http\Request;
 
@@ -44,6 +45,9 @@ class RecipeController extends Controller
 
         $latestRecipes = Recipe::latest()->take(5)->get();
 
+        $rootRegions = Region::whereNull('parent_id') // Get root regions
+        ->with('children') // Eager load the children relationship
+        ->get();
 
         return view('recipes.index', [
             'breakfasts' => $breakfast,
@@ -51,6 +55,7 @@ class RecipeController extends Controller
             'countRecipes' => $countRecipes,
             'countReviews' => $countReviews,
             'latestRecipes' => $latestRecipes,
+            'rootRegions' => $rootRegions,
         ]);
     }
 
@@ -165,4 +170,22 @@ class RecipeController extends Controller
             ->paginate(5);
         return view('recipes.category', compact('recipes','category'));
     }
+
+    public function region(Region $region)
+    {
+        $breadcrumbs = $region->getBreadcrumbs();
+        // Get the region's children IDs
+        $regionIds = $region->children()->pluck('id')->toArray();
+
+        // Include the parent region's ID in the list
+        $regionIds[] = $region->id;
+
+        // Fetch recipes from the current region and its children
+        $recipes = Recipe::whereIn('region_id', $regionIds)
+            ->orderBy('updated_at', 'desc')
+            ->paginate(10);
+
+        return view('recipes.region', compact('recipes', 'region', 'breadcrumbs'));
+    }
+
 }

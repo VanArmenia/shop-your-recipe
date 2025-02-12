@@ -30,7 +30,7 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    public function getCategoryRoute()
+    public function getUnitRoute()
     {
         return route('product.category', $this); // Adjust route as needed
     }
