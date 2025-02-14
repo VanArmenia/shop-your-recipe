@@ -46,7 +46,9 @@ class RecipeController extends Controller
         $latestRecipes = Recipe::latest()->take(5)->get();
 
         $rootRegions = Region::whereNull('parent_id') // Get root regions
-        ->with('children') // Eager load the children relationship
+        ->with(['children' => function ($query) {
+            $query->whereHas('recipes'); // Only include children that have recipes
+        }])
         ->get();
 
         return view('recipes.index', [
