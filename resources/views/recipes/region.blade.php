@@ -39,6 +39,34 @@
             <h2 class="font-bold text-2xl p-4 relative inline-block">  Recipes for {{ $region->name }}.
                 <span class="absolute bottom-0 left-1/2 w-1/2 border-b-2 border-yellow-300 -translate-x-1/2"></span>
             </h2>
+
+            @if($region->children->count() > 0)
+                <div class="rounded-md text-center mt-2" x-data="{ showAll: false }">
+                    @foreach ($region->children as $child)
+                        <p class="relative text-lg md:inline-block" x-show="showAll || {{ $loop->index }} < 5" x-cloak
+                           x-transition:enter="transition duration-500 ease-out"
+                           x-transition:enter-start="opacity-0 transform -translate-y-2"
+                           x-transition:enter-end="opacity-100 transform translate-y-0"
+                        >
+                            <a href="{{ route('recipe.region', $child->name) }}" class="block px-4 py-2 hover:bg-indigo-100">
+                                {{ $child->name }}
+                            </a>
+                        </p>
+                    @endforeach
+
+                    @if($region->children->count() > 5)
+                        <p class="relative" :class="!showAll ? 'shadow-md shadow-gray-300 rounded-md' : ''">
+                            <button @click="showAll = !showAll" class="text-blue-500 px-4 py-2">
+                                <span x-text="showAll ? 'View Less' : 'View More'"></span>
+                                <i class="fa p-1 text-xs text-yellow-400" :class="showAll ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                            </button>
+                        </p>
+                    @endif
+                </div>
+            @endif
+
+
+
             <div
                 class="grid gap-8 grig-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-5"
             >
