@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Ingredient;
 use App\Models\Recipe;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -51,28 +52,22 @@ class RecipesSeeder extends Seeder
 
     public function run()
     {
-        // Fetch all categories
         $categoriesResponse = Http::get('https://www.themealdb.com/api/json/v1/1/categories.php');
 
-        // Check if the response is successful
         if ($categoriesResponse->successful()) {
             $categoriesData = $categoriesResponse->json();
 
             if (isset($categoriesData['categories']) && is_array($categoriesData['categories'])) {
-                // Iterate over the categories
                 foreach ($categoriesData['categories'] as $category) {
                     $categoryName = $category['strCategory'];
 
-                    // Fetch meals for each category
                     $mealsResponse = Http::get("https://www.themealdb.com/api/json/v1/1/filter.php?c={$categoryName}");
 
                     if ($mealsResponse->successful()) {
                         $mealsData = $mealsResponse->json();
 
                         if (isset($mealsData['meals']) && is_array($mealsData['meals'])) {
-                            // Iterate over the meals
                             foreach ($mealsData['meals'] as $meal) {
-                                // Fetch details for each meal
                                 $mealId = $meal['idMeal'];
                                 $mealDetailsResponse = Http::get("https://www.themealdb.com/api/json/v1/1/lookup.php?i={$mealId}");
 
@@ -85,31 +80,47 @@ class RecipesSeeder extends Seeder
                                     $countryName = $this->areaToCountryMapping[$areaName] ?? null;
                                     $regionId = null;
 
-                                    var_dump($areaName);
-                                    var_dump($countryName);
                                     if ($countryName) {
                                         $region = DB::table('regions')->where('name', $countryName)->first();
                                         $regionId = $region ? $region->id : null;
                                     }
 
-                                    Recipe::updateOrCreate(
+                                    // Create Recipe
+                                    $recipe = Recipe::updateOrCreate(
                                         ['id' => $mealId],
                                         [
                                             'name' => $mealDetails['strMeal'],
-                                            'description' => $mealDetails['strInstructions'], // Using instructions as a placeholder for description
-                                            'ingredients' => $this->getIngredients($mealDetails), // Combine ingredients into a single string
+                                            'description' => $mealDetails['strInstructions'],
                                             'instructions' => $mealDetails['strInstructions'],
-                                            'prep_time' => null, // API does not provide prep time
-                                            'cook_time' => null, // API does not provide prep time
-                                            'servings' => $mealDetails['strServings'] ?? null,
-                                            'difficulty' => $mealDetails['strDifficulty'] ?? null,
-                                            'category' => $mealDetails['strCategory'] ?? $categoryName,
                                             'image_url' => $mealDetails['strMealThumb'],
-                                            'rating' => null, // API does not provide rating
                                             'region_id' => $regionId,
                                             'created_by' => 1,
                                         ]
                                     );
+
+                                    // Process and Store Ingredients
+                                    $ingredients = $this->getIngredients($mealDetails);
+                                    foreach ($ingredients as $ingredientName => $measurement) {
+                                        if (!empty($ingredientName)) {
+
+                                            $normalizedIngredient = $this->normalizeIngredient($ingredientName);
+
+                                            // Check if the ingredient already exists and create if not
+                                            $ingredient = Ingredient::updateOrCreate(
+                                                ['name' => $ingredientName], // Store the original name
+                                                ['normalized_name' => $normalizedIngredient] // Store the normalized name
+                                            );
+
+                                            // Attach the ingredient to the recipe with measurement
+                                            DB::table('ingredient_recipe')->updateOrInsert(
+                                                [
+                                                    'recipe_id' => $recipe->id,
+                                                    'ingredient_id' => $ingredient->id,
+                                                ],
+                                                ['measurement' => $measurement]
+                                            );
+                                        }
+                                    }
                                 } else {
                                     $this->command->error('Failed to fetch meal details for ID: ' . $mealId);
                                 }
@@ -125,32 +136,48 @@ class RecipesSeeder extends Seeder
                 $this->command->error('No categories data found in the API response.');
             }
         } else {
-            // Handle the error
             $this->command->error('Failed to fetch categories from the API.');
         }
     }
 
     /**
-     * Get formatted ingredients from the API item.
+     * Get formatted ingredients as an associative array.
      *
      * @param array $item
-     * @return string
+     * @return array
      */
     private function getIngredients($item)
     {
         $ingredients = [];
 
-        // Loop through possible ingredient fields
         for ($i = 1; $i <= 20; $i++) {
-            $ingredient = $item["strIngredient$i"];
-            $measure = $item["strMeasure$i"];
+            $ingredient = trim($item["strIngredient$i"] ?? '');
+            $measure = trim($item["strMeasure$i"] ?? '');
 
             if (!empty($ingredient)) {
-                $ingredients[] = trim("$ingredient - $measure");
+                $ingredients[$ingredient] = $measure; // Store ingredient as key and measurement as value
             }
         }
 
-        // Join all ingredients into a single string
-        return implode("\n", $ingredients);
+        return $ingredients;
     }
+
+    private function normalizeIngredient($ingredient)
+    {
+        $mapping = [
+            'Sun-Dried Tomatoes' => 'Tomatoes',
+            'baby plum tomatoes' => 'Tomatoes',
+            'Chicken Thighs' => 'Chicken',
+            'Chicken Breast' => 'Chicken',
+            'Parmesan cheese' => 'Cheese',
+            'Cheddar cheese' => 'Cheese',
+            'Mozzarella cheese' => 'Cheese',
+            'Red Bell Pepper' => 'Bell Pepper',
+            'Green Bell Pepper' => 'Bell Pepper',
+            'Yellow Bell Pepper' => 'Bell Pepper',
+        ];
+
+        return $mapping[$ingredient] ?? $ingredient; // Default to itself if no match
+    }
+
 }
