@@ -41,4 +41,8 @@ class Recipe extends Model
         return $this->reviews()->avg('rating') ?? 0; // Returns average rating, or 0 if no reviews
     }
 
+    public function ingredients()
+    {
+        return $this->belongsToMany(Ingredient::class)->withPivot('measurement');
+    }
 }

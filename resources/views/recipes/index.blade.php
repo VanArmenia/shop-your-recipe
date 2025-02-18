@@ -7,11 +7,11 @@
     <header class="md:px-5 bg-indigo-100">
         <nav class="md:block">
             <ul class="grid grid-flow-col items-center w-1/4">
-                <!-- Ingredients Dropdown -->
+
                 <li class="relative group">
                     <a
                         href="{{ route('recipes.index') }}"
-                        class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
+                        class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-indigo-300"
                     >
                         Cuisines
                     </a>
@@ -45,13 +45,24 @@
                     </ul>
                 </li>
 
-                <li>
+                <!-- Ingredients Dropdown -->
+                <li class="relative group">
                     <a
                         href="{{ route('recipes.index') }}"
                         class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
                     >
                         Ingredients
                     </a>
+
+                    <ul class="absolute hidden bg-white shadow-md rounded-md w-40 z-[9999] group-hover:block">
+                        @foreach ($ingredients as $ingredient)
+                            <li class="relative group/item">
+                                <a href="{{ route('recipe.ingredient', $ingredient->name) }}" class="block px-4 py-2 hover:bg-gray-200">
+                                    {{ $ingredient->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
                 </li>
                 <!-- Shop Link (No Dropdown) -->
                 <li>

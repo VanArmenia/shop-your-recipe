@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ingredient;
 use App\Models\Recipe;
 use App\Models\RecipeCategory;
 use App\Models\Region;
@@ -51,6 +52,8 @@ class RecipeController extends Controller
         }])
         ->get();
 
+        $ingredients = Ingredient::all();
+
         return view('recipes.index', [
             'breakfasts' => $breakfast,
             'vegetarians' => $vegetarian,
@@ -58,6 +61,7 @@ class RecipeController extends Controller
             'countReviews' => $countReviews,
             'latestRecipes' => $latestRecipes,
             'rootRegions' => $rootRegions,
+            'ingredients' => $ingredients,
         ]);
     }
 
@@ -188,6 +192,11 @@ class RecipeController extends Controller
             ->paginate(10);
 
         return view('recipes.region', compact('recipes', 'region', 'breadcrumbs'));
+    }
+
+    public function ingredient(Ingredient $ingredient)
+    {
+        return view('recipes.ingredient', compact('ingredient'));
     }
 
 }
