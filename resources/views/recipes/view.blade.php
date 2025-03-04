@@ -19,7 +19,7 @@
             @endforeach
         </ol>
     </nav>
-    <div class="grid grid-cols-1 md:grid-cols-[minmax(250px,_25%)_1fr] min-h-screen">
+    <div class="grid grid-cols-1 md:grid-cols-2 min-h-screen p-12 gap-8">
 
         <!-- Include the aside Blade component here -->
 {{--        <x-aside :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)"/>--}}
@@ -31,7 +31,7 @@
                     'fetchReviews' => route('fetch-recipe-reviews', $recipe),
                     'addReview' => route('add-recipe-review', $recipe),
                 ]) }})" class="container mx-auto">
-            <div class="grid gap-6 grid-cols-1 lg:grid-cols-6 p-4">
+            <div class="p-4 py-8">
                 <div class="md:col-span-3 px-4">
                     <div
                         x-data="{
@@ -116,32 +116,43 @@
                         </div>
                     </div>
                 </div>
-                <div class="md:col-span-3">
-                    <h5 class="font-bold pb-4 ">{{$recipe->category->name}}</h5>
-                    <h1 class="text-lg font-semibold">
-                        {{$recipe->name}}
-                    </h1>
-                    <div class="mb-6" x-data="{expanded: false}">
-                        <div
-                            x-show="expanded"
-                            x-collapse.min.120px
-                            class="text-gray-500 wysiwyg-content"
-                        >
-                            {!! $recipe->description !!}
-                        </div>
-
-                        <p class="text-right">
-                            <a
-                                @click="expanded = !expanded"
-                                href="javascript:void(0)"
-                                class="text-purple-500 hover:text-purple-700"
-                                x-text="expanded ? 'Read Less' : 'Read More'"
-                            ></a>
-                        </p>
-                    </div>
-                </div>
             </div>
             <x-reviews :reviews="$recipe->reviews" handler="recipeItem" />
+        </div>
+        <div>
+            <div class="md:col-span-3">
+                <h5 class="font-bold pb-4 ">{{$recipe->category->name}}</h5>
+                <h1 class="text-lg font-semibold">
+                    {{$recipe->name}}
+                </h1>
+                <div class="mb-6" x-data="{expanded: false}">
+                    <div
+                        x-show="expanded"
+                        x-collapse.min.120px
+                        class="text-gray-500 wysiwyg-content"
+                    >
+                        {!! $recipe->description !!}
+                    </div>
+
+                    <p class="text-right">
+                        <a
+                            @click="expanded = !expanded"
+                            href="javascript:void(0)"
+                            class="text-purple-500 hover:text-purple-700"
+                            x-text="expanded ? 'Read Less' : 'Read More'"
+                        ></a>
+                    </p>
+                </div>
+            </div>
+            <div class="md:col-span-3">
+                <ul>
+                    @foreach($recipe->ingredients()->get() as $ingredient)
+                        <li class="leading-relaxed">
+                            {{$ingredient->name}} - {{$ingredient->pivot->measurement}}
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
     </div>
 

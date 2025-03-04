@@ -105,11 +105,11 @@ class RecipesSeeder extends Seeder
 
                                             $normalizedIngredient = $this->normalizeIngredient($ingredientName);
 
-                                            // Check if the ingredient already exists and create if not
-                                            $ingredient = Ingredient::updateOrCreate(
-                                                ['name' => $ingredientName], // Store the original name
-                                                ['normalized_name' => $normalizedIngredient] // Store the normalized name
+                                            // Normalize before searching & storing
+                                            $ingredient = Ingredient::firstOrCreate(
+                                                ['name' => strtolower($ingredientName)] // Store in lowercase
                                             );
+                                            $ingredient->update(['normalized_name' => $normalizedIngredient]);
 
                                             // Attach the ingredient to the recipe with measurement
                                             DB::table('ingredient_recipe')->updateOrInsert(
@@ -151,7 +151,7 @@ class RecipesSeeder extends Seeder
         $ingredients = [];
 
         for ($i = 1; $i <= 20; $i++) {
-            $ingredient = trim($item["strIngredient$i"] ?? '');
+            $ingredient = strtolower(trim($item["strIngredient$i"] ?? '')); // Convert to lowercase
             $measure = trim($item["strMeasure$i"] ?? '');
 
             if (!empty($ingredient)) {
@@ -165,19 +165,116 @@ class RecipesSeeder extends Seeder
     private function normalizeIngredient($ingredient)
     {
         $mapping = [
-            'Sun-Dried Tomatoes' => 'Tomatoes',
             'baby plum tomatoes' => 'Tomatoes',
-            'Chicken Thighs' => 'Chicken',
-            'Chicken Breast' => 'Chicken',
-            'Parmesan cheese' => 'Cheese',
-            'Cheddar cheese' => 'Cheese',
-            'Mozzarella cheese' => 'Cheese',
-            'Red Bell Pepper' => 'Bell Pepper',
-            'Green Bell Pepper' => 'Bell Pepper',
-            'Yellow Bell Pepper' => 'Bell Pepper',
+            'plum tomatoes' => 'Tomatoes',
+            'diced tomatoes' => 'Tomatoes',
+            'cherry tomatoes' => 'Tomatoes',
+            'grape tomatoes' => 'Tomatoes',
+            'chopped tomatoes' => 'Tomatoes',
+            'sun-dried tomatoes' => 'Tomatoes',
+            'tomato puree' => 'Tomatoes',
+
+            'chopped onion' => 'Onion',
+            'red onion' => 'Onion',
+            'onion' => 'Onion',
+            'onions' => 'Onion',
+            'spring onions' => 'Onion',
+
+            'freshly chopped parsley' => 'Herbs',
+            'parsley' => 'Herbs',
+            'chopped parsley' => 'Herbs',
+            'rosemary' => 'Herbs',
+            'thyme' => 'Herbs',
+
+            'cubed feta cheese' => 'Cheese',
+            'shredded monterey jack cheese' => 'Cheese',
+            'parmesan' => 'Cheese',
+            'gouda cheese' => 'Cheese',
+            'cheese' => 'Cheese',
+            'parmesan cheese' => 'Cheese',
+            'gruyere cheese' => 'Cheese',
+            'shredded mexican cheese' => 'Cheese',
+            'cream cheese' => 'Cheese',
+            'cheese curds' => 'Cheese',
+            'goats cheese' => 'Cheese',
+            'monterey jack cheese' => 'Cheese',
+            'colby jack cheese' => 'Cheese',
+            'stilton cheese' => 'Cheese',
+            'mozzarella' => 'Cheese',
+            'ricotta' => 'Cheese',
+            'mascarpone' => 'Cheese',
+            'cheddar cheese' => 'Cheese',
+            'parmigiano-reggiano' => 'Cheese',
+            'paneer' => 'Cheese',
+
+
+            'free-range egg, beaten' => 'Eggs',
+            'egg yolks' => 'Eggs',
+            'eggs' => 'Eggs',
+            'egg' => 'Eggs',
+            'egg white' => 'Eggs',
+            'free-range eggs, beaten' => 'Eggs',
+            'egg rolls' => 'Eggs',
+            'flax eggs' => 'Eggs',
+
+            'bramley apples' => 'Apples',
+            'apples' => 'Apples',
+            'braeburn apples' => 'Apples',
+
+            'chilled butter' => 'Butter',
+            'butter, softened' => 'Butter',
+
+            'noodles' => 'Noodles',
+            'rice stick noodles' => 'Noodles',
+            'rice noodles' => 'Noodles',
+            'udon noodles' => 'Noodles',
+
+            'green beans' => 'Beans',
+            'borlotti beans' => 'Beans',
+            'cannellini beans' => 'Beans',
+            'fermented black beans' => 'Beans',
+            'broad beans' => 'Beans',
+            'kidney beans' => 'Beans',
+            'refried beans' => 'Beans',
+            'black beans' => 'Beans',
+            'baked beans' => 'Beans',
+            'haricot beans' => 'Beans',
+
+            'chestnuts' => 'Nuts',
+            'pine nuts' => 'Nuts',
+            'peanuts' => 'Nuts',
+            'ground almonds' => 'Nuts',
+            'flaked almonds' => 'Nuts',
+            'pecan nuts' => 'Nuts',
+            'almond extract' => 'Nuts',
+            'almonds' => 'Nuts',
+            'cashew' => 'Nuts',
+            'cashew nuts' => 'Nuts',
+            'hazlenuts' => 'Nuts',
+
+            'penne rigate' => 'Pasta',
+            'bowtie pasta' => 'Pasta',
+
+
+            'chestnut mushroom' => 'Mushroom',
+            'mushroom' => 'Mushroom',
+            'shiitake mushroom' => 'Mushroom',
+            'wood ear mushroom' => 'Mushroom',
+            'wild mushroom' => 'Mushroom',
+
+            'chickpeas' => 'Pulses',
+            'french lentils' => 'Pulses',
+            'green red lentils' => 'Pulses',
+            'lentils' => 'Pulses',
+
+            'semi-skimmed milk' => 'Milk',
+            'whole milk' => 'Milk',
+            'condensed milk' => 'Milk',
+            'milk' => 'Milk',
+
         ];
 
-        return $mapping[$ingredient] ?? $ingredient; // Default to itself if no match
+        return $mapping[$ingredient] ??  null; // Default to itself if no match
     }
 
 }

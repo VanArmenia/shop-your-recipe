@@ -54,15 +54,29 @@
                         Ingredients
                     </a>
 
-                    <ul class="absolute hidden bg-white shadow-md rounded-md w-40 z-[9999] group-hover:block">
-                        @foreach ($ingredients as $ingredient)
-                            <li class="relative group/item">
-                                <a href="{{ route('recipe.ingredient', $ingredient->name) }}" class="block px-4 py-2 hover:bg-gray-200">
-                                    {{ $ingredient->name }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
+                    <div class="absolute hidden bg-white shadow-md rounded-md w-[320px] z-[9999] group-hover:block p-4" x-data="{ showAll: false }">
+                        <div class="grid grid-cols-2 gap-2">
+                            @foreach ($ingredients as $ingredient)
+                                <div class="relative group/item" x-show="showAll || {{ $loop->index }} < 10" x-cloak>
+                                    <a href="{{ route('recipe.ingredient', $ingredient) }}"
+                                       class="block px-2 py-1 hover:bg-gray-200 rounded">
+                                        {{ $ingredient->normalized_name }}
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        @if($ingredients->count() > 10)
+                            <div class="mt-4 flex justify-center" :class="!showAll ? 'shadow-md shadow-gray-300 rounded-md' : ''">
+                                <button @click="showAll = !showAll"
+                                        class="text-blue-500 px-4 py-2 w-full flex items-center justify-center gap-2">
+                                    <span x-text="showAll ? 'View Less' : 'View More'"></span>
+                                    <i class="fa text-xs text-yellow-400" :class="showAll ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                                </button>
+                            </div>
+                        @endif
+                    </div>
+
                 </li>
                 <!-- Shop Link (No Dropdown) -->
                 <li>
