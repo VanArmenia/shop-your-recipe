@@ -8,6 +8,7 @@ use App\Models\RecipeCategory;
 use App\Models\Region;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RecipeController extends Controller
 {
@@ -52,7 +53,12 @@ class RecipeController extends Controller
         }])
         ->get();
 
-        $ingredients = Ingredient::all();
+        $ingredients = Ingredient::select('normalized_name')
+            ->whereNotNull('normalized_name')
+            ->distinct()
+            ->get();
+
+//        dd($ingredients);
 
         return view('recipes.index', [
             'breakfasts' => $breakfast,
@@ -197,6 +203,14 @@ class RecipeController extends Controller
     public function ingredient(Ingredient $ingredient)
     {
         return view('recipes.ingredient', compact('ingredient'));
+    }
+
+    public function showRecipesByIngredient(Ingredient $ingredient)
+    {
+
+        $recipes = $ingredient->getAllRelatedRecipes();
+
+        return view('recipes.ingredient', compact('recipes', 'ingredient'));
     }
 
 }

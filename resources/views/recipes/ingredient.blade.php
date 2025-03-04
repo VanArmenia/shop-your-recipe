@@ -14,7 +14,9 @@
         </ol>
         <div class="p-4 text-center text-yellow-700">
             <h1 class="text-xl md:text-2xl">
-                Recipes for {{ $ingredient->name }}.
+                <h2 class="font-bold text-2xl p-4 relative inline-block">  Found {{ $recipes->count() }} recipes with {{ $ingredient->normalized_name }}
+                    <span class="absolute bottom-0 left-1/2 w-1/2 border-b-2 border-yellow-300 -translate-x-1/2"></span>
+                </h2>
             </h1>
         </div>
     </header>
@@ -26,13 +28,10 @@
     <?php else: ?>
     <div class="grid md:grid-cols-[3fr_1fr] gap-8 grid-cols-[1fr]">
         <div class="text-center">
-            <h2 class="font-bold text-2xl p-4 relative inline-block">  Explore Cuisines with {{ $ingredient->name }}.
-                <span class="absolute bottom-0 left-1/2 w-1/2 border-b-2 border-yellow-300 -translate-x-1/2"></span>
-            </h2>
             <div
                 class="grid gap-8 grig-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-5"
             >
-                @foreach($ingredient->recipes as $recipe)
+                @foreach($recipes as $recipe)
                     <!-- Recipe Item -->
                     <div
                         x-data="recipeItem({{ json_encode([

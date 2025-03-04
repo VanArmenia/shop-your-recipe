@@ -34,7 +34,7 @@ Route::middleware(['guestOrVerified'])->group(function () {
     Route::get('/recipes/search', [RecipeController::class, 'search'])->name('recipes.search');
     Route::get('/recipes/category/{category:name}', [RecipeController::class, 'category'])->name('recipe.category');
     Route::get('/recipes/region/{region:name}', [RecipeController::class, 'region'])->name('recipe.region');
-    Route::get('/recipes/ingredient/{ingredient:name}', [RecipeController::class, 'ingredient'])->name('recipe.ingredient');
+    Route::get('/recipes/ingredient/{ingredient:normalized_name}', [RecipeController::class, 'showRecipesByIngredient'])->name('recipe.ingredient');
 
     Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
 
