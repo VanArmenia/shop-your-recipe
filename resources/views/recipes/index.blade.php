@@ -24,7 +24,7 @@
                                 <a href="{{ route('recipe.region', $region->name) }}" class="block px-4 py-2 hover:bg-gray-200">
                                     {{ $region->name }}
                                     @if($region->children->count() > 0)
-                                        <span class="float-right">→</span>
+                                        <i class="fa-solid fa-chevron-right text-xs"></i>
                                     @endif
                                 </a>
 

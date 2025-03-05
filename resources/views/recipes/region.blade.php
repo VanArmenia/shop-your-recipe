@@ -5,27 +5,27 @@
 <x-app-layout>
     <header class="md:px-5 bg-indigo-100">
         <ol class="breadcrumb flex">
-            <li class="breadcrumb-item">
+            <li class="breadcrumb-item text-yellow-700 font-bold">
                 <a href="/recipes/">
                     Recipes
-                    <i class="fas fa-chevron-right text-sm px-1 text-gray-600"></i>
+                    <i class="fas fa-chevron-right text-xs px-1 text-yellow-700"></i>&nbsp;
                 </a>
             </li>
             @foreach ($breadcrumbs as $breadcrumb)
-                <li class="breadcrumb-item">
+                <li class="breadcrumb-item text-yellow-700 font-bold">
                     <a href="{{ $breadcrumb['url'] }}">
                         {{ $breadcrumb['name'] }}
                         @if (!$loop->last) <!-- Only show '>' if it's not the last item -->
-                        <i class="fas fa-chevron-right text-sm px-1 text-gray-600"></i>
+                        <i class="fas fa-chevron-right text-xs px-1 text-yellow-700"></i>&nbsp;
                         @endif
                     </a>
                 </li>
             @endforeach
         </ol>
         <div class="p-4 text-center text-yellow-700">
-            <h1 class="text-xl md:text-2xl">
-                Recipes for {{ $region->name }}.
-            </h1>
+            <h2 class="font-bold text-2xl p-4 relative inline-block">  Explore Cuisines in {{ $region->name }}.
+                <span class="absolute bottom-0 left-1/2 w-1/2 border-b-2 border-yellow-300 -translate-x-1/2"></span>
+            </h2>
         </div>
     </header>
 
@@ -34,12 +34,8 @@
             There are no recipes published
         </div>
     <?php else: ?>
-    <div class="grid md:grid-cols-[3fr_1fr] gap-8 grid-cols-[1fr]">
+    <div class="grid gap-8 grid-cols-[1fr]">
         <div class="text-center">
-            <h2 class="font-bold text-2xl p-4 relative inline-block">  Explore Cuisines in {{ $region->name }}.
-                <span class="absolute bottom-0 left-1/2 w-1/2 border-b-2 border-yellow-300 -translate-x-1/2"></span>
-            </h2>
-
             @if($region->children->count() > 0)
                 <div class="rounded-md text-center mt-2" x-data="{ showAll: false }">
                     @foreach ($region->children as $child)
@@ -86,7 +82,7 @@
                             <img
                                 src="{{ $recipe->image }}"
                                 alt=""
-                                class="object-cover rounded-lg hover:scale-98 transition-transform p-1"
+                                class="object-cover rounded-xl hover:scale-98 transition-transform p-1"
                             />
                         </a>
                         <div class="py-0 px-2">
@@ -116,39 +112,7 @@
                     <!--/ Recipe Item -->
                 @endforeach
             </div>
-            @if ($recipes->lastPage() > 1)
-                <ul class="flex flex-wrap items-center justify-center gap-2 my-4">
-                    {{-- Previous Button --}}
-                    @if ($recipes->currentPage() > 1)
-                        <li>
-                            <a href="{{ $recipes->previousPageUrl() }}"
-                               class="px-3 py-2 text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 transition">
-                                &laquo;
-                            </a>
-                        </li>
-                    @endif
-
-                    {{-- Page Numbers --}}
-                    @for ($i = 1; $i <= $recipes->lastPage(); $i++)
-                        <li>
-                            <a href="{{ $recipes->url($i) }}"
-                               class="px-4 py-2 rounded-md {{ $recipes->currentPage() == $i ? 'bg-blue-500 text-white' : 'text-gray-700 bg-gray-100 hover:bg-blue-200 transition' }}">
-                                {{ $i }}
-                            </a>
-                        </li>
-                    @endfor
-
-                    {{-- Next Button --}}
-                    @if ($recipes->currentPage() < $recipes->lastPage())
-                        <li>
-                            <a href="{{ $recipes->nextPageUrl() }}"
-                               class="px-3 py-2 text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 transition">
-                                &raquo;
-                            </a>
-                        </li>
-                    @endif
-                </ul>
-            @endif
+            <x-paginator :paginator="$recipes"/>
 
 
         </div>

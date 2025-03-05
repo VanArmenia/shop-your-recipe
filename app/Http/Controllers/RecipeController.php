@@ -186,6 +186,12 @@ class RecipeController extends Controller
     public function region(Region $region)
     {
         $breadcrumbs = $region->getBreadcrumbs();
+
+        // Get children that have recipes
+        $region->load(['children' => function ($query) {
+            $query->whereHas('recipes'); // Only include children that have recipes
+        }]);
+
         // Get the region's children IDs
         $regionIds = $region->children()->pluck('id')->toArray();
 
@@ -208,9 +214,10 @@ class RecipeController extends Controller
     public function showRecipesByIngredient(Ingredient $ingredient)
     {
 
+        $breadcrumbs = $ingredient->getBreadcrumbs();
         $recipes = $ingredient->getAllRelatedRecipes();
 
-        return view('recipes.ingredient', compact('recipes', 'ingredient'));
+        return view('recipes.ingredient', compact('recipes', 'ingredient' , 'breadcrumbs'));
     }
 
 }

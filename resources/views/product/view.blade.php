@@ -6,7 +6,7 @@
                     <a href="{{ $breadcrumb['url'] }}">
                         {{ $breadcrumb['name'] }}
                         @if (!$loop->last) <!-- Only show '>' if it's not the last item -->
-                        <i class="fas fa-chevron-right text-sm px-1 text-gray-600"></i>
+                        <i class="fas fa-chevron-right text-xs px-1 text-gray-600"></i>&nbsp;
                         @endif
                     </a>
                 </li>
