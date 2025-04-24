@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Ingredient;
 use App\Models\Recipe;
 use App\Models\RecipeCategory;
@@ -21,6 +22,8 @@ class RecipeController extends Controller
         // Get recipes for Breakfast category
         $breakfast = Recipe::query()
             ->where('category_id', $categoryBr->id)
+            ->with('region')
+            ->with('category')
             ->with('reviews') // Include the 'reviews' relationship
             ->withCount('reviews as review_count') // Add review count
             ->withAvg('reviews as average_rating', 'rating') // Add average rating
@@ -58,7 +61,6 @@ class RecipeController extends Controller
             ->distinct()
             ->get();
 
-//        dd($ingredients);
 
         return view('recipes.index', [
             'breakfasts' => $breakfast,
@@ -94,7 +96,30 @@ class RecipeController extends Controller
     public function show(Recipe $recipe)
     {
         $breadcrumbs = $recipe->category->getBreadcrumbs();
-        return view('recipes.view', compact('recipe', 'breadcrumbs'));
+
+        // Fetch the country (region) data from the database or any external service
+        $region = $recipe->region;
+
+        // Assuming you have a method to fetch GeoJSON data for the country's borders
+        $geoJsonData = $this->getGeoJsonDataForCountry($region->name);
+
+        return view('recipes.view', compact('recipe', 'breadcrumbs', 'geoJsonData'));
+    }
+
+    // Simulating a method to fetch GeoJSON data from an external API or file
+    private function getGeoJsonDataForCountry($countryName)
+    {
+        // This could be a call to an external API to get GeoJSON data
+        // or you could fetch it from your database or a local file.
+
+        // For simplicity, assume we have a GeoJSON file for each country:
+        $geoJsonFile = storage_path("app/geojson/{$countryName}.json");
+
+        if (file_exists($geoJsonFile)) {
+            return json_decode(file_get_contents($geoJsonFile));
+        }
+
+        return null;  // or return a default/fallback GeoJSON
     }
 
     /**

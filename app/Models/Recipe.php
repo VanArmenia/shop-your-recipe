@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Recipe extends Model
 {
@@ -21,9 +22,14 @@ class Recipe extends Model
         return $this->belongsTo(RecipeCategory::class, 'category_id');
     }
 
+    public function region()
+    {
+        return $this->belongsTo(Region::class, 'region_id');
+    }
+
     public function getImageAttribute()
     {
-        return $this->images->count() > 0 ? $this->images->get(0)->url : null;
+        return $this->images->count() > 0 ? $this->images->first()->url : null;
     }
 
     public function reviews()

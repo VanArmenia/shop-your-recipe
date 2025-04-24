@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('recipes', function (Blueprint $table) {
-            $table->dropColumn('category');
+        Schema::table('regions', function (Blueprint $table) {
+            $table->string('map_url')->nullable();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('recipes', function (Blueprint $table) {
-            //
+        Schema::table('regions', function (Blueprint $table) {
+            $table->dropColumn('map_url');
         });
     }
 };

@@ -1,4 +1,14 @@
 <x-app-layout>
+    <!-- Add Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/osmtogeojson@3.0.0-beta.5/osmtogeojson.min.js"></script>
+
+    <!-- Add Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
+
     <nav aria-label="breadcrumb" class="flex p-4">
         <ol class="breadcrumb flex">
             <li class="breadcrumb-item">
@@ -125,6 +135,9 @@
                 <h1 class="text-lg font-semibold">
                     {{$recipe->name}}
                 </h1>
+                <h3 class="text-sm font-semibold mb-2">
+                    <span class="font-normal">Original recipe from - </span> {{$recipe->region->name}}
+                </h3>
                 <div class="mb-6" x-data="{expanded: false}">
                     <div
                         x-show="expanded"
@@ -133,6 +146,9 @@
                     >
                         {!! $recipe->description !!}
                     </div>
+
+                    {{--map--}}
+                    <div id="map" style="width: 300px; height: 200px;"></div>
 
                     <p class="text-right">
                         <a
@@ -154,6 +170,68 @@
                 </ul>
             </div>
         </div>
+        <script>
+            // Dynamically pass the latitude, longitude, and zoom level from PHP to JavaScript
+            var lat = {{ $recipe->region->latitude }}; // Replace with actual data
+            var lng = {{ $recipe->region->longitude }}; // Replace with actual data
+            var zoom = 4; // Replace with desired zoom level
+            // Create the map object and set the initial view (latitude, longitude, zoom level)
+            var map = L.map('map', {
+                zoomControl: false // Disable the zoom controls entirely when initializing
+            }).setView([lat, lng], zoom);
+
+            // Add OpenStreetMap tile layer to the map
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy;'
+            }).addTo(map);
+
+            // Disable zooming entirely (mouse scroll and touch gestures)
+            map.scrollWheelZoom.disable();
+            map.touchZoom.disable();
+            map.doubleClickZoom.disable();
+
+            fetch('/geojson')
+                .then(response => response.json())
+                .then(data => {
+
+                    // Be careful with filtering raw OSM data
+                    // Make sure to preserve the structure
+                    const filteredData = {
+                        ...data,  // Keep all the original properties
+                        elements: data.elements.filter(element => {
+                            // Only filter out nodes that aren't part of ways
+                            if (element.type === 'node') {
+                                // Check if this node is referenced by any way
+                                const isUsedInWay = data.elements.some(e =>
+                                    e.type === 'way' &&
+                                    e.nodes &&
+                                    e.nodes.includes(element.id)
+                                );
+                                return isUsedInWay;
+                            }
+                            // Keep all ways and relations
+                            return true;
+                        })
+                    };
+
+                    // Then convert the filtered data
+                    const geojsonData = osmtogeojson(filteredData);
+
+                    // Convert OSM data to GeoJSON
+                    var geoJson = osmtogeojson(geojsonData);
+
+                    L.geoJSON(geoJson, {
+                        style: {
+                            color: "#ff7800", // Border color
+                            weight: 3,        // Border thickness
+                            opacity: 0.7      // Border opacity
+                        }
+                    }).addTo(map);
+                })
+                .catch(error => console.error('Error fetching GeoJSON:', error));
+
+        </script>
+
     </div>
 
     {{--    Similar products --}}

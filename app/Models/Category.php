@@ -15,6 +15,10 @@ class Category extends Model
         'id' => 'integer',  // Ensure that 'id' is always an integer
     ];
 
+    protected $table = 'categories';
+
+    protected $guarded = [];
+
     public function products()
     {
         return $this->hasMany(Product::class);
@@ -32,6 +36,15 @@ class Category extends Model
 
     public function getUnitRoute()
     {
-        return route('product.category', $this); // Adjust route as needed
+        // Check if this category has any products directly in the database
+        if ($this->products()->exists()) {
+            return route('product.category', $this);
+        }
+
+        // Check if this category has any recipes directly in the database
+        if ($this->recipes()->exists()) {
+            return route('recipe.category', $this);
+        }
+
     }
 }

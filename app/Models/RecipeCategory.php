@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Traits\HasBreadcrumbs;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasBreadcrumbs;
 
 class RecipeCategory extends Model
 {
@@ -18,6 +18,10 @@ class RecipeCategory extends Model
 
     public function getUnitRoute()
     {
-        return route('recipe.category', $this);
+        // Check if this category has any recipes directly in the database
+        if ($this->recipes()->exists()) {
+            return route('recipe.category', $this);
+        }
+
     }
 }

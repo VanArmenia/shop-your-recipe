@@ -11,8 +11,9 @@ class ExampleTest extends TestCase
      *
      * @return void
      */
-    public function test_that_true_is_true()
+
+    public function test_environment_is_testing()
     {
-        $this->assertTrue(true);
+        $this->assertEquals('testing', env('APP_ENV'));
     }
 }

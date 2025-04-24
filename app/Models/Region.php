@@ -11,6 +11,8 @@ class Region extends Model
     use HasFactory;
     use HasBreadcrumbs;
 
+    protected $fillable = ['latitude', 'longitude', 'map_url'];
+
     public function recipes () {
         return $this->hasMany(Recipe::class);
     }

@@ -191,9 +191,13 @@
                             />
                         </a>
                         <div class="p-2">
+                            @if ($vegetarian->category)
                             <a href="{{ route('recipe.category', $vegetarian->category) }}" class="text-lg font-bold">
                                <h5 class="text-gray-600">{{$vegetarian->category->name}}</h5>
                             </a>
+                            @else
+                                <p class="text-red-500">No category assigned!</p>
+                            @endif
                         </div>
                         <div class="py-0 px-2">
                             <h3 class="text-lg font-bold">
@@ -254,9 +258,13 @@
                         </div>
                         <div class="flex-1">
                             <div class="p-2">
+                                @if ($latestRecipe->category)
                                 <a href="{{ route('recipe.category', $latestRecipe->category) }}" class="text-lg font-bold">
                                     <h5 class="text-gray-600">{{$latestRecipe->category->name}}</h5>
                                 </a>
+                                @else
+                                    <p class="text-red-500">No category assigned!</p>
+                                @endif
 
                             </div>
                             <div class="py-0 px-2">

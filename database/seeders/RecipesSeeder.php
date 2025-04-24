@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Ingredient;
 use App\Models\Recipe;
+use App\Models\RecipeCategory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -61,6 +63,13 @@ class RecipesSeeder extends Seeder
                 foreach ($categoriesData['categories'] as $category) {
                     $categoryName = $category['strCategory'];
 
+                    $categoryCreated = RecipeCategory::updateOrCreate(
+                        [
+                            'name' => $categoryName,
+                            'description' => '',
+                        ]
+                    );
+
                     $mealsResponse = Http::get("https://www.themealdb.com/api/json/v1/1/filter.php?c={$categoryName}");
 
                     if ($mealsResponse->successful()) {
@@ -91,10 +100,10 @@ class RecipesSeeder extends Seeder
                                         [
                                             'name' => $mealDetails['strMeal'],
                                             'description' => $mealDetails['strInstructions'],
-                                            'instructions' => $mealDetails['strInstructions'],
                                             'image_url' => $mealDetails['strMealThumb'],
                                             'region_id' => $regionId,
                                             'created_by' => 1,
+                                            'category_id' => $categoryCreated->id,
                                         ]
                                     );
 

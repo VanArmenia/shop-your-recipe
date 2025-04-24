@@ -6,6 +6,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,5 +64,14 @@ Route::middleware(['auth', 'verified'])->group(function() {
 });
 
 Route::post('/webhook/stripe', [CheckoutController::class, 'webhook']);
+
+Route::get('/geojson', function () {
+    $geojson_url = "https://overpass-api.de/api/interpreter?data=[out:json];relation[\"admin_level\"=\"2\"][\"name\"=\"Canada\"];out geom;";
+    $response = Http::withHeaders([
+        'User-Agent' => 'Mozilla/5.0'
+    ])->get($geojson_url);
+    return response($response->body())->header('Content-Type', 'application/json');
+});
+
 
 require __DIR__ . '/auth.php';
