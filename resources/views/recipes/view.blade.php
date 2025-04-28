@@ -189,47 +189,6 @@
             map.scrollWheelZoom.disable();
             map.touchZoom.disable();
             map.doubleClickZoom.disable();
-
-            fetch('/geojson')
-                .then(response => response.json())
-                .then(data => {
-
-                    // Be careful with filtering raw OSM data
-                    // Make sure to preserve the structure
-                    const filteredData = {
-                        ...data,  // Keep all the original properties
-                        elements: data.elements.filter(element => {
-                            // Only filter out nodes that aren't part of ways
-                            if (element.type === 'node') {
-                                // Check if this node is referenced by any way
-                                const isUsedInWay = data.elements.some(e =>
-                                    e.type === 'way' &&
-                                    e.nodes &&
-                                    e.nodes.includes(element.id)
-                                );
-                                return isUsedInWay;
-                            }
-                            // Keep all ways and relations
-                            return true;
-                        })
-                    };
-
-                    // Then convert the filtered data
-                    const geojsonData = osmtogeojson(filteredData);
-
-                    // Convert OSM data to GeoJSON
-                    var geoJson = osmtogeojson(geojsonData);
-
-                    L.geoJSON(geoJson, {
-                        style: {
-                            color: "#ff7800", // Border color
-                            weight: 3,        // Border thickness
-                            opacity: 0.7      // Border opacity
-                        }
-                    }).addTo(map);
-                })
-                .catch(error => console.error('Error fetching GeoJSON:', error));
-
         </script>
 
     </div>

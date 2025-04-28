@@ -29,6 +29,7 @@ Route::middleware(['guestOrVerified'])->group(function () {
         ->middleware('auth')->name('add-review');  // Ensure only authenticated users can post reviews
     Route::get('/product/{product:id}/reviews', [ProductController::class, 'fetchReviews'])->name('fetch-reviews');
 
+    Route::resource('recipes', RecipeController::class);
     Route::post('/recipes/{recipe:id}/reviews', [RecipeController::class, 'storeReview'])
         ->middleware('auth')->name('add-recipe-review');  // Ensure only authenticated users can post reviews
     Route::get('/recipes/{recipe:id}/reviews', [RecipeController::class, 'fetchReviews'])->name('fetch-recipe-reviews');
@@ -38,9 +39,6 @@ Route::middleware(['guestOrVerified'])->group(function () {
     Route::get('/recipes/ingredient/{ingredient:normalized_name}', [RecipeController::class, 'showRecipesByIngredient'])->name('recipe.ingredient');
 
     Route::get('/shop', [ProductController::class, 'shop'])->name('shop');
-
-    Route::resource('recipes', RecipeController::class);
-
     Route::view('/about', 'about')->name('about');
 
     Route::prefix('/cart')->name('cart.')->group(function () {
@@ -65,13 +63,6 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
 Route::post('/webhook/stripe', [CheckoutController::class, 'webhook']);
 
-Route::get('/geojson', function () {
-    $geojson_url = "https://overpass-api.de/api/interpreter?data=[out:json];relation[\"admin_level\"=\"2\"][\"name\"=\"Canada\"];out geom;";
-    $response = Http::withHeaders([
-        'User-Agent' => 'Mozilla/5.0'
-    ])->get($geojson_url);
-    return response($response->body())->header('Content-Type', 'application/json');
-});
 
 
 require __DIR__ . '/auth.php';

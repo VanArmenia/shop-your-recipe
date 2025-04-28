@@ -96,30 +96,8 @@ class RecipeController extends Controller
     public function show(Recipe $recipe)
     {
         $breadcrumbs = $recipe->category->getBreadcrumbs();
-
-        // Fetch the country (region) data from the database or any external service
-        $region = $recipe->region;
-
-        // Assuming you have a method to fetch GeoJSON data for the country's borders
-        $geoJsonData = $this->getGeoJsonDataForCountry($region->name);
-
-        return view('recipes.view', compact('recipe', 'breadcrumbs', 'geoJsonData'));
-    }
-
-    // Simulating a method to fetch GeoJSON data from an external API or file
-    private function getGeoJsonDataForCountry($countryName)
-    {
-        // This could be a call to an external API to get GeoJSON data
-        // or you could fetch it from your database or a local file.
-
-        // For simplicity, assume we have a GeoJSON file for each country:
-        $geoJsonFile = storage_path("app/geojson/{$countryName}.json");
-
-        if (file_exists($geoJsonFile)) {
-            return json_decode(file_get_contents($geoJsonFile));
-        }
-
-        return null;  // or return a default/fallback GeoJSON
+        
+        return view('recipes.view', compact('recipe', 'breadcrumbs'));
     }
 
     /**
@@ -231,10 +209,6 @@ class RecipeController extends Controller
         return view('recipes.region', compact('recipes', 'region', 'breadcrumbs'));
     }
 
-    public function ingredient(Ingredient $ingredient)
-    {
-        return view('recipes.ingredient', compact('ingredient'));
-    }
 
     public function showRecipesByIngredient(Ingredient $ingredient)
     {

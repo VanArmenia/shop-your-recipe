@@ -24,7 +24,7 @@
         </ol>
         <div class="p-4 text-center text-yellow-700">
             <h1 class="text-xl md:text-2xl">
-                <h2 class="font-bold text-2xl p-4 relative inline-block">  Found {{ $recipes->count() }} recipes with {{ $ingredient->normalized_name }}
+                <h2 class="font-bold text-2xl p-4 relative inline-block">  Found {{ $recipes->total() }} recipes with {{ $ingredient->normalized_name }}
                     <span class="absolute bottom-0 left-1/2 w-1/2 border-b-2 border-yellow-300 -translate-x-1/2"></span>
                 </h2>
             </h1>
