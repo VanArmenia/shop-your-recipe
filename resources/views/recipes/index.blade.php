@@ -306,7 +306,10 @@
                     });
                     this.nextUrl = data.next_page_url;
                     this.prevUrl = data.prev_page_url;
-                });
+                })
+                 .catch(error => {
+                    console.error('Error fetching recipes:', error);
+                  });
         },
          goToPage(page) {
             this.search(page);  // Fetch data for the selected page

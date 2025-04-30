@@ -8,16 +8,14 @@ use Illuminate\View\Component;
 
 class Reviews extends Component
 {
-    public $reviews;
     public $handler;
     /**
      * Create a new component instance.
      * @param array $reviews
      * @param string $handler
      */
-    public function __construct($reviews, $handler)
+    public function __construct($handler)
     {
-        $this->reviews = $reviews;
         $this->handler = $handler;
     }
 

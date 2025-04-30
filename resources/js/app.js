@@ -206,7 +206,7 @@ document.addEventListener("alpine:init", async () => {
                   rating: this.rating,
                   review_text: this.reviewText,
                   created_at: new Date().toISOString(),  // Assuming you'll show the time
-                  user: { name: 'You' }  // Placeholder for the authenticated user
+                  user: { name: '' }  // Placeholder for the authenticated user
                 });
 
                 this.fetchReviews();

@@ -96,7 +96,7 @@ class RecipeController extends Controller
     public function show(Recipe $recipe)
     {
         $breadcrumbs = $recipe->category->getBreadcrumbs();
-        
+
         return view('recipes.view', compact('recipe', 'breadcrumbs'));
     }
 

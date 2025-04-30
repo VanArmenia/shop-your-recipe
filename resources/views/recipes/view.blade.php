@@ -127,7 +127,7 @@
                     </div>
                 </div>
             </div>
-            <x-reviews :reviews="$recipe->reviews" handler="recipeItem" />
+            <x-reviews handler="recipeItem" />
         </div>
         <div>
             <div class="md:col-span-3">

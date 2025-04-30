@@ -29,11 +29,11 @@ Route::middleware(['guestOrVerified'])->group(function () {
         ->middleware('auth')->name('add-review');  // Ensure only authenticated users can post reviews
     Route::get('/product/{product:id}/reviews', [ProductController::class, 'fetchReviews'])->name('fetch-reviews');
 
+    Route::get('/recipes/search', [RecipeController::class, 'search'])->name('recipes.search');
     Route::resource('recipes', RecipeController::class);
     Route::post('/recipes/{recipe:id}/reviews', [RecipeController::class, 'storeReview'])
         ->middleware('auth')->name('add-recipe-review');  // Ensure only authenticated users can post reviews
     Route::get('/recipes/{recipe:id}/reviews', [RecipeController::class, 'fetchReviews'])->name('fetch-recipe-reviews');
-    Route::get('/recipes/search', [RecipeController::class, 'search'])->name('recipes.search');
     Route::get('/recipes/category/{category:name}', [RecipeController::class, 'category'])->name('recipe.category');
     Route::get('/recipes/region/{region:name}', [RecipeController::class, 'region'])->name('recipe.region');
     Route::get('/recipes/ingredient/{ingredient:normalized_name}', [RecipeController::class, 'showRecipesByIngredient'])->name('recipe.ingredient');
