@@ -31,4 +31,9 @@ class Region extends Model
     {
         return route('recipe.region', $this);
     }
+
+    public function getUnitName()
+    {
+        return $this->name;
+    }
 }

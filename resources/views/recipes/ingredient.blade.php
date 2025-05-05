@@ -68,22 +68,8 @@
                             </h3>
                         </div>
                         <div class="p-2">
-                            <div class="flex items-center">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    @if ($i <= floor($recipe->average_rating))
-                                        <i class="fas fa-star text-pink-600"></i> <!-- Full star -->
-                                    @elseif ($i - $recipe->average_rating < 1)
-                                        <i class="fas fa-star-half-alt text-pink-600"></i> <!-- Half star -->
-                                    @else
-                                        <i class="far fa-star text-gray-300"></i> <!-- Empty star -->
-                                    @endif
-                                @endfor
-                                <span class="ml-2 text-sm text-gray-700">
-                            {{ number_format($recipe->average_rating, 1) }}/5 ({{ $recipe->review_count }} reviews)
-                        </span>
-                            </div>
+                            <x-rating :average_rating="$recipe->average_rating" :review_count="$recipe->review_count"/>
                         </div>
-                    </div>
                     <!--/ Recipe Item -->
                 @endforeach
             </div>

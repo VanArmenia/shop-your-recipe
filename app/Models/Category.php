@@ -47,4 +47,9 @@ class Category extends Model
         }
 
     }
+
+    public function getUnitName()
+    {
+        return $this->name;
+    }
 }

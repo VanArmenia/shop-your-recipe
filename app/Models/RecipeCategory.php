@@ -24,4 +24,9 @@ class RecipeCategory extends Model
         }
 
     }
+
+    public function getUnitName()
+    {
+        return $this->name;
+    }
 }

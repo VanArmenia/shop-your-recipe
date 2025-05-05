@@ -160,7 +160,11 @@ class RecipeController extends Controller
 
     public function search(Request $request)
     {
-        $query = $request->input('q');
+        $validated = $request->validate([
+            'q' => 'nullable|string|max:100' // or 'required' if needed
+        ]);
+
+        $query = $validated['q'];
 
         $recipes = Recipe::query()
             ->where('name', 'like', '%' . $query . '%')

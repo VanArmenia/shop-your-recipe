@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Recipe;
 use App\Models\RecipeCategory;
+use App\Models\RecipeImage;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -101,4 +102,46 @@ class RecipeTest extends TestCase
 
         $response->assertSee($recipe1->title); // Example: see recipe in rendered HTML
     }
+
+    public function test_recipe_search_endpoint_filters_and_returns_expected_data()
+    {
+        // Create recipes
+        $recipeWithImage = Recipe::factory()
+            ->has(RecipeImage::factory()->count(1), 'images') // use the correct factory and relationship name
+            ->create([
+                'name' => 'Spaghetti',
+                'difficulty' => 'easy',
+            ]);
+
+
+        $recipeWithoutImage = Recipe::factory()
+            ->create(['name' => 'Salad', 'difficulty' => 'moderate']);
+
+        $nonMatchingRecipe = Recipe::factory()
+            ->create(['name' => 'Burger']);
+
+        // ✅ Test: Search with matching query
+        $response = $this->getJson('/recipes/search?q=spa');
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['name' => 'Spaghetti']);
+        $response->assertJsonMissing(['name' => 'Burger']);
+
+        // ✅ Test: Recipe with image returns correct image URL
+        $this->assertEquals(
+            $recipeWithImage->images->first()->url,
+            $response['data'][0]['image']
+        );
+
+        // ✅ Test: Recipe with no image returns image => null
+        $response2 = $this->getJson('/recipes/search?q=salad');
+        $response2->assertStatus(200);
+        $response2->assertJsonFragment(['name' => 'Salad']);
+        $this->assertNull($response2['data'][0]['image']);
+
+        // ✅ Test: Invalid query (too long string)
+        $longQuery = str_repeat('a', 101);
+        $response4 = $this->getJson('/recipes/search?q=' . $longQuery);
+        $response4->assertStatus(422); // Only works if you add validation
+    }
+
 }

@@ -11,7 +11,7 @@ trait HasBreadcrumbs
 
         while ($unit) {
             $breadcrumbs[] = [
-                'name' => $unit->name,
+                'name' => $unit->getUnitName(),
                 'url' => $unit->getUnitRoute() // Use dynamic method
             ];
             $unit = $unit->parent; // Ensure parent relationship exists

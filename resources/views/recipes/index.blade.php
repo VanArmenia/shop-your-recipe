@@ -144,22 +144,8 @@
                             </h3>
                         </div>
                         <div class="p-2">
-                            <div class="flex items-center">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    @if ($i <= floor($breakfast->average_rating))
-                                        <i class="fas fa-star text-pink-600"></i> <!-- Full star -->
-                                    @elseif ($i - $breakfast->average_rating < 1)
-                                        <i class="fas fa-star-half-alt text-pink-600"></i> <!-- Half star -->
-                                    @else
-                                        <i class="far fa-star text-gray-300"></i> <!-- Empty star -->
-                                    @endif
-                                @endfor
-                                <span class="ml-2 text-sm text-gray-700">
-                            {{ number_format($breakfast->average_rating, 1) }}/5 ({{ $breakfast->review_count }} reviews)
-                        </span>
-                            </div>
+                            <x-rating :average_rating="$breakfast->average_rating" :review_count="$breakfast->review_count"/>
                         </div>
-                    </div>
                     <!--/ Recipe Item -->
                 @endforeach
             </div>
@@ -207,22 +193,8 @@
                             </h3>
                         </div>
                         <div class="p-2">
-                            <div class="flex items-center">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    @if ($i <= floor($vegetarian->average_rating))
-                                        <i class="fas fa-star text-pink-600"></i> <!-- Full star -->
-                                    @elseif ($i - $vegetarian->average_rating < 1)
-                                        <i class="fas fa-star-half-alt text-pink-600"></i> <!-- Half star -->
-                                    @else
-                                        <i class="far fa-star text-gray-300"></i> <!-- Empty star -->
-                                    @endif
-                                @endfor
-                                <span class="ml-2 text-sm text-gray-700">
-                            {{ number_format($vegetarian->average_rating, 1) }}/5 ({{ $vegetarian->review_count }} reviews)
-                        </span>
-                            </div>
+                            <x-rating :average_rating="$vegetarian->average_rating" :review_count="$vegetarian->review_count"/>
                         </div>
-                    </div>
                     <!--/ Recipe Item -->
                 @endforeach
             </div>
@@ -319,9 +291,9 @@
             this.search();
         }
     }"
-        class="border border-gray-400 m-2 p-4 w-3/4 mx-auto"
+        class="border border-gray-400 m-2 p-4 w-3/4 md:mx-auto mx-1 w-full"
     >
-        <div class="relative p-4">
+        <div class="relative p-4 w-64">
             <div class="flex items-center space-x-2">
                 <i class="fas fa-blender text-gray-700 text-lg"></i>
                 <div class="text-lg font-semibold px-1">What would you like to cook?</div>
@@ -345,7 +317,7 @@
             </div>
         </div>
 
-        <div class="mt-2 p-4">
+        <div class="mt-2 p-4 w-60">
             <div class="text-xl font-bold mb-4">Popular Searches</div>
             <div
                 @click="predefinedSearch('Chicken')"
@@ -374,9 +346,9 @@
         </div>
 
         <!-- Recipe Results -->
-        <div x-show="recipes.length > 0" class="mt-4 p-4 grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div x-show="recipes.length > 0" class="mt-4 md:p-4 p-2 grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             <template x-for="recipe in recipes" :key="recipe.id">
-                <div class="flex space-x-4 border-b py-2">
+                <div class="flex space-x-4 border-b py-2 flex-col md:flex-row">
                     <!-- Image -->
                     <div class="w-[120px] flex-shrink-0">
                         <a :href="'/recipes/' + recipe.id" class="text-blue-500 hover:underline">
@@ -405,13 +377,14 @@
         </div>
 
         <!-- Pagination Controls (All Page Links) -->
-        <div class="flex justify-center space-x-4 mt-4">
+        <div class="justify-center space-x-4 mt-4 w-60 overflow-hidden">
             <!-- Display Page Links -->
             <template x-for="page in pageLinks" :key="page.label">
                 <button
                     @click="goToPage(page.url.split('?page=')[1])"
                     :class="{'bg-indigo-500 text-white': currentPage == page.label, 'px-4 py-2 rounded-full': true, 'bg-indigo-200': currentPage != page.label}"
                     :disabled="currentPage === page.label"
+                    class="m-1"
                 >
                     <span x-text="page.label"></span>
                 </button>

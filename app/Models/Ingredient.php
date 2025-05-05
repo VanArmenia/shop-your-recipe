@@ -35,4 +35,9 @@ class Ingredient extends Model
     {
         return route('recipe.ingredient', $this);
     }
+
+    public function getUnitName()
+    {
+        return $this->normalized_name;
+    }
 }
