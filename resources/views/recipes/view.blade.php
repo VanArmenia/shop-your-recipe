@@ -131,12 +131,17 @@
         </div>
         <div>
             <div class="md:col-span-3">
-                <h5 class="font-bold pb-4 ">{{$recipe->category->name}}</h5>
+                <a href="{{ route('recipe.category', $recipe->category) }}" class="text-lg font-bold">
+                    <h5 class="font-bold pb-4 ">{{$recipe->category->name}}</h5>
+                </a>
                 <h1 class="text-lg font-semibold">
                     {{$recipe->name}}
                 </h1>
                 <h3 class="text-sm font-semibold mb-2">
-                    <span class="font-normal">Original recipe from - </span> {{$recipe->region->name}}
+                    <span class="font-normal">Original recipe from -</span>
+                    <a href="{{ route('recipe.region', $recipe->region->name) }}" class="block py-2 inline-block">
+                        {{ $recipe->region->name }}
+                    </a>
                 </h3>
                 <div class="mb-6" x-data="{expanded: false}">
                     <div

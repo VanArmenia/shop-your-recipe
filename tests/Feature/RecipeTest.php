@@ -13,9 +13,6 @@ use Tests\TestCase;
 
 class RecipeTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
     public function test_authenticated_user_can_submit_review()
     {
         $user = User::factory()->create();

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
  */
-class RecipeCategoryFactory extends Factory
+class RegionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,10 @@ class RecipeCategoryFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->words(1, true),
+            'name' => $this->faker->country(1, true),
             'description' => fake()->realText(2000),
+            'latitude' => fake()->latitude(),
+            'longitude' => fake()->longitude(),
             'parent_id' => null,
             'created_at' => now(),
             'updated_at' => now(),

@@ -182,12 +182,14 @@ class RecipesSeeder extends Seeder
             'chopped tomatoes' => 'Tomatoes',
             'sun-dried tomatoes' => 'Tomatoes',
             'tomato puree' => 'Tomatoes',
+            'tomato' => 'Tomatoes',
 
             'chopped onion' => 'Onion',
             'red onion' => 'Onion',
             'onion' => 'Onion',
             'onions' => 'Onion',
             'spring onions' => 'Onion',
+            'shallots' => 'Onion',
 
             'freshly chopped parsley' => 'Herbs',
             'parsley' => 'Herbs',
@@ -270,6 +272,8 @@ class RecipesSeeder extends Seeder
             'shiitake mushroom' => 'Mushroom',
             'wood ear mushroom' => 'Mushroom',
             'wild mushroom' => 'Mushroom',
+            'mushrooms' => 'Mushroom',
+
 
             'chickpeas' => 'Pulses',
             'french lentils' => 'Pulses',
@@ -280,6 +284,23 @@ class RecipesSeeder extends Seeder
             'whole milk' => 'Milk',
             'condensed milk' => 'Milk',
             'milk' => 'Milk',
+
+            'carrots' => 'Vegetables',
+            'cucumber' => 'Vegetables',
+            'celeriac' => 'Vegetables',
+            'green pepper' => 'Vegetables',
+            'red pepper' => 'Vegetables',
+            'celery' => 'Vegetables',
+            'leek' => 'Vegetables',
+            'swede' => 'Vegetables',
+            'broccoli' => 'Vegetables',
+            'iceberg lettuce' => 'Vegetables',
+            'lettuce' => 'Vegetables',
+            'cabbage' => 'Vegetables',
+            'courgettes' => 'Vegetables',
+            'aubergine' => 'Vegetables',
+
+
 
         ];
 
