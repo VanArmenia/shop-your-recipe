@@ -44,6 +44,7 @@ export default {
     total: null
   },
   countries: [],
+  manufacturers: [],
   orders: {
     loading: false,
     data: [],

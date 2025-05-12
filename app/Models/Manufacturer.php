@@ -9,6 +9,8 @@ class Manufacturer extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'description'];
+
     protected $casts = [
         'id' => 'integer',  // Ensure that 'id' is always an integer
     ];

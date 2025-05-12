@@ -1,3 +1,4 @@
+import {getManufacturers} from "./actions";
 
 export function setUser(state, user) {
   state.user.data = user;
@@ -28,6 +29,11 @@ export function setProducts(state, [loading, data = null]) {
   }
   state.products.loading = loading;
 }
+
+export function setManufacturers(state, manufacturers) {
+  state.manufacturers = manufacturers.data;
+}
+
 export function setRecipes(state, [loading, data = null]) {
 
   if (data) {

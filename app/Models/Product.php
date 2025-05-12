@@ -41,10 +41,10 @@ class Product extends Model
         return $this->images->count() > 0 ? $this->images->get(0)->url : null;
     }
 
-//    public function category()
-//    {
-//        return $this->belongsTo(Category::class);
-//    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     public function manufacturer()
     {

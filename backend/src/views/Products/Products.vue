@@ -8,7 +8,7 @@
     </router-link>
   </div>
   <ProductsTable/>
-  <ProductModal v-model="showProductModal" :product="productModel" @close="onModalClose"/>
+<!--  <ProductModal v-model="showProductModal" :product="productModel" @close="onModalClose"/>-->
 </template>
 
 <script setup>

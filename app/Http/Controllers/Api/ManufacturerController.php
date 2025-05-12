@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\ManufacturerListResource;
+use App\Http\Resources\ManufacturerResource;
 use App\Models\Manufacturer;
 use App\Http\Requests\StoreManufacturerRequest;
 use App\Http\Requests\UpdateManufacturerRequest;
@@ -33,7 +34,11 @@ class ManufacturerController extends Controller
      */
     public function store(StoreManufacturerRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $manufacturer = Manufacturer::create($data);
+
+        return new ManufacturerResource($manufacturer);
     }
 
     /**

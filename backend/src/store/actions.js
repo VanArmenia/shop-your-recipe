@@ -76,6 +76,14 @@ export function getProducts({commit, state}, {url = null, search = '', per_page,
       commit('setProducts', [false])
     })
 }
+
+export function getManufacturers({commit}) {
+  return axiosClient.get('manufacturers')
+    .then(({data}) => {
+      commit('setManufacturers', data)
+    })
+}
+
 export function getRecipes({commit, state}, {url = null, search = '', per_page, sort_field, sort_direction} = {}) {
   commit('setRecipes', [true])
   url = url || '/recipes'
@@ -121,6 +129,15 @@ export function createProduct({commit}, product) {
     product = form;
   }
   return axiosClient.post('/products', product)
+}
+
+export function createManufacturer({commit}, manufacturer) {
+  const form = new FormData();
+  form.append('name', manufacturer.name);
+  form.append('description', manufacturer.description || '');
+  manufacturer = form;
+
+  return axiosClient.post('/manufacturers', manufacturer)
 }
 
 export function createRecipe({commit}, recipe) {
