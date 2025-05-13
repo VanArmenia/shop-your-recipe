@@ -140,6 +140,18 @@ export function createManufacturer({commit}, manufacturer) {
   return axiosClient.post('/manufacturers', manufacturer)
 }
 
+export function createCategory({commit}, category) {
+  const form = new FormData();
+  form.append('name', category.name);
+  form.append('description', category.description || '');
+  form.append('parent_id', category.parent_id || null);
+  category = form;
+
+  console.log(form.get('parent_id'))
+
+  return axiosClient.post('/categories', category)
+}
+
 export function createRecipe({commit}, recipe) {
   if (recipe.images && recipe.images.length) {
     const form = new FormData();

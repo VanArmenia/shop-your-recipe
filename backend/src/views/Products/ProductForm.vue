@@ -20,11 +20,17 @@
           <CustomInput type="select" class="mb-2" v-model.number="product.manufacturer_id" :selectOptions="manufacturers" name="manufacturer_id" label="Manufacturer"/>
           <button type="button"
                   @click="showManufacturerModal = true"
-                  class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm
+                  class="my-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm
                           text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500">
             Add Manufacturer
           </button>
           <CustomInput type="select" class="mb-2" v-model.number="product.category_id" :selectOptions="categories" name="category_id" label="Category"/>
+          <button type="button"
+                  @click="showCategoryModal = true"
+                  class="my-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm
+                          text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500">
+            Add Category
+          </button>
           <CustomInput type="number" class="mb-2" v-model="product.price" placeholder="Price" prepend="$"/>
           <CustomInput type="number" class="mb-2" v-model="product.quantity" placeholder="Quantity"/>
           <CustomInput type="checkbox" class="mb-2" v-model="product.published" label="Published"/>
@@ -55,7 +61,8 @@
       </footer>
     </form>
   </div>
-  <ManufacturerModal v-model="showManufacturerModal" :manufacturer="manufacturerModel" @close="onModalClose"/>
+  <ManufacturerModal v-model="showManufacturerModal" :manufacturer="manufacturerModel" @close="onManModalClose"/>
+  <CategoryModal v-model="showCategoryModal" :category="categoryModel" @close="onCatModalClose"/>
 </template>
 
 <script setup>
@@ -67,6 +74,7 @@ import {useRoute, useRouter} from "vue-router";
 import ImagePreview from "../../components/core/ImagePreview.vue";
 import axiosClient from "../../axios";
 import ManufacturerModal from "./ManufacturerModal.vue";
+import CategoryModal from "./CategoryModal.vue";
 
 const product = ref({
   id: null,
@@ -90,8 +98,17 @@ const DEFAULT_MANUFACTURER = {
   description: '',
 }
 
+const DEFAULT_CATEGORY = {
+  id: '',
+  name: '',
+  description: '',
+  parent_id: '',
+}
+
 const manufacturerModel = ref({...DEFAULT_MANUFACTURER})
 const showManufacturerModal = ref(false);
+const categoryModel = ref({...DEFAULT_CATEGORY})
+const showCategoryModal = ref(false);
 
 const loading = ref(false)
 
@@ -115,9 +132,14 @@ onMounted(() => {
   }
 })
 
-function onModalClose() {
+function onManModalClose() {
   manufacturerModel.value = {...DEFAULT_MANUFACTURER}
   fetchManufacturers();
+}
+
+function onCatModalClose() {
+  categoryModel.value = {...DEFAULT_CATEGORY}
+  fetchCategories();
 }
 
 const fetchCategories = async () => {

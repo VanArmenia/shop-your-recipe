@@ -34,6 +34,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/countries', [CustomerController::class, 'countries']);
     Route::get('orders', [OrderController::class, 'index']);
     Route::get('categories', [CategoryController::class, 'index']);
+    Route::post('categories', [CategoryController::class, 'store']);
     Route::get('recipe-categories', [CategoryController::class, 'recipeCategories']);
     Route::get('manufacturers', [ManufacturerController::class, 'index']);
     Route::post('manufacturers', [ManufacturerController::class, 'store']);
