@@ -14,6 +14,30 @@
           <CustomInput class="mb-2" v-model="recipe.name" placeholder="Recipe Title"/>
           <CustomInput type="richtext" class="mb-2" v-model="recipe.description" label="Description"/>
           <CustomInput type="text" class="mb-2" v-model="recipe.prep_time" label="Prep time"/>
+
+          <h3 class="text-gray-500 text-sm mb-2">Ingredients</h3>
+          <div v-for="(ingredient, index) in recipe.ingredients" :key="index" class="mb-2 inline-block mx-2">
+            <input
+              v-model="ingredient.name"
+              type="text"
+              placeholder="Ingredient name"
+              class="inline-block w-full px-2 py-1 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm rounded-md"
+            />
+            <button @click="removeIngredient(index)" type="button" class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-2 py-1 bg-white text-base font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-1 sm:w-auto sm:text-xs text-white bg-red-500 hover:bg-indigo-700 focus:ring-indigo-500">Remove</button>
+          </div>
+
+          <div class="mb-4 mx-2 mt-4">
+            <input
+              v-model="newIngredient"
+              type="text"
+              placeholder="New ingredient"
+              class="w-72 w-full px-2 py-1 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm rounded-md"
+            />
+            <button type="button" @click="addIngredient" class="mt-3 w-full block justify-center rounded-md border border-gray-300 shadow-sm px-2 py-2 bg-white text-base font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto sm:text-sm
+                          text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500">Add Ingredient</button>
+          </div>
+
+
           <div>
             <label class="text-gray-500 text-sm">Categories</label>
             <div class="mt-1 flex rounded-md">
@@ -73,6 +97,13 @@ const recipe = ref({
   description: '',
   prep_time: null,
   category_id: null,
+  category: {
+    id: null,
+    name: ''
+  },
+  ingredients: [
+    { name: '' }
+  ],
 })
 
 const loading = ref(false)
@@ -140,6 +171,21 @@ function onSubmit(event, close = false) {
       console.error(err);
     }
   };
+
+const newIngredient = ref('');
+
+function addIngredient() {
+  if (newIngredient.value.trim()) {
+    recipe.value.ingredients.push({ name: newIngredient.value.trim() });
+    newIngredient.value = '';
+  }
+}
+
+
+function removeIngredient(index) {
+  recipe.value.ingredients.splice(index, 1);
+}
+
 </script>
 <style scoped>
 

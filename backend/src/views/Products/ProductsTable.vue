@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white p-4 rounded-lg shadow animate-fade-in-down">
+  <div class="bg-white p-4 rounded-lg shadow animate-fade-in-down overflow-x-auto">
     <div class="flex justify-between border-b-2 pb-3">
       <div class="flex items-center">
         <span class="whitespace-nowrap mr-3">Per Page</span>
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <table class="table-auto w-full">
+    <table class="table-fixed w-full md:table-auto">
       <thead>
       <tr>
         <TableHeaderCell field="id" :sort-field="sortField" :sort-direction="sortDirection" @click="sortProducts('id')">
@@ -60,7 +60,7 @@
       </tr>
       </tbody>
       <tbody v-else>
-      <tr v-for="(product, index) of products.data" class="animate-fade-in-down">
+      <tr v-for="(product, index) of products.data" class="animate-fade-in-down text-[11px] md:text-[16px]">
         <td class="border-b p-2 ">{{ product.id }}</td>
         <td class="border-b p-2 ">
           <img v-if="product.image_url" class="w-16 h-16 object-cover" :src="product.image_url" :alt="product.title" />

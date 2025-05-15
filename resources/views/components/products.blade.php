@@ -17,7 +17,7 @@
                         'price' => $product->price,
                         'addToCartUrl' => route('cart.add', $product)
                     ]) }})">
-        <div class="transition duration-300 ease-in-out bg-white p-4 py-2 hover:scale-103 hover:shadow-lg"
+        <div class="transition duration-300 ease-in-out bg-white p-4 py-2 hover:scale-103 hover:shadow-lg rounded-md"
         >
             <a href="{{ route('product.view', $product->slug) }}"
                class="aspect-w-2 aspect-h-2 block overflow-hidden">

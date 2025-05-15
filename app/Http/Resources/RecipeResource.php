@@ -19,7 +19,6 @@ class RecipeResource extends JsonResource
     public function toArray($request)
     {
         /** @var \Illuminate\Support\Collection $images */
-        $images = $this->images;
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -27,7 +26,9 @@ class RecipeResource extends JsonResource
             'description' => $this->description,
             'prep_time' => $this->prep_time,
             'category' => $this->category,
+            'category_id' => $this->category_id,
             'images' => $this->images,
+            'ingredients' => $this->ingredients,
             'created_at' => (new \DateTime($this->created_at))->format('Y-m-d H:i:s'),
             'updated_at' => (new \DateTime($this->updated_at))->format('Y-m-d H:i:s'),
         ];

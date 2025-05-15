@@ -19,13 +19,12 @@ class ProductResource extends JsonResource
     public function toArray($request)
     {
         /** @var \Illuminate\Support\Collection $images */
-        $images = $this->images;
         return [
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
             'description' => $this->description,
-            'manufacturer' => $this->manufacturer,
+//            'manufacturer' => $this->manufacturer,
             'allergens' => $this->allergens,
             'composition' => $this->composition,
             'storing' => $this->storing,

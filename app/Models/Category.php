@@ -41,11 +41,6 @@ class Category extends Model
             return route('product.category', $this);
         }
 
-        // Check if this category has any recipes directly in the database
-        if ($this->recipes()->exists()) {
-            return route('recipe.category', $this);
-        }
-
     }
 
     public function getUnitName()
