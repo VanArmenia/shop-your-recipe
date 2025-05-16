@@ -23,18 +23,29 @@
               placeholder="Ingredient name"
               class="inline-block w-full px-2 py-1 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm rounded-md"
             />
+            <input
+              v-model="ingredient.measurement"
+              type="text"
+              placeholder="Measurement (e.g., '100g', '2 tsp')"
+              class="w-full px-2 py-1 border border-gray-300 text-sm rounded-md mb-1"
+            />
             <button @click="removeIngredient(index)" type="button" class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-2 py-1 bg-white text-base font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-1 sm:w-auto sm:text-xs text-white bg-red-500 hover:bg-indigo-700 focus:ring-indigo-500">Remove</button>
           </div>
 
           <div class="mb-4 mx-2 mt-4">
             <input
-              v-model="newIngredient"
+              v-model="newIngredient.name"
               type="text"
               placeholder="New ingredient"
               class="w-72 w-full px-2 py-1 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm rounded-md"
             />
-            <button type="button" @click="addIngredient" class="mt-3 w-full block justify-center rounded-md border border-gray-300 shadow-sm px-2 py-2 bg-white text-base font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto sm:text-sm
-                          text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500">Add Ingredient</button>
+            <input
+              v-model="newIngredient.measurement"
+              type="text"
+              placeholder="Measurement (e.g., '100g', '2 tsp')"
+              class="w-72 w-full px-2 py-1 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm rounded-md"
+            />
+            <button type="button" @click="addIngredient" class="mt-3 w-full block justify-center rounded-md border border-gray-300 shadow-sm px-2 py-2 bg-white text-base font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto sm:text-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500">Add Ingredient</button>
           </div>
 
 
@@ -102,7 +113,7 @@ const recipe = ref({
     name: ''
   },
   ingredients: [
-    { name: '' }
+    { name: '' , measurement: ''},
   ],
 })
 
@@ -161,25 +172,34 @@ function onSubmit(event, close = false) {
       })
   }
 }
-  const fetchCategories = async () => {
-    error.value = null;
-    try {
-      const response = await axiosClient.get('/recipe-categories');
-      categories.value = response.data.data;
-    } catch (err) {
-      error.value = 'Failed to fetch categories';
-      console.error(err);
-    }
-  };
+const fetchCategories = async () => {
+  error.value = null;
+  try {
+    const response = await axiosClient.get('/recipe-categories');
+    categories.value = response.data.data;
+  } catch (err) {
+    error.value = 'Failed to fetch categories';
+    console.error(err);
+  }
+};
 
-const newIngredient = ref('');
+const newIngredient = ref({
+  name: '',
+  measurement: '',
+});
 
 function addIngredient() {
-  if (newIngredient.value.trim()) {
-    recipe.value.ingredients.push({ name: newIngredient.value.trim() });
-    newIngredient.value = '';
+  if (newIngredient.value.name.trim()) {
+    recipe.value.ingredients.push({
+      name: newIngredient.value.name.trim(),
+      measurement: newIngredient.value.measurement.trim(),
+    });
+
+    // Clear input fields
+    newIngredient.value = { name: '', measurement: '' };
   }
 }
+
 
 
 function removeIngredient(index) {

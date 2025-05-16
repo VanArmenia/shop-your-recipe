@@ -100,7 +100,25 @@ class RecipeController extends Controller
         $this->deleteImages($deletedImages, $recipe);
 
         $recipe->update($data);
-        return new RecipeResource($recipe);
+
+        // ✅ Sync ingredients
+        if (isset($data['ingredients'])) {
+            $ingredientIds = [];
+
+            foreach ($data['ingredients'] as $ingredientData) {
+                $ingredient = \App\Models\Ingredient::firstOrCreate(
+                    ['name' => $ingredientData['name']],
+                );
+
+                $ingredientIds[$ingredient->id] = [
+                    'measurement' => $ingredientData['measurement'] ?? null
+                ];
+            }
+
+            $recipe->ingredients()->sync($ingredientIds);
+        }
+
+        return new RecipeResource($recipe->load('ingredients'));
     }
 
     /**

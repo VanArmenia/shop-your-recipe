@@ -28,7 +28,13 @@ class RecipeResource extends JsonResource
             'category' => $this->category,
             'category_id' => $this->category_id,
             'images' => $this->images,
-            'ingredients' => $this->ingredients,
+            'ingredients' => $this->ingredients->map(function ($ingredient) {
+                return [
+                    'id' => $ingredient->id,
+                    'name' => $ingredient->name,
+                    'measurement' => $ingredient->pivot->measurement,
+                ];
+            }),
             'created_at' => (new \DateTime($this->created_at))->format('Y-m-d H:i:s'),
             'updated_at' => (new \DateTime($this->updated_at))->format('Y-m-d H:i:s'),
         ];

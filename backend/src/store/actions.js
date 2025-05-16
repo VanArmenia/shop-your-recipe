@@ -208,6 +208,15 @@ export function updateRecipe({commit}, recipe) {
     form.append('category_id', recipe.category_id); // Use category_id, not category name
     form.append('_method', 'PUT');
     recipe = form;
+
+    // ✅ Append ingredients
+    recipe.ingredients.forEach((ingredient, i) => {
+      form.append(`ingredients[${i}][name]`, ingredient.name);
+      if (ingredient.measurement) {
+        form.append(`ingredients[${i}][measurement]`, ingredient.measurement);
+      }
+    });
+
     console.log(form.get('prep_time'))
     console.log(form.get('category_id'))
   } else {

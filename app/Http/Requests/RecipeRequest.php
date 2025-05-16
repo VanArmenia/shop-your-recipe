@@ -30,6 +30,11 @@ class RecipeRequest extends FormRequest
             'prep_time' => ['required', 'string'],
             'images.*' => ['nullable', 'image'],
             'deleted_images.*' => ['nullable', 'int'],
+
+            // Accept ingredients
+            'ingredients' => 'array',
+            'ingredients.*.name' => 'required|string|max:255',
+            'ingredients.*.measurement' => 'nullable|string|max:255',
         ];
     }
 }
