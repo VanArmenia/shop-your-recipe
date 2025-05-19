@@ -104,6 +104,7 @@ class RecipesSeeder extends Seeder
                                             'region_id' => $regionId,
                                             'created_by' => 1,
                                             'category_id' => $categoryCreated->id,
+                                            'tags' => $mealDetails['strTags'],
                                         ]
                                     );
 

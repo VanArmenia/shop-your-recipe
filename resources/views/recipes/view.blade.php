@@ -29,7 +29,7 @@
             @endforeach
         </ol>
     </nav>
-    <div class="grid grid-cols-1 md:grid-cols-2 min-h-screen p-12 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 min-h-screen md:p-12 p-2 gap-8">
 
         <!-- Include the aside Blade component here -->
 {{--        <x-aside :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)"/>--}}
@@ -73,44 +73,6 @@
                                     <img :src="image" alt="" class="w-auto mx-auto"/>
                                 </div>
                             </template>
-                            <a
-                                @click.prevent="prev"
-                                class="cursor-pointer bg-black/30 text-white absolute left-0 top-1/2 -translate-y-1/2"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="h-10 w-10"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M15 19l-7-7 7-7"
-                                    />
-                                </svg>
-                            </a>
-                            <a
-                                @click.prevent="next"
-                                class="cursor-pointer bg-black/30 text-white absolute right-0 top-1/2 -translate-y-1/2"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="h-10 w-10"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M9 5l7 7-7 7"
-                                    />
-                                </svg>
-                            </a>
                         </div>
                         <div class="flex pt-2">
                             <template x-for="image in images">

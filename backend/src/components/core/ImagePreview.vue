@@ -84,7 +84,7 @@ function removeImage(image) {
   if (image.isProp) {
     deletedImages.value.push(image.id)
     image.deleted = true
-    // imageUrls.value = imageUrls.value.filter(im => im.id !== image.id)
+    imageUrls.value = imageUrls.value.filter(im => im.id !== image.id)
     emit('update:deletedImages', deletedImages.value)
   } else {
     files.value = files.value.filter(f => f.id !== image.id)

@@ -195,33 +195,32 @@ export function updateProduct({commit}, product) {
 }
 
 export function updateRecipe({commit}, recipe) {
-  const id = recipe.id
-  if (recipe.images && recipe.images.length) {
-    const form = new FormData();
-    form.append('name', recipe.name);
-    recipe.images.forEach(im => form.append('images[]', im))
-    if (recipe.deletedImages) {
-      recipe.deletedImages.forEach(im => form.append('deleted_images[]', im))
-    }
-    form.append('description', recipe.description || '');
-    form.append('prep_time', recipe.prep_time);
-    form.append('category_id', recipe.category_id); // Use category_id, not category name
-    form.append('_method', 'PUT');
-    recipe = form;
-
-    // ✅ Append ingredients
-    recipe.ingredients.forEach((ingredient, i) => {
-      form.append(`ingredients[${i}][name]`, ingredient.name);
-      if (ingredient.measurement) {
-        form.append(`ingredients[${i}][measurement]`, ingredient.measurement);
+    const id = recipe.id
+    if (recipe.images && recipe.images.length) {
+      const form = new FormData();
+      recipe.images.forEach(im => form.append('images[]', im))
+      if (recipe.deletedImages) {
+        recipe.deletedImages.forEach(im => form.append('deleted_images[]', im))
       }
-    });
+      form.append('name', recipe.name);
+      form.append('description', recipe.description || '');
+      form.append('prep_time', recipe.prep_time);
+      form.append('category_id', recipe.category_id); // Use category_id, not category name
+      form.append('_method', 'PUT');
 
-    console.log(form.get('prep_time'))
-    console.log(form.get('category_id'))
-  } else {
+      // ✅ Append ingredients
+      recipe.ingredients.forEach((ingredient, i) => {
+        form.append(`ingredients[${i}][name]`, ingredient.name);
+        if (ingredient.measurement) {
+          form.append(`ingredients[${i}][measurement]`, ingredient.measurement);
+        }
+      });
+      recipe = form;
+      console.log(form.get('prep_time'))
+    } else {
     recipe._method = 'PUT'
-  }
+    }
+
   return axiosClient.post(`/recipes/${id}`, recipe)
 }
 
