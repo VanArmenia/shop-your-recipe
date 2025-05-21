@@ -102,7 +102,7 @@ document.addEventListener("alpine:init", async () => {
         rating: 1,           // Default rating value
         reviewText: '',      // Default review text
         message: '',         // To display success or error messages
-        reviews: [],             // Array to hold reviews dynamically
+        reviews: [],         // Array to hold reviews dynamically
 
         init() {
           // Initialize reviews from the backend
@@ -165,10 +165,10 @@ document.addEventListener("alpine:init", async () => {
       recipe,
       reviewHandler() {
         return {
-          rating: 1,           // Default rating value
+          rating: 0,           // Default rating value
           reviewText: '',      // Default review text
           message: '',         // To display success or error messages
-          reviews: [],             // Array to hold reviews dynamically
+          reviews: [],         // Array to hold reviews dynamically
 
           init() {
             // Initialize reviews from the backend

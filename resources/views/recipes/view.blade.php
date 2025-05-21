@@ -29,7 +29,7 @@
             @endforeach
         </ol>
     </nav>
-    <div class="grid grid-cols-1 md:grid-cols-2 min-h-screen md:p-12 p-2 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 min-h-screen md:p-12 p-4 gap-8">
 
         <!-- Include the aside Blade component here -->
 {{--        <x-aside :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)"/>--}}
@@ -41,8 +41,11 @@
                     'fetchReviews' => route('fetch-recipe-reviews', $recipe),
                     'addReview' => route('add-recipe-review', $recipe),
                 ]) }})" class="container mx-auto">
-            <div class="p-4 py-8">
-                <div class="md:col-span-3 px-4">
+            <div>
+                <h1 class="text-lg font-semibold pb-2">
+                    {{$recipe->name}}
+                </h1>
+                <div class="md:col-span-3">
                     <div
                         x-data="{
                       images: {{$recipe->images->map(fn($im) => $im->url)}},
@@ -89,16 +92,11 @@
                     </div>
                 </div>
             </div>
-            <x-reviews handler="recipeItem" />
-        </div>
         <div>
             <div class="md:col-span-3">
                 <a href="{{ route('recipe.category', $recipe->category) }}" class="text-lg font-bold">
                     <h5 class="font-bold pb-4 ">{{$recipe->category->name}}</h5>
                 </a>
-                <h1 class="text-lg font-semibold">
-                    {{$recipe->name}}
-                </h1>
                 <h3 class="text-sm font-semibold mb-2">
                     <span class="font-normal">Original recipe from -</span>
                     <a href="{{ route('recipe.region', $recipe->region->name) }}" class="block py-2 inline-block">
@@ -136,29 +134,31 @@
                     @endforeach
                 </ul>
             </div>
+            <x-reviews handler="recipeItem" />
         </div>
-        <script>
-            // Dynamically pass the latitude, longitude, and zoom level from PHP to JavaScript
-            var lat = {{ $recipe->region->latitude }}; // Replace with actual data
-            var lng = {{ $recipe->region->longitude }}; // Replace with actual data
-            var zoom = 4; // Replace with desired zoom level
-            // Create the map object and set the initial view (latitude, longitude, zoom level)
-            var map = L.map('map', {
-                zoomControl: false // Disable the zoom controls entirely when initializing
-            }).setView([lat, lng], zoom);
-
-            // Add OpenStreetMap tile layer to the map
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy;'
-            }).addTo(map);
-
-            // Disable zooming entirely (mouse scroll and touch gestures)
-            map.scrollWheelZoom.disable();
-            map.touchZoom.disable();
-            map.doubleClickZoom.disable();
-        </script>
-
     </div>
+<script>
+        // Dynamically pass the latitude, longitude, and zoom level from PHP to JavaScript
+        var lat = {{ $recipe->region->latitude }}; // Replace with actual data
+        var lng = {{ $recipe->region->longitude }}; // Replace with actual data
+        var zoom = 4; // Replace with desired zoom level
+        // Create the map object and set the initial view (latitude, longitude, zoom level)
+        var map = L.map('map', {
+            zoomControl: false // Disable the zoom controls entirely when initializing
+        }).setView([lat, lng], zoom);
+
+        // Add OpenStreetMap tile layer to the map
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy;'
+        }).addTo(map);
+
+        // Disable zooming entirely (mouse scroll and touch gestures)
+        map.scrollWheelZoom.disable();
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+</script>
+
+</div>
 
     {{--    Similar products --}}
 {{--    <?php if ($recipe->count() > 0): ?>--}}
