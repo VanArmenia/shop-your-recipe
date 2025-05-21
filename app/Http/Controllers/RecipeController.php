@@ -95,9 +95,13 @@ class RecipeController extends Controller
      */
     public function show(Recipe $recipe)
     {
+        $simRecipes = $recipe->category->recipes()
+            ->orderBy('updated_at', 'desc')
+            ->paginate(10);
+
         $breadcrumbs = $recipe->category->getBreadcrumbs();
 
-        return view('recipes.view', compact('recipe', 'breadcrumbs'));
+        return view('recipes.view', compact('recipe', 'breadcrumbs', 'simRecipes'));
     }
 
     /**

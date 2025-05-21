@@ -169,6 +169,7 @@ document.addEventListener("alpine:init", async () => {
           reviewText: '',      // Default review text
           message: '',         // To display success or error messages
           reviews: [],         // Array to hold reviews dynamically
+          hoverRating: 0,      // For controlling style on hover
 
           init() {
             // Initialize reviews from the backend

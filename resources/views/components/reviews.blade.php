@@ -1,11 +1,11 @@
 {{--Reviews--}}
-<div class="border-t-2">
+<div class="border-t-2 mt-4">
     <div x-data="reviewHandler()">
+        <hr class="border-t border-gray-400">
         <h3 class="py-4 text-xl font-bold">Reviews</h3>
         @if(auth()->check())
-            <div x-data="ratingComponent()" class="max-w-md mx-auto p-4 bg-white p-2">
+            <div class="max-w-md mx-auto p-4 bg-white p-2">
                 <form @submit.prevent="submitReview" class="space-y-4">
-
                     <!-- ⭐ Star Rating -->
                     <div>
                         <label class="block mb-1 font-medium text-gray-700">My Rating:</label>
@@ -57,8 +57,11 @@
             <p>Please <a href="{{ route('login') }}">log in</a> to submit a review.</p>
         @endif
         <div class="mt-4">
-            <template x-for="review in reviews" :key="review.id">
-                <div class="review mb-4 p-2 border-b flex gap-3">
+            <template x-for="(review, index) in reviews" :key="review.id">
+                <div
+                    class="review mb-4 p-2 flex gap-3"
+                    :class="index === reviews.length - 1 ? '' : 'border-b'"
+                >
                     <div class="flex items-center mb-2 flex-col">
                         <!-- Conditionally render the avatar -->
                         <template x-if="review.user.customer.avatar">
@@ -95,14 +98,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    function ratingComponent() {
-        return {
-            rating: 0,
-            hoverRating: 0,
-            reviewText: '',
-        };
-    }
-</script>
 
