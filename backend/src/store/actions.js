@@ -205,6 +205,12 @@ export function updateRecipe({commit}, recipe) {
       form.append('name', recipe.name);
       form.append('description', recipe.description || '');
       form.append('prep_time', recipe.prep_time);
+      form.append('cook_time', recipe.cook_time);
+      form.append('servings', recipe.servings);
+      form.append('calories', recipe.calories);
+      form.append('protein', recipe.protein);
+      form.append('carbohydrates', recipe.carbohydrates);
+      form.append('fats', recipe.fats);
       form.append('category_id', recipe.category_id); // Use category_id, not category name
       form.append('_method', 'PUT');
 

@@ -14,6 +14,12 @@
           <CustomInput class="mb-2" v-model="recipe.name" placeholder="Recipe Title"/>
           <CustomInput type="richtext" class="mb-2" v-model="recipe.description" label="Description"/>
           <CustomInput type="text" class="mb-2" v-model="recipe.prep_time" label="Prep time"/>
+          <CustomInput type="text" class="mb-2" v-model="recipe.cook_time" label="Cook time"/>
+          <CustomInput type="text" class="mb-2" v-model="recipe.servings" label="Servings"/>
+          <CustomInput type="text" class="mb-2" v-model="recipe.calories" label="Calories"/>
+          <CustomInput type="text" class="mb-2" v-model="recipe.protein" label="Protein"/>
+          <CustomInput type="text" class="mb-2" v-model="recipe.carbohydrates" label="Carbohydrates"/>
+          <CustomInput type="text" class="mb-2" v-model="recipe.fats" label="Fats"/>
 
           <h3 class="text-gray-500 text-sm mb-2">Ingredients</h3>
           <div v-for="(ingredient, index) in recipe.ingredients" :key="index" class="mb-2 inline-block mx-2">
@@ -107,6 +113,12 @@ const recipe = ref({
   deleted_images: [],
   description: '',
   prep_time: '',
+  cook_time: '',
+  servings: '',
+  calories: '',
+  protein: '',
+  carbohydrates: '',
+  fats: '',
   category_id: null,
   category: {
     id: null,

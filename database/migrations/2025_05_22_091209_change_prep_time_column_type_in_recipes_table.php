@@ -15,6 +15,9 @@ return new class extends Migration
             $table->string('prep_time')->change();
             $table->string('cook_time')->change();
             $table->string('servings')->change();
+            $table->string('protein')->change();
+            $table->string('carbohydrates')->change();
+            $table->string('fats')->change();
         });
     }
 
@@ -27,6 +30,9 @@ return new class extends Migration
             $table->integer('prep_time')->change();
             $table->integer('cook_time')->change();
             $table->integer('servings')->change();
+            $table->integer('protein')->change();
+            $table->integer('carbohydrates')->change();
+            $table->integer('fats')->change();
         });
     }
 };

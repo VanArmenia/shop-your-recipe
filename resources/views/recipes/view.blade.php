@@ -93,9 +93,25 @@
                 </div>
             </div>
         <div>
+            <div class="md:col-span-3 bg-indigo-50 p-2 pt-1 mt-6 rounded-md border-indigo-50 border-t-amber-500 border border-t-8">
+                <div class="flex justify-between gap-4 mx-1 pt-4">
+                    <div class="">
+                        <p class="">Prep Time:</p>
+                        <p class="font-bold"> {{ $recipe->prep_time }} </p>
+                    </div>
+                    <div>
+                        <p>Cook Time:</p>
+                        <p class="font-bold"> {{ $recipe->cook_time }} </p>
+                    </div>
+                   <div>
+                       <p class="">Servings</p>
+                       <p class="font-bold"> {{ $recipe->servings }} </p>
+                   </div>
+                </div>
+            </div>
+            </div>
             <div class="md:col-span-3">
                 <div class="mb-6 pt-2" x-data="{expanded: false}">
-                    <hr class="border-t border-gray-400">
                     <h3 class="py-2 text-xl font-bold m-0">Directions</h3>
                     <div
                         x-show="expanded"
@@ -109,7 +125,7 @@
                         <a
                             @click="expanded = !expanded"
                             href="javascript:void(0)"
-                            class="text-white w-full bg-red-400 hover:bg-red-600 text-white py-1.5 px-2 rounded-md transition-colors"
+                            class="text-white w-full bg-amber-500 hover:bg-amber-600 text-white py-1.5 px-2 rounded-md transition-colors"
                             x-text="expanded ? 'Read Less' : 'Read More'"
                         ></a>
                     </p>
@@ -152,13 +168,31 @@
                 <ul>
                     @foreach($recipe->ingredients()->get() as $ingredient)
                         <li class="leading-relaxed">
-                            <i class="fa-solid fa-utensils text-sm px-1 text-red-600"></i> &nbsp;
-                            {{$ingredient->name}} <i class="fas fa-chevron-right text-[8px] px-1 text-red-600 align-middle"></i> &nbsp; &nbsp;
+                            <i class="fa-solid fa-utensils text-sm px-1 text-amber-500"></i> &nbsp;
+                            {{$ingredient->name}} <i class="fas fa-chevron-right text-[8px] px-1 text-amber-600 align-middle"></i> &nbsp; &nbsp;
                             {{$ingredient->pivot->measurement}}
                         </li>
                     @endforeach
                 </ul>
             </div>
+            <div class="md:col-span-3 p-4 pt-1 mt-6 rounded-lg bg-indigo-50 pt-1 mt-6 rounded-md border-indigo-50 border-t-amber-500 border border-t-8">
+                <h3 class="py-2 text-xl font-bold m-0">Nutrition Facts</h3>
+                <div class="flex justify-start gap-12 mx-1">
+                    <div class="">
+                        <p class="font-bold"> {{ $recipe->calories }} </p>
+                        <p class="mb-4">Calories</p>
+                        <p class="font-bold"> {{ $recipe->protein }} </p>
+                        <p>Protein</p>
+                    </div>
+                    <div class="">
+                        <p class="font-bold"> {{ $recipe->carbohydrates }} </p>
+                        <p class="mb-4">Carbs</p>
+                        <p class="font-bold"> {{ $recipe->fats }} </p>
+                        <p>Fats</p>
+                    </div>
+                </div>
+            </div>
+
             <x-reviews handler="recipeItem" />
         </div>
     </div>

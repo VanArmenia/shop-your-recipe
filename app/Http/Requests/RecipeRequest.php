@@ -28,6 +28,12 @@ class RecipeRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'category_id' => ['required', 'int'],
             'prep_time' => ['required', 'string'],
+            'cook_time' => ['required', 'string'],
+            'servings' => ['required', 'string'],
+            'calories' => ['required', 'int'],
+            'protein' => ['required', 'string'],
+            'carbohydrates' => ['required', 'string'],
+            'fats' => ['required', 'string'],
             'images.*' => ['nullable', 'image'],
             'deleted_images.*' => ['nullable', 'int'],
 
