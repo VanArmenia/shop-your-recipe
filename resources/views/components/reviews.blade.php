@@ -54,7 +54,7 @@
             </div>
 
         @else
-            <p>Please <a href="{{ route('login') }}">log in</a> to submit a review.</p>
+            <p>Please <a href="{{ route('login') }}" ><span class="font-bold text-red-600"> log in</span></a> to submit a review.</p>
         @endif
         <div class="mt-4">
             <template x-for="(review, index) in reviews" :key="review.id">

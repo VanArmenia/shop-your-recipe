@@ -94,12 +94,6 @@
             </div>
         <div>
             <div class="md:col-span-3">
-                <h3 class="text-sm font-semibold mb-2">
-                    <span class="font-normal">Original recipe from -</span>
-                    <a href="{{ route('recipe.region', $recipe->region->name) }}" class="block py-2 inline-block">
-                        {{ $recipe->region->name }}
-                    </a>
-                </h3>
                 <div class="mb-6 pt-2" x-data="{expanded: false}">
                     <hr class="border-t border-gray-400">
                     <h3 class="py-2 text-xl font-bold m-0">Directions</h3>
@@ -121,8 +115,36 @@
                     </p>
                 </div>
                 {{--map--}}
-                <div id="map" style="width: 300px; height: 200px;"></div>
+                <h3 class="text-sm font-semibold mb-2">
+                    <span class="font-normal">Original recipe from -</span>
+                    <a href="{{ route('recipe.region', $recipe->region->name) }}" class="block py-2 inline-block">
+                        {{ $recipe->region->name }}
+                    </a>
+                </h3>
+                @if ($recipe->region && $recipe->region->latitude && $recipe->region->longitude)
+                    <div id="map" style="width: 300px; height: 200px;"></div>
 
+                    <script>
+                        const lat = {{ $recipe->region->latitude }};
+                        const lng = {{ $recipe->region->longitude }};
+                        const zoom = 3;
+
+                        const map = L.map('map', {
+                            zoomControl: false
+                        }).setView([lat, lng], zoom);
+
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy;'
+                        }).addTo(map);
+
+                        map.scrollWheelZoom.disable();
+                        map.touchZoom.disable();
+                        map.doubleClickZoom.disable();
+                    </script>
+                @else
+                    <p>Map data not available.</p>
+                @endif
+                {{--map--}}
             </div>
             <div class="md:col-span-3 mt-6">
                 <hr class="border-t border-gray-400">
@@ -130,7 +152,9 @@
                 <ul>
                     @foreach($recipe->ingredients()->get() as $ingredient)
                         <li class="leading-relaxed">
-                            {{$ingredient->name}} - {{$ingredient->pivot->measurement}}
+                            <i class="fa-solid fa-utensils text-sm px-1 text-red-600"></i> &nbsp;
+                            {{$ingredient->name}} <i class="fas fa-chevron-right text-[8px] px-1 text-red-600 align-middle"></i> &nbsp; &nbsp;
+                            {{$ingredient->pivot->measurement}}
                         </li>
                     @endforeach
                 </ul>
@@ -191,27 +215,7 @@
                 </div>
             </div>
         </div>
-        <?php endif; ?>
-<script>
-        // Dynamically pass the latitude, longitude, and zoom level from PHP to JavaScript
-        var lat = {{ $recipe->region->latitude }}; // Replace with actual data
-        var lng = {{ $recipe->region->longitude }}; // Replace with actual data
-        var zoom = 4; // Replace with desired zoom level
-        // Create the map object and set the initial view (latitude, longitude, zoom level)
-        var map = L.map('map', {
-            zoomControl: false // Disable the zoom controls entirely when initializing
-        }).setView([lat, lng], zoom);
-
-        // Add OpenStreetMap tile layer to the map
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy;'
-        }).addTo(map);
-
-        // Disable zooming entirely (mouse scroll and touch gestures)
-        map.scrollWheelZoom.disable();
-        map.touchZoom.disable();
-        map.doubleClickZoom.disable();
-</script>
+    <?php endif; ?>
 
 </div>
 <style>

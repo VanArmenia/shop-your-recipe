@@ -95,6 +95,8 @@ class RecipeController extends Controller
      */
     public function show(Recipe $recipe)
     {
+        $recipe->load(['region']);
+
         $simRecipes = $recipe->category->recipes()
             ->orderBy('updated_at', 'desc')
             ->paginate(10);
