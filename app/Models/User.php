@@ -48,4 +48,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(Customer::class);
     }
+
+    public function recipes()
+    {
+        return $this->hasMany(Recipe::class, 'created_by');
+    }
 }
