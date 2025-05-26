@@ -16,6 +16,19 @@ class RecipeRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        if ($this->has('ingredients')) {
+            $filtered = array_filter($this->input('ingredients'), function ($ingredient) {
+                return !empty($ingredient['name']);
+            });
+
+            // Replace ingredients with only non-empty names
+            $this->merge([
+                'ingredients' => array_values($filtered),
+            ]);
+        }
+    }
     /**
      * Get the validation rules that apply to the request.
      *

@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RecipeRequest;
 use App\Models\Category;
 use App\Models\Ingredient;
 use App\Models\Recipe;
 use App\Models\RecipeCategory;
+use App\Models\RecipeImage;
 use App\Models\Region;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 class RecipeController extends Controller
 {
@@ -85,9 +90,61 @@ class RecipeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RecipeRequest $request)
     {
-        //
+        $data = $request->validated();
+        $data['created_by'] = $request->user()->id;
+        $data['updated_by'] = $request->user()->id;
+
+        /** @var \Illuminate\Http\UploadedFile $image */
+        $images = $data['images'] ?? [];
+
+        $recipe = Recipe::create($data);
+
+
+        // ✅ Sync ingredients
+        if (isset($data['ingredients'])) {
+            $ingredientIds = [];
+
+            foreach ($data['ingredients'] as $ingredientData) {
+                $ingredient = \App\Models\Ingredient::firstOrCreate(
+                    ['name' => $ingredientData['name']],
+                );
+
+                $ingredientIds[$ingredient->id] = [
+                    'measurement' => $ingredientData['measurement'] ?? null
+                ];
+            }
+
+            $recipe->ingredients()->sync($ingredientIds);
+        }
+
+        $this->saveImages($images, $recipe);
+        return redirect()->route('profile')->with('success', 'Recipe created!');
+    }
+
+    private function saveImages($images, Recipe $recipe)
+    {
+        foreach ($images as $i => $image) {
+            $path = 'images/' . Str::random();
+            if (!Storage::exists($path)) {
+                Storage::makeDirectory($path);
+            }
+            if (!Storage::putFileAS('public/' . $path, $image, $image->getClientOriginalName())) {
+                throw new \Exception("Unable to save file \"{$image->getClientOriginalName()}\"");
+            }
+
+            $relativePath = $path . '/' . $image->getClientOriginalName();
+
+            RecipeImage::create([
+                'recipe_id' => $recipe->id,
+                'path' => $relativePath,
+                'url' => URL::to(Storage::url($relativePath)),
+                'mime' => $image->getClientMimeType(),
+                'size' => $image->getSize(),
+                'position' => $i + 1
+            ]);
+        }
     }
 
     /**

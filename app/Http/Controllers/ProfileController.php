@@ -7,6 +7,7 @@ use App\Http\Requests\PasswordUpdateRequest;
 use App\Http\Requests\ProfileRequest;
 use App\Models\Country;
 use App\Models\CustomerAddress;
+use App\Models\RecipeCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -26,8 +27,9 @@ class ProfileController extends Controller
         $billingAddress = $customer->billingAddress ?: new CustomerAddress(['type' => AddressType::Billing]);
 //        dd($customer, $shippingAddress->attributesToArray(), $billingAddress, $billingAddress->customer);
         $countries = Country::query()->orderBy('name')->get();
+        $categories = RecipeCategory::All();
 
-        return view('profile.view', compact('customer', 'user', 'shippingAddress', 'billingAddress', 'countries'));
+        return view('profile.view', compact('customer', 'user', 'shippingAddress', 'billingAddress', 'countries','categories'));
     }
 
     public function store(ProfileRequest $request)
