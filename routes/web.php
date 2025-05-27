@@ -52,6 +52,8 @@ Route::middleware(['guestOrVerified'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/profile', [ProfileController::class, 'view'])->name('profile');
     Route::post('/profile', [ProfileController::class, 'store'])->name('profile.update');
+    Route::get('/profile/recipes', [ProfileController::class, 'recipes'])->name('profile.recipes');
+    Route::post('/profile/recipes', [RecipeController::class, 'store'])->name('profile_recipes.create');
     Route::post('/profile/password-update', [ProfileController::class, 'passwordUpdate'])->name('profile_password.update');
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('cart.checkout');
     Route::post('/checkout/{order}', [CheckoutController::class, 'checkoutOrder'])->name('cart.checkout-order');

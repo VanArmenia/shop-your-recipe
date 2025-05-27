@@ -22,6 +22,25 @@
 @include('layouts.navigation')
 
 <main class="relative">
+    <!-- Sidebar Menu -->
+    <aside class="min-w-[200px] w-[200px] transition-all bg-orange-50 text-gray-800 py-4 px-2 h-screen">
+        <div class="inline-block">
+            @if($customer->avatar)
+                <img src="{{ asset('storage/' . $customer->avatar) }}" alt="User Avatar" class="w-14 h-14 rounded-full inline">
+            @else
+                <img src="{{ asset('images/default-avatar.png') }}" alt="Default Avatar" class="w-14 h-14 rounded-full inline">
+            @endif
+            <p class="inline px-2">Hi, {{ $customer->first_name }}</p>
+        </div>
+
+
+        <a href="{{ route('profile') }}" class="flex items-center p-2 rounded transition-colors hover:bg-black/30 mt-4 text-lg font-bold">
+            <h5 class="text-gray-600">Profile Details </h5>
+        </a>
+        <a href="{{ route('profile.recipes') }}" class="flex items-center p-2 rounded transition-colors hover:bg-black/30 text-lg">
+            <h5 class="text-gray-600"> My Recipes </h5>
+        </a>
+    </aside>
     {{ $slot }}
 </main>
 
