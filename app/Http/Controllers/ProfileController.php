@@ -8,6 +8,7 @@ use App\Http\Requests\ProfileRequest;
 use App\Models\Country;
 use App\Models\CustomerAddress;
 use App\Models\RecipeCategory;
+use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -39,8 +40,10 @@ class ProfileController extends Controller
         $customer = $user->customer;
 
         $categories = RecipeCategory::All();
+        $regions = Region::whereDoesntHave('children')->get();
 
-        return view('profile.recipes', compact('customer', 'user', 'categories'));
+
+        return view('profile.recipes', compact('customer', 'user', 'categories', 'regions'));
     }
 
     public function store(ProfileRequest $request)

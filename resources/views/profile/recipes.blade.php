@@ -1,7 +1,7 @@
 <x-account-layout>
     <div x-data="{ currentView: '{{ $errors->any() ? 'recipe_form' : 'recipes' }}' }" class="flex">
         <div x-show="currentView === 'recipes'"
-             class="container mx-auto lg:w-2/3 p-5"
+             class="container mx-auto lg:w-2/3 p-6"
         >
             <div class="flex justify-between">
                 <h2 class="text-gray-800 text-xl font-bold"> My Recipes </h2>
@@ -49,7 +49,7 @@
         </div>
 
         {{--Recipe Form--}}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start m-4"
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start m-5"
              x-show="currentView === 'recipe_form'"
         >
             <div class="bg-white p-3 shadow rounded-lg md:col-span-2">
@@ -72,6 +72,16 @@
 
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+
+                        {{--Regions--}}
+                        <select name="region_id"
+                                class="inline-flex items-center px-3 rounded-md border border-gray-300 text-gray-500 text-sm mb-2 h-10">
+                            <option disabled selected value="">Select a Region:</option>
+
+                            @foreach ($regions as $region)
+                                <option value="{{ $region->id }}">{{ $region->name }}</option>
                             @endforeach
                         </select>
 
@@ -155,23 +165,26 @@
                     </div>
                     <div id="ingredients-wrapper">
                         <div class="mb-3 flex gap-2">
-                            <x-input type="text" name="ingredients[][name]" placeholder="Ingredient" class="w-full" />
-                            <x-input type="text" name="ingredients[][measurement]" placeholder="Measurement" class="w-full" />
+                            <x-input type="text" name="ingredients[0][name]" placeholder="Ingredient" class="w-full" />
+                            <x-input type="text" name="ingredients[0][measurement]" placeholder="Measurement" class="w-full" />
                         </div>
                     </div>
                     <button type="button" onclick="addIngredientField()" class="text-sm text-purple-600">+ Add Ingredient</button>
 
                     <script>
+                        let ingredientIndex = 1;
                         function addIngredientField() {
                             const wrapper = document.getElementById('ingredients-wrapper');
                             const newField = document.createElement('div');
                             newField.className = 'mb-3 flex gap-2';
                             newField.innerHTML = `
-        <input type="text" name="ingredients[][name]" placeholder="Ingredient" class="w-full border border-gray-300 rounded p-2" />
-        <input type="text" name="ingredients[][measurement]" placeholder="Measurement" class="w-full border border-gray-300 rounded p-2" />
+        <input type="text" name="ingredients[${ingredientIndex}][name]" placeholder="Ingredient" class="w-full border border-gray-300 rounded p-2" />
+        <input type="text" name="ingredients[${ingredientIndex}][measurement]" placeholder="Measurement" class="w-full border border-gray-300 rounded p-2" />
     `;
                             wrapper.appendChild(newField);
+                            ingredientIndex++;
                         }
+
                     </script>
 
                     <x-button class="w-full">Create</x-button>
@@ -190,17 +203,4 @@
             </div>
         </div>
     </div>
-    <script>
-        document.querySelector('form').addEventListener('submit', function (e) {
-            const names = document.querySelectorAll('input[name="ingredients[][name]"]');
-            for (const nameInput of names) {
-                if (nameInput.value.trim() === '') {
-                    alert('Please fill in all ingredient names.');
-                    e.preventDefault();
-                    return;
-                }
-            }
-        });
-    </script>
-
 </x-account-layout>

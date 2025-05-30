@@ -40,6 +40,7 @@ class RecipeRequest extends FormRequest
             'name' => ['required', 'max:2000'],
             'description' => ['nullable', 'string'],
             'category_id' => ['required', 'int'],
+            'region_id' => ['nullable', 'int'],
             'prep_time' => ['required', 'string'],
             'cook_time' => ['required', 'string'],
             'servings' => ['required', 'string'],
@@ -53,7 +54,7 @@ class RecipeRequest extends FormRequest
             // Accept ingredients
             'ingredients' => 'array',
             'ingredients.*.name' => 'required|string|max:255',
-            'ingredients.*.measurement' => 'nullable|string|max:255',
+            'ingredients.*.measurement' => 'required|string|max:255',
         ];
     }
 }

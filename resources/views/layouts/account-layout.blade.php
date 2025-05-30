@@ -21,9 +21,14 @@
 <body class="flex flex-col justify-between h-screen">
 @include('layouts.navigation')
 
-<main class="relative">
+<main class="relative flex"
+      x-data="{sidebarOpened: true}"
+>
     <!-- Sidebar Menu -->
-    <aside class="min-w-[200px] w-[200px] transition-all bg-orange-50 text-gray-800 py-4 px-2 h-screen">
+    <aside
+        x-data="{activeMenu: 1}"
+        :class="{'-ml-[200px]': !sidebarOpened}"
+        class="min-w-[200px] w-[200px] transition-all bg-orange-50 text-gray-800 py-4 px-2 h-screen">
         <div class="inline-block">
             @if($customer->avatar)
                 <img src="{{ asset('storage/' . $customer->avatar) }}" alt="User Avatar" class="w-14 h-14 rounded-full inline">
@@ -34,13 +39,29 @@
         </div>
 
 
-        <a href="{{ route('profile') }}" class="flex items-center p-2 rounded transition-colors hover:bg-black/30 mt-4 text-lg font-bold">
-            <h5 class="text-gray-600">Profile Details </h5>
+        <a href="{{ route('profile') }}" class="flex items-center p-2 rounded transition-colors hover:bg-black/10 mt-4 text-lg font-bold"
+             @click="activeMenu = 1"
+        >
+            <h5 :class="activeMenu === 1 ? 'text-red-500' : 'text-gray-500'">
+                Profile Details
+            </h5>
         </a>
-        <a href="{{ route('profile.recipes') }}" class="flex items-center p-2 rounded transition-colors hover:bg-black/30 text-lg">
-            <h5 class="text-gray-600"> My Recipes </h5>
+        <a href="{{ route('profile.recipes') }}" class="flex items-center p-2 rounded transition-colors hover:bg-black/10 text-lg font-bold"
+             @click="activeMenu = 2"
+        >
+            <h5 :class="activeMenu === 2 ? 'text-red-500' : 'text-gray-500'">
+                My Recipes
+            </h5>
         </a>
     </aside>
+    <button
+        @click="sidebarOpened = !sidebarOpened"
+        class="p-4 pt-0 block md:hidden absolute top-0 left-48"
+        :class="{'-ml-[200px]': !sidebarOpened}"
+    >
+        <i class="fa-solid fa-left-right text-xl text-red-500"></i>
+    </button>
+
     {{ $slot }}
 </main>
 

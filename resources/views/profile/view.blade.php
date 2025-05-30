@@ -8,7 +8,7 @@
                 }
             }
         }"
-             class="container mx-auto lg:w-2/3 p-5"
+             class="container mx-auto lg:w-2/3 p-6"
         >
 
 

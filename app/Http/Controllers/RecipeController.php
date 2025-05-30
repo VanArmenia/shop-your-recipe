@@ -101,6 +101,7 @@ class RecipeController extends Controller
 
         $recipe = Recipe::create($data);
 
+//        dd($data['ingredients']);
 
         // ✅ Sync ingredients
         if (isset($data['ingredients'])) {
@@ -120,7 +121,7 @@ class RecipeController extends Controller
         }
 
         $this->saveImages($images, $recipe);
-        return redirect()->route('profile')->with('success', 'Recipe created!');
+        return redirect()->route('profile.recipes')->with('success', 'Recipe created!');
     }
 
     private function saveImages($images, Recipe $recipe)
