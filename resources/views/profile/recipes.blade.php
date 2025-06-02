@@ -49,21 +49,28 @@
         </div>
 
         {{--Recipe Form--}}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start m-5"
+        <div
+             x-data="imagePreview()"
+             class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start m-5"
              x-show="currentView === 'recipe_form'"
         >
-            <div class="bg-white p-3 shadow rounded-lg md:col-span-2">
+            <div class="bg-white p-3 shadow rounded-lg col-span-1 md:col-span-2">
                 <form
                     action="{{ route('recipes.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <h2 class="text-xl font-semibold mb-2">Recipe Form</h2>
-                    <div class="grid grid-cols-2 gap-3 mb-3">
+                    <div class="grid grid-cols-1 gap-3 mb-3 md:grid-cols-2">
                         <!-- Images -->
+                        <template x-if="imageUrl">
+                            <img :src="imageUrl" class="w-40 h-40 object-cover rounded mb-2" />
+                        </template>
+
                         <x-input
                             type="file"
                             name="images[]"
                             label="Upload Image"
                             class="w-full mt-2"
+                            @change="updatePreview"
                         />
                         {{--Categories--}}
                         <select name="category_id"
@@ -187,7 +194,14 @@
 
                     </script>
 
-                    <x-button class="w-full">Create</x-button>
+                    <div>
+                        <a href="{{ route('profile.recipes') }}"
+                           class ="btn-primary bg-red-400 hover:bg-red-500 active:bg-emerald-700 w-full block my-2 text-center"
+                        >
+                            Cancel
+                        </a>
+                        <x-button>Create</x-button>
+                    </div>
                 </form>
 
                 @if ($errors->any())
@@ -203,4 +217,21 @@
             </div>
         </div>
     </div>
+    <script>
+        function imagePreview() {
+            return {
+                imageUrl: null,
+                updatePreview(event) {
+                    const file = event.target.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            this.imageUrl = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            }
+        }
+    </script>
 </x-account-layout>

@@ -26,7 +26,7 @@
 >
     <!-- Sidebar Menu -->
     <aside
-        x-data="{activeMenu: 1}"
+        x-data="menuHandler()" x-init="loadMenu()"
         :class="{'-ml-[200px]': !sidebarOpened}"
         class="min-w-[200px] w-[200px] transition-all bg-orange-50 text-gray-800 py-4 px-2 h-screen">
         <div class="inline-block">
@@ -40,14 +40,14 @@
 
 
         <a href="{{ route('profile') }}" class="flex items-center p-2 rounded transition-colors hover:bg-black/10 mt-4 text-lg font-bold"
-             @click="activeMenu = 1"
+           @click="setActiveMenu(1)"
         >
             <h5 :class="activeMenu === 1 ? 'text-red-500' : 'text-gray-500'">
                 Profile Details
             </h5>
         </a>
         <a href="{{ route('profile.recipes') }}" class="flex items-center p-2 rounded transition-colors hover:bg-black/10 text-lg font-bold"
-             @click="activeMenu = 2"
+           @click="setActiveMenu(2)"
         >
             <h5 :class="activeMenu === 2 ? 'text-red-500' : 'text-gray-500'">
                 My Recipes
@@ -106,5 +106,20 @@
 </div>
 <!--/ Toast -->
 @include('layouts.footer')
+<script>
+    function menuHandler() {
+        return {
+            activeMenu: 1,
+            loadMenu() {
+                const saved = localStorage.getItem('activeMenu');
+                if (saved) this.activeMenu = parseInt(saved);
+            },
+            setActiveMenu(value) {
+                this.activeMenu = value;
+                localStorage.setItem('activeMenu', value);
+            }
+        };
+    }
+</script>
 </body>
 </html>
