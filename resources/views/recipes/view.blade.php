@@ -34,13 +34,15 @@
         <!-- Include the aside Blade component here -->
 {{--        <x-aside :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)"/>--}}
 
-        <div x-data="recipeItem({{ json_encode([
+        <div x-data="{
+                ...recipeItem({{ json_encode([
                     'id' => $recipe->id,
                     'image' => $recipe->image,
-                    'name' => $recipe->name,
                     'fetchReviews' => route('fetch-recipe-reviews', $recipe),
                     'addReview' => route('add-recipe-review', $recipe),
-                ]) }})" class="container mx-auto">
+                ]) }}),
+                calculate: false
+                }" class="container mx-auto">
             <div>
                 <h1 class="text-lg font-semibold pb-2">
                     {{$recipe->name}}
@@ -109,7 +111,7 @@
                    </div>
                 </div>
             </div>
-            </div>
+        </div>
             <div class="md:col-span-3">
                 <div class="mb-6 pt-2" x-data="{expanded: false}">
                     <h3 class="py-2 text-xl font-bold m-0">Directions</h3>
@@ -164,7 +166,7 @@
             </div>
             <div class="md:col-span-3 mt-6">
                 <hr class="border-t border-gray-400">
-                <h3 class="py-2 text-xl font-bold m-0">Ingredients</h3>
+                <h3 class="py-2 text-xl font-bold m-0">Ingredients (serves 2)</h3>
                 <ul>
                     @foreach($recipe->ingredients()->get() as $ingredient)
                         <li class="leading-relaxed">
@@ -194,64 +196,119 @@
             </div>
 
             <x-reviews handler="recipeItem" />
-        </div>
-    </div>
-        {{--    Similar products --}}
-        <?php if ($simRecipes->count() > 0): ?>
-        <div class="w-full flex flex-col sliderDiv">
-            <hr class="border-t border-gray-800">
-            <h3 class="text-xl p-3">More
-                <a href="{{ route('recipe.category', $recipe->category) }}" class="text-lg font-bold">
-                    <h5 class="font-bold pb-4 inline">{{$recipe->category->name}}</h5>
-                </a>
-                recipes</h3>
-            <div class="splide w-full flex-grow-1" role="group">
-                <div class="splide__track w-full">
-                    <ul class="splide__list">
-                        @foreach($simRecipes as $recipe)
-                            <!-- Product Item -->
-                            <li class="splide__slide px-2">
-                                <div
-                                    x-data="recipeItem({{ json_encode([
-                                        'id' => $recipe->id,
-                                        'image' => $recipe->image,
-                                        'name' => $recipe->name,
-                                        'fetchReviews' => route('fetch-recipe-reviews', $recipe),
-                                        'addReview' => route('add-recipe-review', $recipe),
-                                    ]) }})"
-                                    class="border border-1 border-gray-200 rounded-md hover:border-purple-200 transition-colors bg-white"
-                                >
-                                <a href="{{ route('recipes.show', $recipe->id) }}"
-                                   class="aspect-w-3 aspect-h-2 block overflow-hidden">
-                                    <img
-                                        src="{{ $recipe->image }}"
-                                        alt=""
-                                        class="object-cover rounded-lg hover:scale-98 transition-transform p-1"
-                                    />
-                                </a>
-                                <div class="p-2">
-                                    <a href="{{ route('recipe.category', $recipe->category) }}" class="text-lg font-bold">
-                                        <h5 class="text-gray-600">{{$recipe->category->name}}</h5>
-                                    </a>
-                                </div>
-                                <div class="py-0 px-2">
-                                    <h3 class="text-lg font-bold">
-                                        <a href="{{ route('recipes.show', $recipe->id) }}">
-                                            {{$recipe->name}}
-                                        </a>
-                                    </h3>
-                                </div>
-                                <div class="p-2">
-                                    <x-rating :average_rating="$recipe->average_rating" :review_count="$recipe->review_count"/>
-                                </div>
-                        @endforeach
+
+        <div
+            x-data="{
+                multiplicator: 1,
+                ingredients: {{ $recipe->ingredients->map(fn($i) => [
+                  'name' => $i->name,
+                  'measurement' => $i->pivot->measurement
+                ]) }},
+                calculate: false,
+                formatMeasurement(measurement, multiplicator) {
+                    const match = measurement.match(/^(\d+(\.\d+)?)/); // extract number at start
+                    if (!match) return measurement; // fallback if no number
+                    const number = parseFloat(match[1]);
+                    const unit = measurement.replace(match[0], '').trim(); // rest is unit
+                    return `${number * multiplicator} ${unit}`;
+              }
+              }"
+        >
+            <div>
+                <h1 class="text-lg font-bold mb-2"> Calculate your shopping </h1>
+                <div class="mb-3">
+                    <x-input
+                        type="number"
+                        name="serves"
+                        placeholder="Number of serves"
+                        class="w-full focus:border-purple-600 focus:ring-purple-600 border-gray-300 rounded"
+                        x-model="multiplicator"
+                    />
+                </div>
+                <x-button @click="calculate = true">Calculate</x-button>
+            </div>
+            <div x-show="calculate"
+                 x-transition
+                 class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+            >
+                <div
+                    @click.away="calculate = false"
+                    class="bg-white rounded-lg shadow-lg p-6 w-75 max-w-md"
+                    x-transition.scale
+                >
+                    <h3 class="py-2 text-xl font-bold m-0">Ingredients (serves <span x-text="multiplicator"></span>)</h3>
+                    <ul>
+                        <template x-for="ingredient in ingredients" :key="ingredient.name">
+                            <li class="leading-relaxed">
+                                <i class="fa-solid fa-utensils text-sm px-1 text-amber-500"></i>
+                                <span x-text="ingredient.name"></span>
+                                <i class="fas fa-chevron-right text-[8px] px-1 text-amber-600 align-middle"></i>
+                                <span x-text="formatMeasurement(ingredient.measurement, multiplicator)"></span>
+                            </li>
+                        </template>
                     </ul>
                 </div>
             </div>
         </div>
+
+    </div>
+        {{--    Similar products --}}
+    <?php if ($simRecipes->count() > 0): ?>
+    <div class="w-full flex flex-col sliderDiv">
+        <hr class="border-t border-gray-800">
+        <h3 class="text-xl p-3">More
+            <a href="{{ route('recipe.category', $recipe->category) }}" class="text-lg font-bold">
+                <h5 class="font-bold pb-4 inline">{{$recipe->category->name}}</h5>
+            </a>
+            recipes</h3>
+        <div class="splide w-full flex-grow-1" role="group">
+            <div class="splide__track w-full">
+                <ul class="splide__list">
+                    @foreach($simRecipes as $recipe)
+                        <!-- Product Item -->
+                        <li class="splide__slide px-2">
+                            <div
+                                x-data="recipeItem({{ json_encode([
+                                    'id' => $recipe->id,
+                                    'image' => $recipe->image,
+                                    'name' => $recipe->name,
+                                    'fetchReviews' => route('fetch-recipe-reviews', $recipe),
+                                    'addReview' => route('add-recipe-review', $recipe),
+                                ]) }})"
+                                class="border border-1 border-gray-200 rounded-md hover:border-purple-200 transition-colors bg-white"
+                            >
+                            <a href="{{ route('recipes.show', $recipe->id) }}"
+                               class="aspect-w-3 aspect-h-2 block overflow-hidden">
+                                <img
+                                    src="{{ $recipe->image }}"
+                                    alt=""
+                                    class="object-cover rounded-lg hover:scale-98 transition-transform p-1"
+                                />
+                            </a>
+                            <div class="p-2">
+                                <a href="{{ route('recipe.category', $recipe->category) }}" class="text-lg font-bold">
+                                    <h5 class="text-gray-600">{{$recipe->category->name}}</h5>
+                                </a>
+                            </div>
+                            <div class="py-0 px-2">
+                                <h3 class="text-lg font-bold">
+                                    <a href="{{ route('recipes.show', $recipe->id) }}">
+                                        {{$recipe->name}}
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="p-2">
+                                <x-rating :average_rating="$recipe->average_rating" :review_count="$recipe->review_count"/>
+                            </div>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
     <?php endif; ?>
 
-</div>
+    </div>
+
 <style>
     .sliderDiv {
         width: 100% !important;
