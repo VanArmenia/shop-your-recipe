@@ -19,11 +19,7 @@
         <x-aside :categories="$categories" :prodCategory="($product->category->parent->id ?? 0)"/>
 
         <div x-data="productItem({{ json_encode([
-                    'id' => $product->id,
-                    'slug' => $product->slug,
                     'image' => $product->image,
-                    'title' => $product->title,
-                    'price' => $product->price,
                     'quantity' => $product->quantity,
                     'addToCartUrl' => route('cart.add', $product),
                     'addReview' => route('add-review', $product),

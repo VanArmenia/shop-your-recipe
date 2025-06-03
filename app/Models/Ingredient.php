@@ -40,4 +40,9 @@ class Ingredient extends Model
     {
         return $this->normalized_name;
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class)->orderBy('ingredient_id');
+    }
 }

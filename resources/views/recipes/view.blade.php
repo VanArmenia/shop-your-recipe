@@ -1,3 +1,6 @@
+<?php
+/** @var \Illuminate\Database\Eloquent\Collection $simRecipes */
+?>
 <x-app-layout>
     <!-- Add Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -201,17 +204,43 @@
             x-data="{
                 multiplicator: 1,
                 ingredients: {{ $recipe->ingredients->map(fn($i) => [
+                  'id' => $i->id,
                   'name' => $i->name,
                   'measurement' => $i->pivot->measurement
                 ]) }},
+
                 calculate: false,
+
                 formatMeasurement(measurement, multiplicator) {
                     const match = measurement.match(/^(\d+(\.\d+)?)/); // extract number at start
                     if (!match) return measurement; // fallback if no number
                     const number = parseFloat(match[1]);
                     const unit = measurement.replace(match[0], '').trim(); // rest is unit
                     return `${number * multiplicator} ${unit}`;
-              }
+                   },
+
+                addAllToCart() {
+                    fetch('{{ route('cart.bulk-add') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            ingredients: this.ingredients.map(i => ({ id: i.id, quantity: 1 }))
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                        console.log(data)
+                            if (data.success) {
+                                alert('Products added to cart!');
+                                window.location.href = '{{ route('cart.index') }}';
+                            } else {
+                                alert('Something went wrong.');
+                            }
+                        });
+                }
               }"
         >
             <div>
@@ -242,17 +271,25 @@
                             <li class="leading-relaxed">
                                 <i class="fa-solid fa-utensils text-sm px-1 text-amber-500"></i>
                                 <span x-text="ingredient.name"></span>
+{{--                                <span x-text="ingredient.id"></span>--}}
                                 <i class="fas fa-chevron-right text-[8px] px-1 text-amber-600 align-middle"></i>
                                 <span x-text="formatMeasurement(ingredient.measurement, multiplicator)"></span>
                             </li>
                         </template>
                     </ul>
+
+                    <x-button
+                        class="w-full bg-emerald-500 hover:bg-emerald-600 text-white mt-4"
+                        @click="addAllToCart"
+                    >
+                        Go to Cart
+                    </x-button>
                 </div>
             </div>
         </div>
 
     </div>
-        {{--    Similar products --}}
+        {{--    Similar recipes --}}
     <?php if ($simRecipes->count() > 0): ?>
     <div class="w-full flex flex-col sliderDiv">
         <hr class="border-t border-gray-800">

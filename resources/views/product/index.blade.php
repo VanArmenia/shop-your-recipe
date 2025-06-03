@@ -24,11 +24,6 @@
                 <!-- Product Item -->
                 <div
                     x-data="productItem({{ json_encode([
-                        'id' => $product->id,
-                        'slug' => $product->slug,
-                        'image' => $product->image,
-                        'title' => $product->title,
-                        'price' => $product->price,
                         'addToCartUrl' => route('cart.add', $product)
                     ]) }})"
                     class="border border-1 border-gray-200 rounded-md transition-colors bg-white"

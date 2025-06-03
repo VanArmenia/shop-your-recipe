@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Cart;
 use App\Models\CartItem;
+use App\Models\Ingredient;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
 class CartController extends Controller
@@ -106,6 +108,51 @@ class CartController extends Controller
 
             return response(['count' => Cart::getCountFromItems($cartItems)]);
         }
+    }
+
+    public function bulkAdd(Request $request)
+    {
+        $products = [];
+        if (auth()->check()) {
+            $userId = auth()->id();
+        }
+
+        $validated = $request->validate([
+            'ingredients' => 'required|array',
+            'ingredients.*.id' => 'required',
+            'ingredients.*.quantity' => 'required|integer|min:1',
+        ]);
+
+//
+//        return response()->json([
+//            'ingredients' =>  $validated['ingredients']
+//        ]);
+
+        foreach ($validated['ingredients'] as $item) {
+
+            $product = Ingredient::where('id', $item['id'])->first()?->products()->first();
+
+            $products[] = $product;
+            // Add to cart
+            $cartItem = CartItem::where(['user_id' => $userId, 'product_id' => $product->id])->first();
+
+            if ($cartItem) {
+                $cartItem->quantity += $item['quantity'];
+                $cartItem->update();
+            } else {
+                $data = [
+                    'user_id' => $request->user()->id,
+                    'product_id' => $product->id,
+                    'quantity' => $item['quantity'],
+                ];
+                CartItem::create($data);
+            }
+        }
+        return response()->json([
+                'success' => true,
+                'count' => Cart::getCartItemsCount(),
+//            'products' =>  $products,
+        ]);
     }
 
     public function remove(Request $request, Product $product)
