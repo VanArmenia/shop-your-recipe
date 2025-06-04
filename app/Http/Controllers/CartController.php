@@ -113,6 +113,7 @@ class CartController extends Controller
     public function bulkAdd(Request $request)
     {
         $products = [];
+
         if (auth()->check()) {
             $userId = auth()->id();
         }
@@ -123,16 +124,38 @@ class CartController extends Controller
             'ingredients.*.quantity' => 'required|integer|min:1',
         ]);
 
-//
 //        return response()->json([
 //            'ingredients' =>  $validated['ingredients']
 //        ]);
+
+        $totalQuantity = 0;
 
         foreach ($validated['ingredients'] as $item) {
 
             $product = Ingredient::where('id', $item['id'])->first()?->products()->first();
 
+            // Validate quantity against product->quantity
+            if (auth()->check()) {
+                $cartItem = CartItem::where(['user_id' => $userId, 'product_id' => $product->id])->first();
+                if ($cartItem) {
+                    $totalQuantity = $cartItem->quantity + $item['quantity'];
+                } else {
+                    $totalQuantity = $item['quantity'];
+                }
+            }
+
+            if ($product->quantity !== null && $product->quantity < $totalQuantity) {
+                return response([
+                    'message' => match ( $product->quantity ) {
+                        0 => 'The product is out of stock',
+                        1 => 'There is only 1 item left',
+                        default => 'There are only ' . $product->quantity . ' items left',
+                    }
+                ], 422);
+            }
+
             $products[] = $product;
+
             // Add to cart
             $cartItem = CartItem::where(['user_id' => $userId, 'product_id' => $product->id])->first();
 

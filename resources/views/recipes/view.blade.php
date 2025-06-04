@@ -206,7 +206,8 @@
                 ingredients: {{ $recipe->ingredients->map(fn($i) => [
                   'id' => $i->id,
                   'name' => $i->name,
-                  'measurement' => $i->pivot->measurement
+                  'measurement' => $i->pivot->measurement,
+                  'quantity' => 1
                 ]) }},
 
                 calculate: false,
@@ -219,6 +220,19 @@
                     return `${number * multiplicator} ${unit}`;
                    },
 
+                finalQuantity(measurement, multiplicator) {
+                    const match = measurement.match(/^(\d+(\.\d+)?)/); // extract number at start
+                    if (!match) return measurement; // fallback if no number
+                    const number = parseFloat(match[1]);
+                    return number * multiplicator;
+                   },
+
+                updateQuantities() {
+                    this.ingredients.forEach(i => {
+                        i.quantity = this.finalQuantity(i.measurement, this.multiplicator);
+                    });
+                },
+
                 addAllToCart() {
                     fetch('{{ route('cart.bulk-add') }}', {
                         method: 'POST',
@@ -227,7 +241,7 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         body: JSON.stringify({
-                            ingredients: this.ingredients.map(i => ({ id: i.id, quantity: 1 }))
+                            ingredients: this.ingredients.map(i => ({ id: i.id, quantity: i.quantity }))
                         })
                     })
                         .then(response => response.json())
@@ -254,7 +268,7 @@
                         x-model="multiplicator"
                     />
                 </div>
-                <x-button @click="calculate = true">Calculate</x-button>
+                <x-button @click="updateQuantities(); calculate = true">Calculate</x-button>
             </div>
             <div x-show="calculate"
                  x-transition
